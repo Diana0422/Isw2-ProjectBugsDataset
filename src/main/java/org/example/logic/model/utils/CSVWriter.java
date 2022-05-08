@@ -81,24 +81,24 @@ public class CSVWriter {
         try (FileWriter fileWriter = new FileWriter(outname)) {
             fileWriter.append("Commit Sha;Date;Author;Referenced Ticket;Version;Committed Files");
             fileWriter.append("\n");
-            for (Commit c: commits) {
-                fileWriter.append(c.getShaId());
-                fileWriter.append(";");
-                fileWriter.append(Parser.getInstance().parseLocalDateToString(c.getDate()));
-                fileWriter.append(";");
-                fileWriter.append(c.getAuthor());
-                fileWriter.append(";");
-                fileWriter.append(c.getMessage());
-                fileWriter.append(";");
-                if (c.getVersion()!= null) {
-                    fileWriter.append(Integer.toString(c.getVersion().getIndex()));
-                } else {
-                    fileWriter.append("N/D");
-                }
-                fileWriter.append(";");
-                fileWriter.append(Integer.toString(c.getCommittedFiles().size()));
-                fileWriter.append("\n");
-            }
+//            for (Commit c: commits) {
+//                fileWriter.append(c.getShaId());
+//                fileWriter.append(";");
+//                fileWriter.append(Parser.getInstance().parseLocalDateToString(c.getDate()));
+//                fileWriter.append(";");
+//                fileWriter.append(c.getAuthor());
+//                fileWriter.append(";");
+//                fileWriter.append(c.getMessage());
+//                fileWriter.append(";");
+//                if (c.getVersion()!= null) {
+//                    fileWriter.append(Integer.toString(c.getVersion().getIndex()));
+//                } else {
+//                    fileWriter.append("N/D");
+//                }
+//                fileWriter.append(";");
+//                fileWriter.append(Integer.toString(c.getCommittedFiles().size()));
+//                fileWriter.append("\n");
+//            }
 
 
             for (Commit c: refCommits) {
@@ -129,7 +129,7 @@ public class CSVWriter {
 
         String outname = projName+"dataset.csv";
         try (FileWriter fileWriter = new FileWriter(outname)) {
-            fileWriter.append("Version;Class Name;Size;LOC_added;MAX_LOC_added;LOC_touched;AVG_LOC_added;NR;ChgSetSize;NFix;NAuth;Buggy");
+            fileWriter.append("Version;ClassName;Size;LOC_touched;NR;NFix;NAuth;LOC_added;MAX_LOC_added;AVG_LOC_added;Churn;MAX_Churn;AVG_Churn;ChgSetSize;MAX_ChgSet;AVG_ChgSet;Age;WeightedAge;NSmells;Buggy");
             fileWriter.append("\n");
 
             for (Record r: obs) {
@@ -139,21 +139,37 @@ public class CSVWriter {
                 fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getSize()));
                 fileWriter.append(";");
-                fileWriter.append(Integer.toString(r.getLocAdded()));
-                fileWriter.append(";");
-                fileWriter.append(Integer.toString(r.getMaxLocAdded()));
-                fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getLocTouched()));
                 fileWriter.append(";");
-                fileWriter.append(Float.toString(r.getAvgLoc()));
-                fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getNumRevisions()));
-                fileWriter.append(";");
-                fileWriter.append(Float.toString(r.getChgSetSize()));
                 fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getNumFix()));
                 fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getAuthors().size()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getLocAdded()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getMaxLocAdded()));
+                fileWriter.append(";");
+                fileWriter.append(Float.toString(r.getAvgLoc()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getChurn()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getMaxChurn()));
+                fileWriter.append(";");
+                fileWriter.append(Float.toString(r.getAvgChurn()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getChgSetSize()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getMaxChgSetSize()));
+                fileWriter.append(";");
+                fileWriter.append(Float.toString(r.getAvgChgSetSize()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getAge()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getWeightedAge()));
+                fileWriter.append(";");
+                fileWriter.append(Integer.toString(r.getnSmells()));
                 fileWriter.append(";");
                 fileWriter.append(r.getBuggy());
                 fileWriter.append("\n");

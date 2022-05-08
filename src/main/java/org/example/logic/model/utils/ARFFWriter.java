@@ -124,6 +124,14 @@ public class ARFFWriter {
         String attr7Col = tokenizer.nextToken().replace(" ", "_");
         String attr8Col = tokenizer.nextToken().replace(" ", "_");
         String attr9Col = tokenizer.nextToken().replace(" ", "_");
+        String attr10Col = tokenizer.nextToken().replace(" ", "_");
+        String attr11Col = tokenizer.nextToken().replace(" ", "_");
+        String attr12Col = tokenizer.nextToken().replace(" ", "_");
+        String attr13Col = tokenizer.nextToken().replace(" ", "_");
+        String attr14Col = tokenizer.nextToken().replace(" ", "_");
+        String attr15Col = tokenizer.nextToken().replace(" ", "_");
+        String attr16Col = tokenizer.nextToken().replace(" ", "_");
+        String attr17Col = tokenizer.nextToken().replace(" ", "_");
         String labelCol = tokenizer.nextToken().replace(" ", "_");
 
         writer.append(start+releaseCol+" "+versions+"\n");
@@ -137,6 +145,14 @@ public class ARFFWriter {
         writer.append(start+attr7Col+numend);
         writer.append(start+attr8Col+numend);
         writer.append(start+attr9Col+numend);
+        writer.append(start+attr10Col+numend);
+        writer.append(start+attr11Col+numend);
+        writer.append(start+attr12Col+numend);
+        writer.append(start+attr13Col+numend);
+        writer.append(start+attr14Col+numend);
+        writer.append(start+attr15Col+numend);
+        writer.append(start+attr16Col+numend);
+        writer.append(start+attr17Col+numend);
         writer.append(start+labelCol+labelend);
         writer.append("\n");
 

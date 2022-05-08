@@ -1,19 +1,24 @@
 package org.example.logic.model.keyabstractions;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class Release {
 
     private int index;
     private String id;
     private String name;
+    private String tag;
     private LocalDateTime date;
 
     public Release(String id, String releaseName, LocalDateTime releaseDate) {
         this.id = id;
         this.name = releaseName;
         this.date = releaseDate;
+        this.tag = "";
     }
 
     public Release(int index, String id, String releaseName, LocalDateTime releaseDate) {
@@ -21,6 +26,7 @@ public class Release {
         this.id = id;
         this.name = releaseName;
         this.date = releaseDate;
+        this.tag = "";
     }
 
     public String getId() {
@@ -55,6 +61,14 @@ public class Release {
         this.index = index;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public static Release findVersionByDate(List<Release> versions, LocalDateTime created) {
         Release version = null;
 
@@ -83,6 +97,18 @@ public class Release {
         return version;
     }
 
+    public static Release findVersionByTag(List<Release> versions, String tag) {
+        /* get only the numeric name of the version from name */
+        StringTokenizer st = new StringTokenizer(tag, "-");
+        st.nextToken();
+        String name = st.nextToken();
+
+        for (Release rel: versions) {
+            if (rel.getName().equals(name)) return rel;
+        }
+        return null;
+    }
+
     public static Release findReleaseFromId(String verId, List<Release> versions) {
         for (Release ver: versions) {
             if (ver.getId().equals(verId)) return ver;
@@ -99,4 +125,5 @@ public class Release {
 
         return 0;
     }
+
 }

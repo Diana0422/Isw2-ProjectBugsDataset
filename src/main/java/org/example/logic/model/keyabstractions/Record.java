@@ -1,6 +1,8 @@
 package org.example.logic.model.keyabstractions;
 
+import javax.print.attribute.standard.MediaSize;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Record {
@@ -13,9 +15,16 @@ public class Record {
     private int locTouched;
     private int locAdded;
     private int maxLocAdded;
+    private int locDeleted;
+    private int churn;
+    private int maxChurn;
     private int chgSetSize;
+    private int maxChgSetSize;
     private int numFix;
     private List<String> authors;
+    private int age;
+    private int weightedAge;
+    private int nSmells;
 
 
     public Record(int version, String filename) {
@@ -25,9 +34,16 @@ public class Record {
         this.size = 0;
         this.locTouched = 0;
         this.locAdded = 0;
+        this.locDeleted = 0;
         this.maxLocAdded = 0;
+        this.churn = 0;
+        this.maxChurn = 0;
         this.chgSetSize = 0;
+        this.maxChgSetSize = 0;
         this.numFix = 0;
+        this.age = 0;
+        this.weightedAge = 0;
+        this.nSmells = 0;
         this.buggy = "No";
         this.authors = new ArrayList<>();
     }
@@ -68,8 +84,8 @@ public class Record {
         this.size = size;
     }
 
-    /*
-     * LOC added : sum of LOC added over revisions
+    /**
+     * LOC added
      */
 
     public int getLocAdded() {
@@ -85,6 +101,27 @@ public class Record {
 
         // calculate max loc added
         if (locAdded > this.maxLocAdded) this.maxLocAdded = locAdded;
+    }
+
+    public int getMaxLocAdded() {
+        return maxLocAdded;
+    }
+
+    public void setMaxLocAdded(int maxLoc) {
+        if (maxLoc >= this.maxLocAdded) this.maxLocAdded = maxLoc;
+    }
+
+    public float getAvgLoc() {
+
+        float avg;
+
+        if (this.locAdded == 0) {
+            avg = 0;
+        } else {
+            avg = (float)this.locAdded/this.numRevisions;
+        }
+
+        return (float) (Math.floor(avg * 100) / 100);
     }
 
 
@@ -104,35 +141,6 @@ public class Record {
     }
 
     /*
-     * MAX LOC added : max of the LOC added
-     */
-
-    public int getMaxLocAdded() {
-        return maxLocAdded;
-    }
-
-    public void setMaxLocAdded(int maxLoc) {
-        this.maxLocAdded = maxLoc;
-    }
-
-    /*
-     * AVG LOC added : avg of the LOC added
-     */
-
-    public float getAvgLoc() {
-
-        float avg;
-
-        if (this.locAdded == 0) {
-            avg = 0;
-        } else {
-            avg = (float)this.locAdded/this.numRevisions;
-        }
-
-        return (float) (Math.floor(avg * 100) / 100);
-    }
-
-    /*
      * NUM revision : number of revisions
      */
 
@@ -148,7 +156,7 @@ public class Record {
         this.numRevisions++;
     }
 
-    /*
+    /***
      * ChgSetSize : number of files committed together with file
      */
 
@@ -162,6 +170,26 @@ public class Record {
 
     public void addChgSetSize(int num) {
         this.chgSetSize+=num;
+    }
+
+    public float getAvgChgSetSize() {
+        float avg;
+
+        if (this.chgSetSize == 0) {
+            avg = 0;
+        } else {
+            avg = (float)this.chgSetSize/this.numRevisions;
+        }
+
+        return (float) (Math.floor(avg * 100) / 100);
+    }
+
+    public void setMaxChgSetSize(int chgSetSize) {
+        if (chgSetSize >= this.maxChgSetSize) this.maxChgSetSize = chgSetSize;
+    }
+
+    public int getMaxChgSetSize() {
+        return this.maxChgSetSize;
     }
 
     /*
@@ -200,5 +228,73 @@ public class Record {
 
     public void setNumFix(int numFix) {
         this.numFix = numFix;
+    }
+
+    /**
+     * LOC deleted
+     */
+
+    public int getLocDeleted() {
+        return locDeleted;
+    }
+
+    public void setLocDeleted(int locDeleted) {
+        this.locDeleted = locDeleted;
+    }
+
+    /**
+     * Churn
+     */
+    public int getChurn() {
+        return churn;
+    }
+
+    public void setChurn(int churn) {
+        this.churn = churn;
+    }
+
+    public float getAvgChurn() {
+        float avg;
+
+        if (this.churn == 0) {
+            avg = 0;
+        } else {
+            avg = (float)this.churn/this.numRevisions;
+        }
+
+        return (float) (Math.floor(avg * 100) / 100);
+    }
+
+    public int getMaxChurn() {
+        return this.maxChurn;
+    }
+
+    public void setMaxChurn(int churn) {
+        if (churn >= this.maxChurn) this.maxChurn = churn;
+    }
+
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getWeightedAge() {
+        return weightedAge;
+    }
+
+    public void setWeightedAge(int weightedAge) {
+        this.weightedAge = weightedAge;
+    }
+
+    public int getnSmells() {
+        return nSmells;
+    }
+
+    public void setnSmells(int nSmells) {
+        this.nSmells = nSmells;
     }
 }

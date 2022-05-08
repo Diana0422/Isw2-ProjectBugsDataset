@@ -86,22 +86,17 @@ public class JIRAHandler {
          * param fields: JSON Object field of the issue
          * param fieldType: type of the field to retrieve from Jira
          */
-        String id;
-        String name;
-        int index;
-        String date = null;
+        String date;
         List<Release> ver = new ArrayList<>();
         JSONArray versions = fields.getJSONArray(fieldType);
 
         for (int i=0; i<versions.length(); i++) {
             JSONObject version = versions.getJSONObject(i);
-            if (version.getBoolean("released")) {
-                id = version.getString("id");
-                name = version.getString("name");
+            System.out.println(version);
+            /* consider the version only if has a release date and it's released */
+            if (version.getBoolean("released") && version.has("releaseDate")) {
                 date = version.getString("releaseDate");
-                index = Release.findIndexFromId(id, this.project.getVersions());
-                Release r = new Release(index, id, name, Parser.getInstance().parseDateToLocalDateTime(date));
-
+                Release r = Release.findVersionByDate(project.getVersions(), Parser.getInstance().parseDateToLocalDateTime(date));
                 ver.add(r);
             }
         }

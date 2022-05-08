@@ -1,11 +1,10 @@
 package org.example.logic.model.keyabstractions;
 
+import javax.print.attribute.standard.MediaSize;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Commit {
 
@@ -15,15 +14,32 @@ public class Commit {
     private String author;
     private Release version;
     private List<JFile> committedFiles;
-    private Integer filecount; //for debug
+    private List<JFile> addedFiles;
+    private List<JFile> deletedFiles;
+    private List<JFile> modifiedFiles;
+    private HashMap<String, List<String>> renamedFiles;
 
     public Commit(String sha, String mess, LocalDateTime date, String author) {
         this.shaId = sha;
         this.message = mess;
         this.date = date;
         this.author = author;
-        this.filecount = 0; // for debug
         this.committedFiles = new ArrayList<>();
+        this.addedFiles = new ArrayList<>();
+        this.deletedFiles = new ArrayList<>();
+        this.modifiedFiles = new ArrayList<>();
+        this.renamedFiles = new HashMap<>();
+    }
+
+    public static void addCommit(List<Commit> commits, Commit commit) {
+        /***
+         * add a commit in the list of commits
+         */
+        for (Commit c: commits) {
+            if (c.getShaId().equals(commit.getShaId())) return;
+            commits.add(commit);
+        }
+
     }
 
     public String getShaId() {
@@ -74,39 +90,95 @@ public class Commit {
         this.version = version;
     }
 
-    public static Commit getCommitForSha(String sha, Project project) {
-        String log;
-        for (Commit c: project.getCommits()) {
-            if (c.getShaId().equals(sha)) return c;
+    public void addAddedFiles(JFile file) {
+        /***
+         * Adds a file to the list of file added by the commit
+         */
+        if (this.addedFiles.contains(file)) return;
+        this.addedFiles.add(file);
+    }
+
+    public void addModifiedFiles(JFile file) {
+        /***
+         * Adds a file to the list of files modified by the commit
+         */
+        if (this.modifiedFiles.contains(file)) return;
+        this.modifiedFiles.add(file);
+    }
+
+    public void addRenamedFiles(JFile file) {
+        /***
+         * Adds a file to the list of files renamed by the commit
+         */
+        if (this.renamedFiles.containsKey(file.getRelPath())) {
+            List<String> oldNames = this.renamedFiles.get(file.getRelPath());
+            oldNames.add(file.getOldPath());
+            this.renamedFiles.put(file.getRelPath(), oldNames);
+        } else {
+            List<String> oldNames = new ArrayList<>();
+            oldNames.add(file.getOldPath());
+            this.renamedFiles.put(file.getRelPath(), oldNames);
         }
-
-        for (Commit c: project.getRefCommits()) {
-            if (c.getShaId().equals(sha)) return c;
-        }
-        log = "No commit for sha: "+sha;
-        Logger.getGlobal().log(Level.WARNING, log);
-        return null;
     }
 
-    public JFile getCommittedFileByPath(String relPath) {
-        String filename = null;
-        JFile file = null;
-        StringTokenizer st = new StringTokenizer(relPath, "/");
-        if (st.countTokens() != 0) {
-            while (st.hasMoreTokens()) {
-                filename = st.nextToken();
-            }
-            file = JFile.getSpecificFile(this.committedFiles, filename);
-        }
-
-        return file;
+    public void addDeletedFiles(JFile file) {
+        /***
+         * Adds a file to the list of files deleted by the commit
+         */
+        if (this.deletedFiles.contains(file)) return;
+        this.deletedFiles.add(file);
     }
 
-    public Integer getFilecount() {
-        return filecount;
+    public boolean checkInAddedFiles(JFile file) {
+        /***
+         * Checks if a file is added in the commit
+         */
+        boolean ret = false;
+        if (this.addedFiles.contains(file)) ret = true;
+        return ret;
     }
 
-    public void setFilecount(Integer filecount) {
-        this.filecount = filecount;
+    public boolean checkInModifiedFiles(JFile file) {
+        /***
+         * Checks if a file is modified in the commit
+         */
+        boolean ret = false;
+        if (this.modifiedFiles.contains(file)) ret = true;
+        return ret;
     }
+
+    public boolean checkInDeletedFiles(JFile file) {
+        /***
+         * Check if a file is deleted in a commit
+         */
+        boolean ret = false;
+        if (this.deletedFiles.contains(file)) ret = true;
+        return ret;
+    }
+
+    public boolean checkInRenamedFiles(JFile file) {
+        /***
+         * Check if a file is renamed in a commit
+         */
+        boolean ret = false;
+        if (this.renamedFiles.containsKey(file.getRelPath())) ret = true;
+        return ret;
+    }
+
+//    public static Commit getCommitForSha(String sha, Project project) {
+//        String log;
+//        for (Commit c: project.getCommits()) {
+//            if (c.getShaId().equals(sha)) return c;
+//        }
+//
+//        for (Commit c: project.getRefCommits()) {
+//            if (c.getShaId().equals(sha)) return c;
+//        }
+//        log = "No commit for sha: "+sha;
+//        Logger.getGlobal().log(Level.WARNING, log);
+//        return null;
+//    }
+
+
+
 }

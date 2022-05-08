@@ -4,13 +4,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import org.example.logic.control.InspectionController;
-import org.example.logic.model.handlers.JIRAHandler;
 import org.example.logic.model.utils.Parser;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +16,7 @@ public class Project {
 
     private String projName;
     private String projDir;
+    private boolean external; //the project is an external project and needed only to calculate average P for Cold Start Proportion
     private List<JFile> javaFiles;
     private final List<Release> versions;
     private final List<Release> viewedVersions;
@@ -28,8 +25,11 @@ public class Project {
     private List<Issue> bugIssues;
     private List<Commit> commits;
     private List<Commit> refCommits;
+    private List<HashMap<JFile, JFile>> renames;
+    private HashMap<Integer, List<JFile>> deletions;
 
     public Project(String name, int percent, String projpath, Properties prop) {
+        /* main project */
         this.projName = name;
         this.versions = new ArrayList<>();
         this.viewedVersions = new ArrayList<>();
@@ -39,7 +39,30 @@ public class Project {
         this.commits = new ArrayList<>();
         this.refCommits = new ArrayList<>();
         this.javaFiles = new ArrayList<>();
+        this.external = false;
+        this.renames = new ArrayList<>();
+        this.deletions = new HashMap<>();
 
+        setVersions(prop);
+        setViewedVersions();
+
+        for (int i=0; i<this.versions.size(); i++) {
+            this.renames.add(new HashMap<>());
+        }
+
+        for (int i=1; i<=this.versions.size(); i++) {
+            this.deletions.put(i, new ArrayList<>());
+        }
+    }
+
+    public Project(String name, Properties prop) {
+        /* external project */
+        this.projName = name;
+        this.bugIssues = new ArrayList<>();
+        this.versions = new ArrayList<>();
+        this.viewedVersions = new ArrayList<>();
+        this.viewedPercentage = 100;
+        this.external = true;
         setVersions(prop);
         setViewedVersions();
     }
@@ -81,7 +104,7 @@ public class Project {
                     skipped++;
                 }
             }
-            if (InspectionController.verbose) System.out.println("Skipped versions: "+skipped);
+            if (InspectionController.fulldebug) System.out.println("Skipped versions: "+skipped);
             /* order releases by date */
             versions.sort(Comparator.comparing(Release::getDate));
 
@@ -89,7 +112,9 @@ public class Project {
             for (i = 0; i< this.versions.size(); i++) {
                 Release rel = this.versions.get(i);
                 rel.setIndex(i+1);
-                if (InspectionController.verbose) System.out.println(rel.getName()+" - "+rel.getIndex());
+                System.out.println("Index set n°"+i+": "+rel.getIndex());
+                System.out.println("Release name: "+rel.getName());
+                if (InspectionController.fulldebug) System.out.println(rel.getName()+" - "+rel.getIndex()+" - "+rel.getDate());
             }
 
             // store on properties to commit changes
@@ -110,7 +135,7 @@ public class Project {
                 partial--;
             }
         }
-        if (InspectionController.verbose) System.out.println("Partial num of releases ("+Integer.toString(getViewedPercentage())+"%): "+getViewedVersions().size());
+        if (InspectionController.fulldebug) System.out.println("Partial num of releases ("+Integer.toString(getViewedPercentage())+"%): "+getViewedVersions().size());
 
         // pointer to the last viewed version
         setLastViewedVersion(getViewedVersions().get(getViewedVersions().size()-1));
@@ -197,4 +222,53 @@ public class Project {
         this.refCommits = refCommits;
     }
 
+    public void addJavaFile(JFile javaFile) {
+        /***
+         * adds a new java file to the list of java files
+         */
+        for (JFile file: getJavaFiles()) {
+            if (file.getRelPath().equals(javaFile.getRelPath())) return;
+        }
+        getJavaFiles().add(javaFile);
+    }
+
+    public void addRenomination(int releaseIdx, JFile oldFile, JFile newFile) {
+        int hashIdx = releaseIdx-1;
+        HashMap<JFile, JFile> renomination = this.renames.get(hashIdx);
+        renomination.put(oldFile, newFile);
+    }
+
+    public boolean checkRenomination(int releaseIdx, JFile file) {
+        int hashIdx = releaseIdx-1;
+        boolean ret = false;
+        HashMap<JFile, JFile> renomination = this.renames.get(hashIdx);
+        if (renomination.containsKey(file)) ret = true;
+        return ret;
+    }
+
+    public JFile getRenomination(int releaseIdx, JFile file) {
+        int hashIdx = releaseIdx-1;
+        HashMap<JFile, JFile> renomination = this.renames.get(hashIdx);
+        return renomination.get(file);
+    }
+
+    public boolean checkDeletions(int releaseIdx, JFile file) {
+        boolean ret = false;
+        List<JFile> deletedFiles = this.deletions.get(releaseIdx);
+        if (deletedFiles.contains(file)) ret = true;
+        return ret;
+    }
+
+    public JFile getDeletion(int releaseIdx, JFile file) {
+
+        return null;
+    }
+
+    public boolean isExternal() {
+        return external;
+    }
+
+    public void setExternal(boolean external) {
+        this.external = external;
+    }
 }
