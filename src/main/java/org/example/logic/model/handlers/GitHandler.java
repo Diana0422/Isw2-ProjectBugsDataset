@@ -205,7 +205,6 @@ public class GitHandler {
 
     public void updateCommitLinesChanges(Commit commit, HashMap<String, Record> records, BufferedReader input) throws IOException {
         if (input == null) {
-            String tag = commit.getVersion().getTag();
             String[] args = {"git", "show", commit.getShaId(), "--numstat"};
             File dir = new File(project.getProjDir());
             Process inputProcess = runGitCommand(args, dir);
@@ -217,8 +216,10 @@ public class GitHandler {
         String filepath;
         String recordKey;
         String line;
+        char firstChar = ' ';
         while ((line = input.readLine()) != null) {
-            if (line.contains("git-svn-id")) break;
+            if (line.length() != 0) firstChar = line.charAt(0);
+            if (line.contains("git-svn-id") || Character.isDigit(firstChar)) break;
         }
 
         while ((line = input.readLine()) != null) {

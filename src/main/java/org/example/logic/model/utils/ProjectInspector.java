@@ -54,6 +54,7 @@ public class ProjectInspector {
                 /* retrieve the fixed commits of the issue */
                 if (!project.isExternal()) i.setFixedCommits(findLinkedToIssueCommits(project, i.getKey()));
             }
+            /* TODO order defects by their fix date */
             project.setBugIssues(bugs);
 
         } catch (IOException e) {
