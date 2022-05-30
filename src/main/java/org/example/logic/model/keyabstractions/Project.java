@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.example.logic.control.InspectionController;
 import org.example.logic.model.utils.Parser;
@@ -14,19 +16,18 @@ import org.json.JSONObject;
 
 public class Project {
 
-    private String projName;
+    private final String projName;
     private String projDir;
     private boolean external; //the project is an external project and needed only to calculate average P for Cold Start Proportion
     private List<JFile> javaFiles;
     private final List<Release> versions;
     private final List<Release> viewedVersions;
-    private Release lastViewedVersion;
-    private int viewedPercentage;
+    private final int viewedPercentage;
     private List<Issue> bugIssues;
     private List<Commit> commits;
     private List<Commit> refCommits;
     private List<HashMap<JFile, JFile>> renames;
-    private HashMap<Integer, List<JFile>> deletions;
+    private List<HashMap<String, JFile>> files;
 
     public Project(String name, int percent, String projpath, Properties prop) {
         /* main project */
@@ -41,17 +42,14 @@ public class Project {
         this.javaFiles = new ArrayList<>();
         this.external = false;
         this.renames = new ArrayList<>();
-        this.deletions = new HashMap<>();
+        this.files = new ArrayList<>();
 
         setVersions(prop);
         setViewedVersions();
 
         for (int i=0; i<this.versions.size(); i++) {
             this.renames.add(new HashMap<>());
-        }
-
-        for (int i=1; i<=this.versions.size(); i++) {
-            this.deletions.put(i, new ArrayList<>());
+            this.files.add(new HashMap<>());
         }
     }
 
@@ -70,16 +68,19 @@ public class Project {
     private void setVersions(Properties prop) {
         //Fills the arraylist with releases dates and orders them
         //Ignores releases with missing dates
-        Integer i;
+        int i;
         String url = "https://issues.apache.org/jira/rest/api/2/project/" + projName;
         JSONObject json;
 
         int skipped = 0;
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(Project.class.getClassLoader().getResource("config.properties").getPath())) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(
+                Objects.requireNonNull(
+                        Project.class.getClassLoader().getResource("config.properties"))
+                        .getPath()))
+        {
             json = Parser.getInstance().readJsonFromUrl(url);
             JSONArray releases = json.getJSONArray("versions");
-            System.out.println("Num. releases:"+releases.length());
             for (i = 0; i < releases.length(); i++ ) {
                 String relName = "";
                 String relId = "";
@@ -104,18 +105,15 @@ public class Project {
                     skipped++;
                 }
             }
-            if (InspectionController.fulldebug) System.out.println("Skipped versions: "+skipped);
+            if (InspectionController.FULL_DEBUG) {
+                String log = "Skipped versions: "+skipped;
+                Logger.getGlobal().log(Level.WARNING, log);
+            }
             /* order releases by date */
             versions.sort(Comparator.comparing(Release::getDate));
 
             /* set index numbers to the releases */
-            for (i = 0; i< this.versions.size(); i++) {
-                Release rel = this.versions.get(i);
-                rel.setIndex(i+1);
-                System.out.println("Index set n°"+i+": "+rel.getIndex());
-                System.out.println("Release name: "+rel.getName());
-                if (InspectionController.fulldebug) System.out.println(rel.getName()+" - "+rel.getIndex()+" - "+rel.getDate());
-            }
+            Release.setIndexNumbers(versions);
 
             // store on properties to commit changes
             prop.store(fileOutputStream, "");
@@ -135,10 +133,10 @@ public class Project {
                 partial--;
             }
         }
-        if (InspectionController.fulldebug) System.out.println("Partial num of releases ("+Integer.toString(getViewedPercentage())+"%): "+getViewedVersions().size());
-
-        // pointer to the last viewed version
-        setLastViewedVersion(getViewedVersions().get(getViewedVersions().size()-1));
+        if (InspectionController.FULL_DEBUG) {
+            String log = "Partial num of releases (" + getViewedPercentage() + "%): " + getViewedVersions().size();
+            Logger.getGlobal().log(Level.WARNING, log);
+        }
     }
 
     private void addRelease(String strDate, String name, String id) {
@@ -150,7 +148,7 @@ public class Project {
         this.versions.add(release);
     }
 
-    public void setBugIssues(List<Issue> issues) throws IOException {
+    public void setBugIssues(List<Issue> issues) {
         this.bugIssues = issues;
     }
 
@@ -158,16 +156,8 @@ public class Project {
         return projName;
     }
 
-    public void setProjName(String projName) {
-        this.projName = projName;
-    }
-
     public int getViewedPercentage() {
         return viewedPercentage;
-    }
-
-    public void setViewedPercentage(int viewedPercentage) {
-        this.viewedPercentage = viewedPercentage;
     }
 
     public List<Release> getVersions() {
@@ -182,20 +172,8 @@ public class Project {
         return projDir;
     }
 
-    public void setProjDir(String projDir) {
-        this.projDir = projDir;
-    }
-
     public List<Issue> getBugIssues() {
         return bugIssues;
-    }
-
-    public Release getLastViewedVersion() {
-        return lastViewedVersion;
-    }
-
-    public void setLastViewedVersion(Release lastViewedVersion) {
-        this.lastViewedVersion = lastViewedVersion;
     }
 
     public List<Commit> getCommits() {
@@ -218,50 +196,32 @@ public class Project {
         return refCommits;
     }
 
-    public void setRefCommits(List<Commit> refCommits) {
-        this.refCommits = refCommits;
-    }
-
-    public void addJavaFile(JFile javaFile) {
-        /***
-         * adds a new java file to the list of java files
-         */
-        for (JFile file: getJavaFiles()) {
-            if (file.getRelPath().equals(javaFile.getRelPath())) return;
-        }
-        getJavaFiles().add(javaFile);
-    }
-
     public void addRenomination(int releaseIdx, JFile oldFile, JFile newFile) {
         int hashIdx = releaseIdx-1;
         HashMap<JFile, JFile> renomination = this.renames.get(hashIdx);
-        renomination.put(oldFile, newFile);
+        renomination.put(newFile, oldFile);
     }
 
-    public boolean checkRenomination(int releaseIdx, JFile file) {
-        int hashIdx = releaseIdx-1;
-        boolean ret = false;
-        HashMap<JFile, JFile> renomination = this.renames.get(hashIdx);
-        if (renomination.containsKey(file)) ret = true;
-        return ret;
+    public boolean checkFile(Integer releaseIdx, String filepath) {
+        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
+        return relFiles.containsKey(filepath);
     }
 
-    public JFile getRenomination(int releaseIdx, JFile file) {
-        int hashIdx = releaseIdx-1;
-        HashMap<JFile, JFile> renomination = this.renames.get(hashIdx);
-        return renomination.get(file);
+    public void addFile(Integer releaseIdx, JFile file) {
+        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
+        if (relFiles.containsKey(file.getRelPath())) return;
+        relFiles.put(file.getRelPath(), file);
     }
 
-    public boolean checkDeletions(int releaseIdx, JFile file) {
-        boolean ret = false;
-        List<JFile> deletedFiles = this.deletions.get(releaseIdx);
-        if (deletedFiles.contains(file)) ret = true;
-        return ret;
-    }
-
-    public JFile getDeletion(int releaseIdx, JFile file) {
-
-        return null;
+    public JFile getFile(Integer releaseIdx, String filename, String filepath) {
+        if (checkFile(releaseIdx, filepath)) {
+            HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
+            return relFiles.get(filepath);
+        } else {
+            JFile file = new JFile(this, filename, filepath);
+            addFile(releaseIdx, file);
+            return file;
+        }
     }
 
     public boolean isExternal() {

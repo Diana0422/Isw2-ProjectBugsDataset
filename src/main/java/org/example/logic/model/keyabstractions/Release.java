@@ -1,10 +1,11 @@
 package org.example.logic.model.keyabstractions;
 
+import org.example.logic.control.InspectionController;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Release {
 
@@ -21,12 +22,16 @@ public class Release {
         this.tag = "";
     }
 
-    public Release(int index, String id, String releaseName, LocalDateTime releaseDate) {
-        this.index = index;
-        this.id = id;
-        this.name = releaseName;
-        this.date = releaseDate;
-        this.tag = "";
+    public static void setIndexNumbers(List<Release> versions) {
+        /* set index numbers to the releases */
+        for (int i = 0; i< versions.size(); i++) {
+            Release rel = versions.get(i);
+            rel.setIndex(i+1);
+            if (InspectionController.FULL_DEBUG) {
+                String log = rel.getName()+" - "+rel.getIndex()+" - "+rel.getDate();
+                Logger.getGlobal().log(Level.WARNING, log);
+            }
+        }
     }
 
     public String getId() {
@@ -72,10 +77,9 @@ public class Release {
     public static Release findVersionByDate(List<Release> versions, LocalDateTime created) {
         Release version = null;
 
-        for (int i=0; i<versions.size(); i++) {
-            version = versions.get(i);
+        for (Release release : versions) {
+            version = release;
             if (version.getDate().compareTo(created) >= 0) {
-                version = versions.get(i);
                 return version;
             }
         }
@@ -86,8 +90,8 @@ public class Release {
     public static Release findVersionByIndex(List<Release> versions, int idx) {
         Release version = null;
 
-        for (int i=0; i<versions.size(); i++) {
-            version = versions.get(i);
+        for (Release release : versions) {
+            version = release;
 
             if (version.getIndex() == idx) {
                 return version;
@@ -95,35 +99,6 @@ public class Release {
         }
 
         return version;
-    }
-
-    public static Release findVersionByTag(List<Release> versions, String tag) {
-        /* get only the numeric name of the version from name */
-        StringTokenizer st = new StringTokenizer(tag, "-");
-        st.nextToken();
-        String name = st.nextToken();
-
-        for (Release rel: versions) {
-            if (rel.getName().equals(name)) return rel;
-        }
-        return null;
-    }
-
-    public static Release findReleaseFromId(String verId, List<Release> versions) {
-        for (Release ver: versions) {
-            if (ver.getId().equals(verId)) return ver;
-        }
-        return null;
-    }
-
-    public static int findIndexFromId(String verId, List<Release> versions) {
-        for (Release ver: versions) {
-            if (ver.getId().equals(verId)) {
-                return ver.getIndex();
-            }
-        }
-
-        return 0;
     }
 
 }

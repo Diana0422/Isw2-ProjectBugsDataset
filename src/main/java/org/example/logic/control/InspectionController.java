@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 
 public class InspectionController {
 
-    public static boolean debug = false;
-    public static boolean fulldebug = false;
-    public static double coldproportion; // proportion average from the other 75 apache projects
+    public static boolean DEBUG = false;
+    public static boolean FULL_DEBUG = false;
+    public static double COLD_PROPORTION; // proportion average from the other 75 apache projects
 
     public static void main(String [] args) throws IOException {
 //		main flow of the application
@@ -24,19 +24,17 @@ public class InspectionController {
         String projName = "";
         String projDir = "";
         String log = "";
-        Integer percent = 0;
+        int percent = 0;
 
         try (InputStream inputStream = InspectionController.class.getClassLoader().getResourceAsStream(propFileName)) {
             prop.load(inputStream);
 
             // get the project properties
             projName = prop.getProperty("project_name");
-            System.out.println(projName);
             projDir = prop.getProperty("project_dir");
-            System.out.println(projDir);
-            percent = Integer.parseInt(prop.getProperty("percent"));
-            debug = Boolean.parseBoolean(prop.getProperty("debug"));
-            fulldebug = Boolean.parseBoolean(prop.getProperty("full_debug"));
+            percent = Integer.parseInt(prop.getProperty("percentage"));
+            DEBUG = Boolean.parseBoolean(prop.getProperty("debug"));
+            FULL_DEBUG = Boolean.parseBoolean(prop.getProperty("full_debug"));
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -47,11 +45,10 @@ public class InspectionController {
         Project proj = new Project(projName, percent, projDir, prop);
 
         /* calculate the average P value of the other 75 project apache */
-        coldproportion = Issue.calculateColdStartProportion(projName, prop);
-        System.out.println(coldproportion);
+        COLD_PROPORTION = Issue.calculateColdStartProportion(projName, prop);
 
         /* inspect project */
-        if (debug) {
+        if (DEBUG) {
             log = "--> Inspecting project: " + proj.getProjName() +
                     "\n" + "--> Versions selected: " + proj.getViewedPercentage() + "%\n" + "...";
             Logger.getGlobal().log(Level.INFO, log);
@@ -59,13 +56,13 @@ public class InspectionController {
         ProjectInspector inspector = new ProjectInspector(proj);
 
         /* retrieve all the project commits */
-        if (debug) {
+        if (DEBUG) {
             log = "--> Looking for Commits...";
             Logger.getGlobal().log(Level.INFO, log);
         }
         List<Commit> commits = inspector.inspectProjectCommits();
 
-        if (debug) {
+        if (DEBUG) {
             int i = 0;
             for (Commit commit: commits) {
                 i++;
@@ -82,15 +79,18 @@ public class InspectionController {
             }
         }
 
+        List<JFile> files = inspector.inspectProjectFiles();
+
+        System.out.println(files);
 
         /* get project issues on JIRA */
-        if (debug) {
+        if (DEBUG) {
             log = "--> Setting bug issues...";
             Logger.getGlobal().log(Level.INFO, log);
         }
         List<Issue> issues = inspector.inspectProjectIssues();
 
-        if (debug) {
+        if (DEBUG) {
             int i = 0;
             for (Issue issue: issues) {
                 i++;
@@ -107,13 +107,13 @@ public class InspectionController {
             }
         }
 
-        if (debug) {
+        if (DEBUG) {
             log = "--> Update bugginess...";
             Logger.getGlobal().log(Level.INFO, log);
         }
         inspector.updateBugginess(issues);
 
-        if (debug) {
+        if (DEBUG) {
             int i = 0;
             for (JFile file: proj.getJavaFiles()) {
                 i++;
@@ -137,43 +137,49 @@ public class InspectionController {
         }
 
 
-        if (debug) {
+        if (DEBUG) {
             log = "--> Producing dataset...";
             Logger.getGlobal().log(Level.INFO, log);
         }
         List<Record> obs = inspector.produceRecords();
 
-        if (debug) {
+        if (DEBUG) {
             log = "--> Calculating features...";
             Logger.getGlobal().log(Level.INFO, log);
         }
-        inspector.calculateFeatures();
+        obs = inspector.calculateFeatures();
 
-        if (debug) {
+        if (DEBUG) {
+            log = "--> Selecting first "+percent+"% of instances...";
+            Logger.getGlobal().log(Level.INFO, log);
+        }
+        obs = inspector.selectRecords(obs);
+
+        if (DEBUG) {
             log = "--> Writing version information to file: "+proj.getProjName()+"Versions.csv";
             Logger.getGlobal().log(Level.INFO, log);
         }
         CSVWriter.getInstance().writeReleaseInfo(proj.getVersions(), "Versions", proj.getProjName());
 
-        if (debug) {
+        if (DEBUG) {
             log = "--> Writing tickets information to file: "+proj.getProjName()+"Tickets.csv";
             Logger.getGlobal().log(Level.INFO, log);
         }
         CSVWriter.getInstance().writeTicketsInfo(proj.getBugIssues(), "Tickets", proj.getProjName());
 
-        if (debug) {
+        if (DEBUG) {
             log = "--> Writing commits information to file: "+proj.getProjName()+"Commits.csv";
             Logger.getGlobal().log(Level.INFO, log);
         }
-        CSVWriter.getInstance().writeCommitsInfo(proj.getCommits(), proj.getRefCommits(), "Commits", proj.getProjName());
+        CSVWriter.getInstance().writeCommitsInfo(proj.getRefCommits(), "Commits", proj.getProjName());
 
-        if (debug) {
+        if (DEBUG) {
             log = "--> Writing dataset: "+proj.getProjName()+"dataset.csv";
             Logger.getGlobal().log(Level.INFO, log);
         }
         CSVWriter.getInstance().writeDataset(obs, proj.getProjName());
 
-        if (debug) {
+        if (DEBUG) {
             log = "--> Converting CSV file to ARFF file";
             Logger.getGlobal().log(Level.INFO, log);
         }

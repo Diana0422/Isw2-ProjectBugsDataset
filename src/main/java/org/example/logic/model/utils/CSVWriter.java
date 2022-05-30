@@ -57,8 +57,8 @@ public class CSVWriter {
             for (int i=0; i<numEntries; i++) {
                 Release r = releases.get(i);
                 if (r != null) {
-                    Integer index = i + 1;
-                    fileWriter.append(index.toString());
+                    int index = i + 1;
+                    fileWriter.append(Integer.toString(index));
                     fileWriter.append(";");
                     fileWriter.append(r.getId());
                     fileWriter.append(";");
@@ -74,33 +74,13 @@ public class CSVWriter {
         }
     }
 
-    public void writeCommitsInfo(List<Commit> commits, List<Commit> refCommits, String filename, String projName) {
+    public void writeCommitsInfo(List<Commit> refCommits, String filename, String projName) {
         // iterate on array of commits and write as entries on file csv
 
         String outname = projName + filename + ".csv";
         try (FileWriter fileWriter = new FileWriter(outname)) {
             fileWriter.append("Commit Sha;Date;Author;Referenced Ticket;Version;Committed Files");
             fileWriter.append("\n");
-//            for (Commit c: commits) {
-//                fileWriter.append(c.getShaId());
-//                fileWriter.append(";");
-//                fileWriter.append(Parser.getInstance().parseLocalDateToString(c.getDate()));
-//                fileWriter.append(";");
-//                fileWriter.append(c.getAuthor());
-//                fileWriter.append(";");
-//                fileWriter.append(c.getMessage());
-//                fileWriter.append(";");
-//                if (c.getVersion()!= null) {
-//                    fileWriter.append(Integer.toString(c.getVersion().getIndex()));
-//                } else {
-//                    fileWriter.append("N/D");
-//                }
-//                fileWriter.append(";");
-//                fileWriter.append(Integer.toString(c.getCommittedFiles().size()));
-//                fileWriter.append("\n");
-//            }
-
-
             for (Commit c: refCommits) {
                 fileWriter.append(c.getShaId());
                 fileWriter.append(";");
@@ -143,7 +123,7 @@ public class CSVWriter {
                 fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getNumRevisions()));
                 fileWriter.append(";");
-                fileWriter.append(Integer.toString(r.getNumFix()));
+                fileWriter.append(Integer.toString(r.getNFix()));
                 fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getAuthors().size()));
                 fileWriter.append(";");
@@ -169,7 +149,7 @@ public class CSVWriter {
                 fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getWeightedAge()));
                 fileWriter.append(";");
-                fileWriter.append(Integer.toString(r.getnSmells()));
+                fileWriter.append(Integer.toString(r.getNSmells()));
                 fileWriter.append(";");
                 fileWriter.append(r.getBuggy());
                 fileWriter.append("\n");

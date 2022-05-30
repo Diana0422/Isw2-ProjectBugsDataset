@@ -44,15 +44,12 @@ public class ARFFWriter {
             String attributes = reader.readLine();
             writeAttributes(attributes, writer, filenames, versions);
 
-            String record;
+            String rec;
             writer.append("@data\n");
-            while ((record = reader.readLine()) != null) {
-                record = record.replace(";", ",");
-                writer.append(record+"\n");
+            while ((rec = reader.readLine()) != null) {
+                rec = rec.replace(";", ",");
+                writer.append(rec).append("\n");
             }
-        } catch (FileNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -80,9 +77,10 @@ public class ARFFWriter {
 
             //uniquely add value to subset
             boolean check = true;
-            for (int i=0; i<subset.size(); i++) {
-                if (subset.get(i).equals(value)) {
+            for (String s : subset) {
+                if (s.equals(value)) {
                     check = false;
+                    break;
                 }
             }
 
@@ -134,26 +132,26 @@ public class ARFFWriter {
         String attr17Col = tokenizer.nextToken().replace(" ", "_");
         String labelCol = tokenizer.nextToken().replace(" ", "_");
 
-        writer.append(start+releaseCol+" "+versions+"\n");
-        writer.append(start+filenameCol+" "+filenames+"\n");
-        writer.append(start+attr1Col+numend);
-        writer.append(start+attr2Col+numend);
-        writer.append(start+attr3Col+numend);
-        writer.append(start+attr4Col+numend);
-        writer.append(start+attr5Col+numend);
-        writer.append(start+attr6Col+numend);
-        writer.append(start+attr7Col+numend);
-        writer.append(start+attr8Col+numend);
-        writer.append(start+attr9Col+numend);
-        writer.append(start+attr10Col+numend);
-        writer.append(start+attr11Col+numend);
-        writer.append(start+attr12Col+numend);
-        writer.append(start+attr13Col+numend);
-        writer.append(start+attr14Col+numend);
-        writer.append(start+attr15Col+numend);
-        writer.append(start+attr16Col+numend);
-        writer.append(start+attr17Col+numend);
-        writer.append(start+labelCol+labelend);
+        writer.append(start).append(releaseCol).append(" ").append(versions).append("\n");
+        writer.append(start).append(filenameCol).append(" ").append(filenames).append("\n");
+        writer.append(start).append(attr1Col).append(numend);
+        writer.append(start).append(attr2Col).append(numend);
+        writer.append(start).append(attr3Col).append(numend);
+        writer.append(start).append(attr4Col).append(numend);
+        writer.append(start).append(attr5Col).append(numend);
+        writer.append(start).append(attr6Col).append(numend);
+        writer.append(start).append(attr7Col).append(numend);
+        writer.append(start).append(attr8Col).append(numend);
+        writer.append(start).append(attr9Col).append(numend);
+        writer.append(start).append(attr10Col).append(numend);
+        writer.append(start).append(attr11Col).append(numend);
+        writer.append(start).append(attr12Col).append(numend);
+        writer.append(start).append(attr13Col).append(numend);
+        writer.append(start).append(attr14Col).append(numend);
+        writer.append(start).append(attr15Col).append(numend);
+        writer.append(start).append(attr16Col).append(numend);
+        writer.append(start).append(attr17Col).append(numend);
+        writer.append(start).append(labelCol).append(labelend);
         writer.append("\n");
 
     }

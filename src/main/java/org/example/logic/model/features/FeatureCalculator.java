@@ -1,79 +1,40 @@
 package org.example.logic.model.features;
 import org.example.logic.model.keyabstractions.Record;
-
 import java.util.HashMap;
 import java.util.List;
 
 public class FeatureCalculator {
 
-    private static FeatureCalculator instance;
     private static List<HashMap<String, Record>> hashMaps;
 
-    private FeatureCalculator() {}
-
-    public static FeatureCalculator getInstance() {
-        if (instance == null) {
-            instance = new FeatureCalculator();
-        }
-
-        return instance;
-    }
-
-    public void setHashMaps(List<HashMap<String, Record>> hashMaps) {
-        this.hashMaps = hashMaps;
-    }
-
-    public List<HashMap<String, Record>> getHashMaps() {
+    public static List<HashMap<String, Record>> getHashMaps() {
         return hashMaps;
     }
 
-    public void updateAdditions(int additions, Record record) {
-        /***
-         * Update additions of a record (LOC Added)
-         *
-         * */
-//        int additions = 0;
-//        String line;
-//        String beginChar;
-//
-//        for (int i=0; i<lines.length; i++) {
-//            line = lines[i];
-//            beginChar = line.substring(0, 1);
-//
-//            if (beginChar.contains("+")) additions++;
-//        }
-
-        int locAdded = record.getLocAdded()+additions;
-        record.setLocAdded(locAdded);
-        record.setMaxLocAdded(additions);
+    public static void setHashMaps(List<HashMap<String, Record>> hashMaps) {
+        FeatureCalculator.hashMaps = hashMaps;
     }
 
-    public void updateDeletions(int deletions, Record record) {
-        /**
-         * Update deletions of a record.
-         * */
-//
-//        int deletions = 0;
-//        String line = null;
-//        String beginChar = null;
-//
-//        for (int i=0; i<lines.length; i++) {
-//            line = lines[i];
-//            beginChar = line.substring(0, 1);
-//
-//            if (beginChar.contains("-")) deletions++;
-//        }
-
-        int locDeleted = record.getLocDeleted()+deletions;
-        record.setLocDeleted(locDeleted);
+    /***
+     * Update additions of a record (LOC Added)
+     *
+     * */
+    public static void setAdditions(Record rec, int additions) {
+        rec.setLocAdded(additions);
+        rec.setMaxLocAdded(additions);
     }
 
+    /**
+     * Update deletions of a record.
+     * */
+    public static void setDeletions(Record rec, int deletions) {
+        rec.setLocDeleted(deletions);
+    }
 
-    public void updateLOC(String[] lines, Record record) {
-        /**
-         * Updates LOC of a record (Size).
-         * */
-
+    /**
+     * Updates LOC of a record (Size).
+     * */
+    public static void updateLOC(String[] lines, Record rec) {
         boolean multi = false;
 
         int loc = lines.length;
@@ -81,79 +42,77 @@ public class FeatureCalculator {
             return;
         }
 
-        String line = null;
+        String line;
+        for (String s : lines) {
 
-        for(int i=0; i<lines.length; i++) {
+            line = s;
 
-            line = lines[i];
-
-            if(multi){
+            if (multi) {
                 loc--;
 
-                if(line.contains("*/")) {
+                if (line.contains("*/")) {
                     multi = false;
                 }
-            }
-            else if(line.contains("//")) {
+            } else if (line.contains("//")) {
                 loc--;
-            }
-            else if(line.contains("/*")) {
+            } else if (line.contains("/*")) {
                 loc--;
                 multi = true;
             }
 
         }
 
-        record.setSize(loc);
+        rec.setSize(loc);
     }
 
-    public void calculateLOCTouched(Record record) {
-        /***
-         * update the value of the sum over revisions of LOC added+deleted (LOC Touched)
-         */
-        int added = record.getLocAdded();
-        int deleted = record.getLocDeleted();
-        int locTouched = record.getLocTouched()+added+deleted;
-        record.setLocTouched(locTouched);
+    /***
+     * update the value of the sum over revisions of LOC added+deleted (LOC Touched)
+     */
+    public static void calculateLOCTouched(Record rec) {
+        int added = rec.getLocAdded();
+        int deleted = rec.getLocDeleted();
+        int locTouched = rec.getLocTouched()+added+deleted;
+        rec.setLocTouched(locTouched);
     }
 
-    public void updateNR(Record record) {
-        /***
-         * increments the number of revisions for the record.
-         */
-        int NR = record.getNumRevisions();
-        record.setNumRevisions(NR+1);
+    /***
+     * increments the number of revisions for the record.
+     */
+    public static void updateNR(Record rec) {
+        int nr = rec.getNumRevisions();
+        rec.setNumRevisions(nr+1);
     }
 
-    public void updateNAuth(String authorName, Record record) {
-        /***
-         * update the list of authors for the record specified (and thus the number of authors).
-         */
-        if (record.getAuthors().contains(authorName)) return;
-        record.getAuthors().add(authorName);
+    /***
+     * update the list of authors for the record specified (and thus the number of authors).
+     */
+    public static void updateNAuth(String authorName, Record rec) {
+        if (rec.getAuthors().contains(authorName)) return;
+        rec.getAuthors().add(authorName);
     }
 
-    public void calculateNFix() {
-        // TODO
+    public static void calculateNFix(Record rec) {
+        int fix = rec.getNFix();
+        rec.setNFix(fix+1);
     }
 
-    public void updateChurn(Record record) {
-        /***
-         * Update the value of the sum over revisions of added - deleted LOC in a record.
-         */
-        int added = record.getLocAdded();
-        int deleted = record.getLocDeleted();
-        int churn = record.getChurn()+(added-deleted);
-        record.setChurn(churn);
-        record.setMaxChurn(added-deleted);
+    /***
+     * Update the value of the sum over revisions of added - deleted LOC in a record.
+     */
+    public static void updateChurn(Record rec) {
+        int added = rec.getLocAdded();
+        int deleted = rec.getLocDeleted();
+        int churn = rec.getChurn()+(added-deleted);
+        rec.setChurn(churn);
+        rec.setMaxChurn(added-deleted);
     }
 
-    public void updateChgSetSize(int chgSetSize, Record record) {
-        /***
-         * update the value of the sum over revisions of the number of classes touched together with the file specified in the record
-         */
-        record.addChgSetSize(chgSetSize);
-        record.setMaxChgSetSize(chgSetSize);
+    /***
+     * update the value of the sum over revisions of the number of classes touched together with the file specified in the record
+     */
+    public static void updateChgSetSize(int chgSetSize, Record rec) {
+        rec.addChgSetSize(chgSetSize);
+        rec.setMaxChgSetSize(chgSetSize);
     }
 
     public void calculateAge() {
@@ -161,10 +120,6 @@ public class FeatureCalculator {
     }
 
     public void calculateWeightedAge() {
-        // TODO
-    }
-
-    public void calculateNSmells() {
         // TODO
     }
 }

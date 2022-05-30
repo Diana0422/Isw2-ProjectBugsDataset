@@ -1,8 +1,6 @@
 package org.example.logic.model.keyabstractions;
 
-import javax.print.attribute.standard.MediaSize;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Record {
@@ -96,13 +94,6 @@ public class Record {
         this.locAdded = locAdded;
     }
 
-    public void addLocAdded(int locAdded) {
-        this.locAdded += locAdded;
-
-        // calculate max loc added
-        if (locAdded > this.maxLocAdded) this.maxLocAdded = locAdded;
-    }
-
     public int getMaxLocAdded() {
         return maxLocAdded;
     }
@@ -136,10 +127,6 @@ public class Record {
         this.locTouched = locTouched;
     }
 
-    public void addLocTouched(int locTouched) {
-        this.locTouched += locTouched;
-    }
-
     /*
      * NUM revision : number of revisions
      */
@@ -150,10 +137,6 @@ public class Record {
 
     public void setNumRevisions(int numRevisions) {
         this.numRevisions = numRevisions;
-    }
-
-    public void addRevision() {
-        this.numRevisions++;
     }
 
     /***
@@ -192,8 +175,8 @@ public class Record {
         return this.maxChgSetSize;
     }
 
-    /*
-     * NAuth : num authors
+    /**
+     * num authors
      */
 
     public List<String> getAuthors() {
@@ -202,32 +185,6 @@ public class Record {
 
     public void setAuthors(List<String> authors) {
         this.authors = authors;
-    }
-
-    public void addAuthor(String auth) {
-        for (String author: this.authors) {
-            if (author.equals(auth)) {
-                return;
-            }
-        }
-        this.authors.add(auth);
-    }
-
-    /*
-     * NFix : number of fixes
-     *
-     */
-
-    public void addFix() {
-        this.numFix++;
-    }
-
-    public int getNumFix() {
-        return numFix;
-    }
-
-    public void setNumFix(int numFix) {
-        this.numFix = numFix;
     }
 
     /**
@@ -290,11 +247,19 @@ public class Record {
         this.weightedAge = weightedAge;
     }
 
-    public int getnSmells() {
+    public int getNSmells() {
         return nSmells;
     }
 
-    public void setnSmells(int nSmells) {
+    public void setNSmells(int nSmells) {
         this.nSmells = nSmells;
+    }
+
+    public int getNFix() {
+        return numFix;
+    }
+
+    public void setNFix(int i) {
+        this.numFix = i;
     }
 }
