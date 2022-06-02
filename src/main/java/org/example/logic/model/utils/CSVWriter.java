@@ -109,7 +109,7 @@ public class CSVWriter {
 
         String outname = projName+"dataset.csv";
         try (FileWriter fileWriter = new FileWriter(outname)) {
-            fileWriter.append("Version;ClassName;Size;LOC_touched;NR;NFix;NAuth;LOC_added;MAX_LOC_added;AVG_LOC_added;Churn;MAX_Churn;AVG_Churn;ChgSetSize;MAX_ChgSet;AVG_ChgSet;Age;WeightedAge;NSmells;Buggy");
+            fileWriter.append("Version;ClassName;Size;LOC_touched;NR;NFix;NAuth;LOC_added;MAX_LOC_added;AVG_LOC_added;Churn;MAX_Churn;AVG_Churn;ChgSetSize;MAX_ChgSet;AVG_ChgSet;Age;WeightedAge;Buggy");
             fileWriter.append("\n");
 
             for (Record r: obs) {
@@ -147,9 +147,7 @@ public class CSVWriter {
                 fileWriter.append(";");
                 fileWriter.append(Integer.toString(r.getAge()));
                 fileWriter.append(";");
-                fileWriter.append(Integer.toString(r.getWeightedAge()));
-                fileWriter.append(";");
-                fileWriter.append(Integer.toString(r.getNSmells()));
+                fileWriter.append(Double.toString(r.getWeightedAge()));
                 fileWriter.append(";");
                 fileWriter.append(r.getBuggy());
                 fileWriter.append("\n");

@@ -72,11 +72,13 @@ public class GitHandler {
                         LocalDateTime date = Parser.getInstance().parseDateToLocalDateTime(st.nextToken());
                         String ticketRef = st.nextToken();
                         String author = st.nextToken();
-                        Commit commit = new Commit(sha, ticketRef, date, author);
+                        Commit commit = new Commit(project, sha, ticketRef, date, author);
                         Release commitRelease = Release.findVersionByDate(project.getVersions(), commit.getDate());
                         commit.setVersion(commitRelease);
                         return commit;
-                    }).toList();
+                    }).collect(Collectors.toList());
+
+            cs.sort(Comparator.comparing(Commit::getDate)); // order commits by date
         }catch (CommandException e) {
             e.printStackTrace();
         }
@@ -96,6 +98,8 @@ public class GitHandler {
                     .replace("\r", "")
                     .split("\n");
             List<String> linesJavaList = Arrays.stream(lines).toList();
+//            System.out.println(commit.getShaId()+"->"+linesJavaList);
+//            System.out.println("\n");
 
             /* renamed files */
             files = linesJavaList.parallelStream()
@@ -111,9 +115,9 @@ public class GitHandler {
                             String filepathOld = Parser.getInstance().parseFilepathFromChangesLine(file, true);
                             String filenameOld = Parser.getInstance().parseFilenameFromFilepath(filepathOld);
                             // cerca il vecchio file, oppure creane uno nuovo
-                            JFile oldFile = project.getFile(commit.getVersion().getIndex(), filenameOld, filepathOld);
+                            JFile oldFile = project.getFile(commit, filenameOld, filepathOld);
                             // cerca il nuovo file, oppure creane uno nuovo
-                            JFile newFile = project.getFile(commit.getVersion().getIndex(), filename, filepath);
+                            JFile newFile = project.getFile(commit, filename, filepath);
                             // aggiungi la release del commit al file nuovo
                             newFile.addAndFillRelease(commit.getVersion());
                             // elimina la release del commit dal file vecchio
@@ -136,7 +140,7 @@ public class GitHandler {
                             String filepath = Parser.getInstance().parseFilepathFromChangesLine(file, false);
                             String filename = Parser.getInstance().parseFilenameFromFilepath(file);
                             // cerca il file, altrimenti creane uno nuovo
-                            JFile f = project.getFile(commit.getVersion().getIndex(), filename, filepath);
+                            JFile f = project.getFile(commit, filename, filepath);
                             // aggiungi il commit alla lista delle revisioni del file
                             f.addRevision(commit);
                             // aggiorna le caratteristiche del file
@@ -150,7 +154,7 @@ public class GitHandler {
                             String filename = Parser.getInstance().parseFilenameFromFilepath(file);
 
                             // cerca il file, altrimenti creane uno nuovo
-                            JFile f = project.getFile(commit.getVersion().getIndex(), filename, filepath);
+                            JFile f = project.getFile(commit, filename, filepath);
                             // aggiungi il commit alla lista delle revisioni del file
                             f.addRevision(commit);
                             //aggiungi la release del commit al file
@@ -176,6 +180,7 @@ public class GitHandler {
             file.updateDeletions(version, deletion);
             file.updateChanges(version, changes);
             file.updateContent(version, getFileContent(file.getRelPath(), commit));
+            file.updateAge(version);
         } catch (IOException e) {
             // TODO: handle exception
             e.printStackTrace();

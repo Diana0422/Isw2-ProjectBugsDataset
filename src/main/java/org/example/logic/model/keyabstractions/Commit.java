@@ -2,12 +2,16 @@ package org.example.logic.model.keyabstractions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Commit {
 
+    private Project project;
     private final String shaId;
     private String message;
+    private String ticketTag;
     private LocalDateTime date;
     private String author;
     private Release version;
@@ -17,12 +21,23 @@ public class Commit {
         this.shaId = "head";
     }
 
-    public Commit(String sha, String mess, LocalDateTime date, String author) {
+    public Commit(Project project, String sha, String mess, LocalDateTime date, String author) {
+        this.project = project;
         this.shaId = sha;
         this.message = mess;
         this.date = date;
         this.author = author;
         this.committedFiles = new ArrayList<>();
+        this.ticketTag = getTicketReference(message);
+    }
+
+    private String getTicketReference(String message) {
+        String proj = project.getProjName();
+        String m = message.substring(4);
+        String[] list = m.split(" ");
+        return Arrays.stream(list).parallel()
+                .filter(s -> s.contains(proj + "-"))
+                .collect(Collectors.joining());
     }
 
     public String getShaId() {
@@ -51,6 +66,10 @@ public class Commit {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getTicketTag() {
+        return ticketTag;
     }
 
     public Release getVersion() {

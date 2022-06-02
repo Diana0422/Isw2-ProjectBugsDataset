@@ -20,8 +20,9 @@ public class Record {
     private int maxChgSetSize;
     private int numFix;
     private List<String> authors;
+    private List<String> tickets;
     private int age;
-    private int weightedAge;
+    private double weightedAge;
     private int nSmells;
 
 
@@ -44,6 +45,7 @@ public class Record {
         this.nSmells = 0;
         this.buggy = "No";
         this.authors = new ArrayList<>();
+        this.tickets = new ArrayList<>();
     }
 
     public int getVersion() {
@@ -99,7 +101,7 @@ public class Record {
     }
 
     public void setMaxLocAdded(int maxLoc) {
-        if (maxLoc >= this.maxLocAdded) this.maxLocAdded = maxLoc;
+         this.maxLocAdded = maxLoc;
     }
 
     public float getAvgLoc() {
@@ -239,11 +241,11 @@ public class Record {
         this.age = age;
     }
 
-    public int getWeightedAge() {
+    public double getWeightedAge() {
         return weightedAge;
     }
 
-    public void setWeightedAge(int weightedAge) {
+    public void setWeightedAge(double weightedAge) {
         this.weightedAge = weightedAge;
     }
 
@@ -261,5 +263,15 @@ public class Record {
 
     public void setNFix(int i) {
         this.numFix = i;
+    }
+
+    public List<String> getTickets() {
+        return tickets;
+    }
+
+    public void addTicket(String ticket) {
+        if (!getTickets().contains(ticket)) {
+            tickets.add(ticket);
+        }
     }
 }

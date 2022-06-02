@@ -196,6 +196,9 @@ public class Project {
         return refCommits;
     }
 
+    public void setRefCommits(List<Commit> refCommits) {
+        this.refCommits = refCommits;
+    }
     public void addRenomination(int releaseIdx, JFile oldFile, JFile newFile) {
         int hashIdx = releaseIdx-1;
         HashMap<JFile, JFile> renomination = this.renames.get(hashIdx);
@@ -213,12 +216,16 @@ public class Project {
         relFiles.put(file.getRelPath(), file);
     }
 
-    public JFile getFile(Integer releaseIdx, String filename, String filepath) {
+    public JFile getFile(Commit commit, String filename, String filepath) {
+        int releaseIdx = commit.getVersion().getIndex();
+        LocalDateTime creation = commit.getDate();
         if (checkFile(releaseIdx, filepath)) {
+            /* the file is already created - take the existing instance */
             HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
             return relFiles.get(filepath);
         } else {
-            JFile file = new JFile(this, filename, filepath);
+            /* the file is new - create a new instance */
+            JFile file = new JFile(this, filename, filepath, creation);
             addFile(releaseIdx, file);
             return file;
         }

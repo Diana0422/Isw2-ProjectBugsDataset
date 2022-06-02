@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ProjectInspector {
 
@@ -31,7 +32,11 @@ public class ProjectInspector {
      */
     public List<Commit> inspectProjectCommits() {
         List<Commit> commits = git.lookupForCommits();
+        List<Commit> refCommits = commits.parallelStream()
+                .filter(commit -> commit.getMessage().contains(project.getProjName() + "-"))
+                .toList();
         project.setCommits(commits);
+        project.setRefCommits(refCommits);
         return commits;
     }
 
@@ -220,7 +225,9 @@ public class ProjectInspector {
 
         String[] content = file.getContent().get(releaseIdx);
         int additions = file.getAdditions().get(releaseIdx);
+        int maxAdditions = file.getMaxAdditions().get(releaseIdx);
         int deletions = file.getDeletions().get(releaseIdx);
+        int age = file.getAges().get(releaseIdx);
         String author = commit.getAuthor();
         int chgSetSize = commit.getCommittedFiles().size() - 1;
 
@@ -232,6 +239,7 @@ public class ProjectInspector {
             if (releaseRecords.containsKey(recordKey)) {
                 Record rec = releaseRecords.get(recordKey);
                 FeatureCalculator.setAdditions(rec, additions);
+                FeatureCalculator.setMaxLocAdded(rec, maxAdditions);
                 FeatureCalculator.setDeletions(rec, deletions);
                 FeatureCalculator.updateLOC(content, rec);
                 FeatureCalculator.calculateLOCTouched(rec);
@@ -239,7 +247,9 @@ public class ProjectInspector {
                 FeatureCalculator.updateNR(rec);
                 FeatureCalculator.updateNAuth(author, rec);
                 FeatureCalculator.updateChgSetSize(chgSetSize, rec);
-                if (project.getRefCommits().contains(commit)) FeatureCalculator.calculateNFix(rec);
+                if (project.getRefCommits().contains(commit)) FeatureCalculator.updateNFix(rec, commit.getTicketTag());
+                FeatureCalculator.calculateAge(age, rec);
+                FeatureCalculator.calculateWeightedAge(rec);
                 releaseRecords.put(recordKey, rec);
                 return rec;
             }

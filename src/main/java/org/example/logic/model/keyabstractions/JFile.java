@@ -1,5 +1,8 @@
 package org.example.logic.model.keyabstractions;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.*;
 
 public class JFile {
@@ -8,27 +11,37 @@ public class JFile {
     private String name;
     private final String relpath;
     private final String oldPath;
+    private final LocalDateTime creation;
     private final HashMap<Integer,Integer> additions; // (version, addition)
+    private final HashMap<Integer,Integer> maxAdditions;
     private final HashMap<Integer,Integer> deletions; // (version, deletion)
     private final HashMap<Integer,Integer> changes; // (version, changes)
     private final HashMap<Integer, String[]> content; // (version, content)
+    private final HashMap<Integer, Integer> ages; // (version, age)
     private final List<Commit> revisions;
     private List<Release> releases;
     private List<Release> buggyReleases;
 
 
-    public JFile(Project project, String name, String relpath) {
+    public JFile(Project project, String name, String relpath, LocalDateTime creation) {
         this.name = name;
         this.project = project;
         this.relpath = relpath;
+        this.creation = creation;
         this.additions = new HashMap<>();
+        this.maxAdditions = new HashMap<>();
         this.deletions = new HashMap<>();
         this.changes = new HashMap<>();
         this.content = new HashMap<>();
+        this.ages = new HashMap<>();
         this.revisions = new ArrayList<>();
         this.releases = new ArrayList<>();
         this.buggyReleases = new ArrayList<>();
         this.oldPath = relpath;
+    }
+
+    public LocalDateTime getCreation() {
+        return creation;
     }
 
     public String getOldPath() {
@@ -102,6 +115,20 @@ public class JFile {
         } else {
             this.additions.put(version, deltaAddition);
         }
+        updateMaxAdditions(version, deltaAddition);
+    }
+
+    private void updateMaxAdditions(Integer version, Integer deltaAddition) {
+        if (this.maxAdditions.containsKey(version)) {
+            Integer max = this.maxAdditions.get(version);
+            if (deltaAddition >= max) this.maxAdditions.put(version, deltaAddition);
+        } else {
+            this.maxAdditions.put(version, deltaAddition);
+        }
+    }
+
+    public Map<Integer, Integer> getMaxAdditions() {
+        return maxAdditions;
     }
 
     public Map<Integer, Integer> getDeletions() { return deletions; }
@@ -181,11 +208,25 @@ public class JFile {
         return revisions;
     }
 
-    public void addRevision(Commit commit) {
-        this.revisions.add(commit);
-    }
+    public void addRevision(Commit commit) {this.revisions.add(commit);}
 
     public void setBuggyReleases(List<Release> buggyReleases) {
         this.buggyReleases = buggyReleases;
+    }
+
+    /***
+     * updates file age given a commit
+     * @param version
+     */
+    public void updateAge(int version) {
+        LocalDate releaseDate = Release.findVersionByIndex(project.getVersions(), version).getDate().toLocalDate();
+        LocalDate created = this.creation.toLocalDate();
+        int daysAge = Period.between(created, releaseDate).getDays();
+        int weeksAge = (int) Math.ceil((daysAge / 7.0));
+        this.ages.put(version, weeksAge);
+    }
+
+    public HashMap<Integer, Integer> getAges() {
+        return ages;
     }
 }

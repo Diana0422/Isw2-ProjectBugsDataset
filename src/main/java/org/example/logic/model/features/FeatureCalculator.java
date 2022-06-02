@@ -1,5 +1,7 @@
 package org.example.logic.model.features;
+
 import org.example.logic.model.keyabstractions.Record;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,15 +19,19 @@ public class FeatureCalculator {
 
     /***
      * Update additions of a record (LOC Added)
-     *
+     * (the value is already calculated as cumulative in release)
      * */
     public static void setAdditions(Record rec, int additions) {
         rec.setLocAdded(additions);
-        rec.setMaxLocAdded(additions);
+    }
+
+    public static void setMaxLocAdded(Record rec, int maxAdd) {
+        rec.setMaxLocAdded(maxAdd);
     }
 
     /**
      * Update deletions of a record.
+     * (the value is already calculated as cumulative in release)
      * */
     public static void setDeletions(Record rec, int deletions) {
         rec.setLocDeleted(deletions);
@@ -33,6 +39,7 @@ public class FeatureCalculator {
 
     /**
      * Updates LOC of a record (Size).
+     * (the value is already calculated as cumulative in release)
      * */
     public static void updateLOC(String[] lines, Record rec) {
         boolean multi = false;
@@ -67,11 +74,12 @@ public class FeatureCalculator {
 
     /***
      * update the value of the sum over revisions of LOC added+deleted (LOC Touched)
+     * (the value is already calculated as cumulative in release)
      */
     public static void calculateLOCTouched(Record rec) {
         int added = rec.getLocAdded();
         int deleted = rec.getLocDeleted();
-        int locTouched = rec.getLocTouched()+added+deleted;
+        int locTouched = added+deleted;
         rec.setLocTouched(locTouched);
     }
 
@@ -91,9 +99,11 @@ public class FeatureCalculator {
         rec.getAuthors().add(authorName);
     }
 
-    public static void calculateNFix(Record rec) {
-        int fix = rec.getNFix();
-        rec.setNFix(fix+1);
+    public static void updateNFix(Record rec, String ticketRef) {
+        if (!rec.getTickets().contains(ticketRef)) {
+            int fix = rec.getNFix();
+            rec.setNFix(fix + 1);
+        }
     }
 
     /***
@@ -115,11 +125,23 @@ public class FeatureCalculator {
         rec.setMaxChgSetSize(chgSetSize);
     }
 
-    public void calculateAge() {
-        // TODO
+    /***
+     * update the value of the age of a class
+     */
+    public static void calculateAge(int age, Record rec) {
+        rec.setAge(age);
     }
 
-    public void calculateWeightedAge() {
-        // TODO
+    public static void calculateWeightedAge(Record rec) {
+        int age = rec.getAge();
+        int locTouched = rec.getLocTouched();
+        System.out.println(age);
+        System.out.println(locTouched);
+        if (locTouched == 0) {
+            rec.setWeightedAge(0);
+        } else {
+            double weighted = age/(double)locTouched;
+            rec.setWeightedAge(weighted);
+        }
     }
 }

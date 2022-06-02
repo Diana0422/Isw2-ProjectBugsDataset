@@ -129,7 +129,6 @@ public class ARFFWriter {
         String attr14Col = tokenizer.nextToken().replace(" ", "_");
         String attr15Col = tokenizer.nextToken().replace(" ", "_");
         String attr16Col = tokenizer.nextToken().replace(" ", "_");
-        String attr17Col = tokenizer.nextToken().replace(" ", "_");
         String labelCol = tokenizer.nextToken().replace(" ", "_");
 
         writer.append(start).append(releaseCol).append(" ").append(versions).append("\n");
@@ -150,7 +149,6 @@ public class ARFFWriter {
         writer.append(start).append(attr14Col).append(numend);
         writer.append(start).append(attr15Col).append(numend);
         writer.append(start).append(attr16Col).append(numend);
-        writer.append(start).append(attr17Col).append(numend);
         writer.append(start).append(labelCol).append(labelend);
         writer.append("\n");
 
