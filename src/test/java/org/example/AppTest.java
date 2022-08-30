@@ -1,20 +1,56 @@
 package org.example;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.example.logic.model.utils.Parser;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Unit test for simple App.
  */
+@RunWith(Parameterized.class)
 public class AppTest 
 {
     /**
      * Rigorous Test :-)
      */
+
+    private String line;
+    private String expectedResult;
+    private boolean old;
+
+    public AppTest(String line, boolean old, String expectedResult) {
+        this.line = line;
+        this.old = old;
+        this.expectedResult = expectedResult;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> parameters() {
+        return Arrays.asList(new Object[][]{
+                {"{api => stream/api}/src/com/File.java", true, "api/src/com/File.java"},
+                {"{api => stream/api}/src/com/File.java", false, "stream/api/src/com/File.java"},
+                {"pippo/franco/{api => stream/api}/src/com/File.java", true, "pippo/franco/api/src/com/File.java"},
+                {"pippo/franco/{api => stream/api}/src/com/File.java", false, "pippo/franco/stream/api/src/com/File.java"},
+                {"pippo/franco/stream/src/com/{Old.java => New.java}", false, "pippo/franco/stream/src/com/New.java"},
+                {"pippo/franco/stream/src/com/{Old.java => New.java}", true, "pippo/franco/stream/src/com/Old.java"},
+                {"pippo/franco/stream/src/com/File.java", false, "pippo/franco/stream/src/com/File.java"},
+                {"bookkeeper-server/src/test/java/org/apache/bookkeeper/bookie/{TestEntryLog.java => EntryLogTest.java}", false, "bookkeeper-server/src/test/java/org/apache/bookkeeper/bookie/EntryLogTest.java"},
+                {"bookkeeper-server/src/{test/java/org/apache/bookkeeper/meta/HierarchicalLedgerDeleteTest.java => main/java/org/apache/bookkeeper/versioning/Version.java}", false, "bookkeeper-server/src/main/java/org/apache/bookkeeper/versioning/Version.java"},
+        });
+    }
+
     @Test
-    public void shouldAnswerWithTrue()
+    public void testParseFilepathFromLine()
     {
-        assertTrue( true );
+        String s = Parser.getInstance().parseFilePathFromLine(this.line, this.old);
+//        String s = Parser.getInstance().parseFilepathFromChangesLine(line, old);
+        assertEquals(expectedResult, s);
     }
 }

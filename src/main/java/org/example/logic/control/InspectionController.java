@@ -32,7 +32,7 @@ public class InspectionController {
             // get the project properties
             projName = prop.getProperty("project_name");
             projDir = prop.getProperty("project_dir");
-            percent = Integer.parseInt(prop.getProperty("percentage"));
+            percent = Integer.parseInt(prop.getProperty("percent"));
             DEBUG = Boolean.parseBoolean(prop.getProperty("debug"));
             FULL_DEBUG = Boolean.parseBoolean(prop.getProperty("full_debug"));
 
@@ -44,7 +44,8 @@ public class InspectionController {
         /* instantiate project */
         Project proj = new Project(projName, percent, projDir, prop);
 
-        /* calculate the average P value of the other 75 project apache */
+        /* calculate the average P value of the other 75 project apache:
+        * warning: this is valid just as a starting value not having analyzed any issue */
         COLD_PROPORTION = Issue.calculateColdStartProportion(projName, prop);
 
         /* inspect project */

@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -65,63 +64,54 @@ public class Parser {
         return sb.toString();
     }
 
-    public String parseFilepathFromChangesLine(String line, boolean old) {
-        /**
-         * Extract the actual filepath from the commit changes extracted line
-         */
-        StringTokenizer tokenizer = new StringTokenizer(line, "/");
-        StringBuilder builder = new StringBuilder();
-        while (tokenizer.hasMoreTokens()) {
-            String tok = tokenizer.nextToken();
-            if (tok.contains("=>")) {
-                // prepare renaming part
-                extractRenaming(tok, builder, old);
-            } else if (tok.contains("{")) {
-                // prepare renaming part
-                StringBuilder interBuilder = new StringBuilder();
-                String interTok = "";
-                interBuilder.append(tok);
-                interBuilder.append("/");
-                while (tokenizer.hasMoreTokens()) {
-                    interTok = tokenizer.nextToken();
-                    interBuilder.append(interTok);
-                    if (!interTok.contains("}")) {
-                        interBuilder.append("/");
-                    } else {
-                        break;
-                    }
-                }
-                String renaming = interBuilder.toString();
-                extractRenaming(renaming, builder, old);
-            } else if (tok.contains("}")) {
-                tok = tok.substring(0, tok.length()-1);
-                builder.append(tok);
-                if (!tok.contains(".java")) builder.append("/");
-            } else {
-                builder.append(tok);
-                if (!tok.contains(".java")) builder.append("/");
-            }
-        }
-        return builder.toString();
-    }
+    /**
+     * Extract the actual filepath from the commit changes extracted line
+     * @param line line to parse
+     * @param old specifies whether I'm interested to the old path or the new path
+     * @return the parsed string
+     */
+    public String parseFilePathFromLine(String line, boolean old) {
+        boolean splits = false;
+        String firstSplit = "";
 
-    private void extractRenaming(String renaming, StringBuilder builder, boolean old) {
-        if (!renaming.contains("}")) renaming = renaming + "}";
-        StringTokenizer internalTokenizer = new StringTokenizer(renaming, " ");
-        String interTok = "";
-        while (internalTokenizer.hasMoreTokens()) {
-            interTok = internalTokenizer.nextToken();
-            if (old) break;
+        // If string doesn't contain "=>" then just return line, because the file was not renamed
+        if (!line.contains("=>")) return line;
+
+        // Extract modified part from line
+        StringTokenizer tokenizer = new StringTokenizer(line, "{");
+        if (line.charAt(0) != '{') {
+            firstSplit = tokenizer.nextToken();
+            splits = true;
         }
-        int interTokLen = interTok.length();
-        String dir;
-        if (old) {
-            dir = interTok.substring(1, interTokLen);
+        String modifiedPart = tokenizer.nextToken("}") + "}";
+
+        // Extract remaining part
+        int startIdx;
+        int endIdx;
+        if (splits) {
+            String totalFirstSplit = firstSplit+modifiedPart;
+            startIdx = totalFirstSplit.length();
         } else {
-            dir = interTok.substring(0, interTokLen - 1);
+            startIdx = modifiedPart.length();
         }
-        builder.append(dir);
-        if (!dir.contains(".java")) builder.append("/");
+        endIdx = line.length();
+        String remainingPart = line.substring(startIdx, endIdx);
+
+        // tokenize modifiedPart on =>
+        StringTokenizer splitTokenize = new StringTokenizer(modifiedPart, "=>");
+        String oldPathSpaced = splitTokenize.nextToken().replace("{", "");
+        String newPathSpaced = splitTokenize.nextToken().replace("}", "");
+        // remove useless spaces
+        String oldPath = oldPathSpaced.substring(0, oldPathSpaced.length()-1);
+        String newPath = newPathSpaced.substring(1, newPathSpaced.length());
+
+        if (old) {
+            if (splits) return firstSplit+oldPath+remainingPart;
+            return oldPath+remainingPart;
+        } else {
+            if (splits) return firstSplit+newPath+remainingPart;
+            return newPath+remainingPart;
+        }
     }
 
     public String parseFilenameFromFilepath(String completeName) {
