@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class ProjectInspector {
 
@@ -32,20 +31,25 @@ public class ProjectInspector {
      */
     public List<Commit> inspectProjectCommits() {
         List<Commit> commits = git.lookupForCommits();
+        /* filter only commits that reference an issue (contains in the message something like:
+            "[PROJECTNAME-#]" or PROJECTNAME-
+         */
         List<Commit> refCommits = commits.parallelStream()
                 .filter(commit -> commit.getMessage().contains(project.getProjName() + "-"))
                 .toList();
+        /* set project commits and referenced commits */
         project.setCommits(commits);
         project.setRefCommits(refCommits);
         return commits;
     }
 
     /***
-     * retrieve all the files of the project selected in the config file
+     * Retrieves all the files of the project selected in the config file
+     * @return the list of files of the project
      */
     public List<JFile> inspectProjectFiles() {
         List<Commit> commitList = project.getCommits();
-        List<JFile> files = commitList.parallelStream()
+        List<JFile> files = commitList.stream()
                 .map(git::lookupForFiles)
                 .flatMap(List::stream).distinct().toList();
 
@@ -103,7 +107,7 @@ public class ProjectInspector {
             for (Commit commit: issue.getFixedCommits()) {
                 touchedFiles = commit.getCommittedFiles();
                 av = issue.getAffectedVersions();
-                if (InspectionController.FULL_DEBUG) {
+                if (InspectionController.isFullDebug()) {
                     String log = "Update Bugginess -affected versions-: " + av;
                     Logger.getGlobal().log(Level.WARNING, log);
                     log = "Update Bugginess -touched files-: " + touchedFiles;
@@ -171,7 +175,7 @@ public class ProjectInspector {
             int index = presRel.getIndex();
             int i = index - 1;
 
-            if (InspectionController.FULL_DEBUG) {
+            if (InspectionController.isFullDebug()) {
                 String log = "Index: " + index;
                 Logger.getGlobal().log(Level.WARNING, log);
                 log = "Index-1: " + i;

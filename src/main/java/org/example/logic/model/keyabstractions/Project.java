@@ -28,6 +28,7 @@ public class Project {
     private List<Commit> refCommits;
     private List<HashMap<JFile, JFile>> renames;
     private List<HashMap<String, JFile>> files;
+    private HashMap<String, List<Integer>> filesReleases;
 
     public Project(String name, int percent, String projpath, Properties prop) {
         /* main project */
@@ -51,6 +52,8 @@ public class Project {
             this.renames.add(new HashMap<>());
             this.files.add(new HashMap<>());
         }
+
+        this.filesReleases = new HashMap<>();
     }
 
     public Project(String name, Properties prop) {
@@ -105,7 +108,7 @@ public class Project {
                     skipped++;
                 }
             }
-            if (InspectionController.FULL_DEBUG) {
+            if (InspectionController.isFullDebug()) {
                 String log = "Skipped versions: "+skipped;
                 Logger.getGlobal().log(Level.WARNING, log);
             }
@@ -133,7 +136,7 @@ public class Project {
                 partial--;
             }
         }
-        if (InspectionController.FULL_DEBUG) {
+        if (InspectionController.isFullDebug()) {
             String log = "Partial num of releases (" + getViewedPercentage() + "%): " + getViewedVersions().size();
             Logger.getGlobal().log(Level.WARNING, log);
         }
@@ -211,9 +214,13 @@ public class Project {
     }
 
     public void addFile(Integer releaseIdx, JFile file) {
+        /* Add the file to the release specified - current */
         HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
         if (relFiles.containsKey(file.getRelPath())) return;
         relFiles.put(file.getRelPath(), file);
+
+        /* Add release to list of release indexes of file */
+        addFileRelease(file, releaseIdx);
     }
 
     public JFile getFile(Commit commit, String filename, String filepath) {
@@ -228,6 +235,36 @@ public class Project {
             JFile file = new JFile(this, filename, filepath, creation);
             addFile(releaseIdx, file);
             return file;
+        }
+    }
+
+    private void addFileRelease(JFile file, int releaseIdx) {
+        String filepath = file.getRelPath();
+        if (filesReleases.containsKey(filepath)) {
+            List<Integer> fileRels = filesReleases.get(filepath);
+            fileRels.add(releaseIdx);
+            filesReleases.put(filepath, fileRels);
+            if (fileRels.size() > 1) {
+                int currRel = fileRels.get(fileRels.size()-1);
+                int prevRel = fileRels.get(fileRels.size()-2);
+
+                /* Replicate last file for all the previous missing releases */
+                if (checkGap(currRel, prevRel)) replicatePrevFile(currRel, prevRel, filepath);
+            }
+        } else {
+            filesReleases.put(filepath, new ArrayList<>());
+        }
+    }
+
+    private boolean checkGap(int currRel, int prevRel) {
+        return currRel-prevRel == 1;
+    }
+
+    private void replicatePrevFile(int currRel, int prevRel, String filepath) {
+        HashMap<String, JFile> fileList = files.get(prevRel - 1);
+        JFile file = fileList.get(filepath);
+        for (int i = prevRel+1; i < currRel-1; i++) {
+            addFile(i, file);
         }
     }
 

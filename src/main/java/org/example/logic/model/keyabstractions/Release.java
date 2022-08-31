@@ -27,7 +27,7 @@ public class Release {
         for (int i = 0; i< versions.size(); i++) {
             Release rel = versions.get(i);
             rel.setIndex(i+1);
-            if (InspectionController.FULL_DEBUG) {
+            if (InspectionController.isFullDebug()) {
                 String log = rel.getName()+" - "+rel.getIndex()+" - "+rel.getDate();
                 Logger.getGlobal().log(Level.WARNING, log);
             }

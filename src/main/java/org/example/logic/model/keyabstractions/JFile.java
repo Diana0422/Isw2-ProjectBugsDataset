@@ -40,10 +40,6 @@ public class JFile {
         this.oldPath = relpath;
     }
 
-    public LocalDateTime getCreation() {
-        return creation;
-    }
-
     public String getOldPath() {
         return oldPath;
     }
@@ -226,7 +222,7 @@ public class JFile {
         this.ages.put(version, weeksAge);
     }
 
-    public HashMap<Integer, Integer> getAges() {
+    public Map<Integer, Integer> getAges() {
         return ages;
     }
 }

@@ -1,7 +1,6 @@
 package org.example.logic.model.utils;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -63,7 +62,7 @@ public class ARFFWriter {
         String line;
         String value=null;
 
-        read.readLine();	//discard first line
+        line = read.readLine();//discard first line
         while ((line = read.readLine()) != null) {
             line = line.replace(";", ",");
             StringTokenizer st = new StringTokenizer(line, ",");

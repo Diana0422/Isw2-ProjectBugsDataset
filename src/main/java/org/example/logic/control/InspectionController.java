@@ -13,9 +13,103 @@ import java.util.logging.Logger;
 
 public class InspectionController {
 
-    public static boolean DEBUG = false;
-    public static boolean FULL_DEBUG = false;
-    public static double COLD_PROPORTION; // proportion average from the other 75 apache projects
+
+    public static boolean isFullDebug() {
+        return fullDebug;
+    }
+
+    public static double getColdProportion() {
+        return coldProportion;
+    }
+
+    private static boolean debug = false;
+    private static boolean fullDebug = false;
+    private static double coldProportion; // proportion average from the other 75 apache projects
+
+    public static void simpleDebug(String msg) {
+        if (debug) {
+            StringBuilder log;
+            log = new StringBuilder(msg);
+            String s = log.toString();
+            Logger.getGlobal().log(Level.FINE, s);
+        }
+    }
+
+    public static void debugFiles(List<JFile> files) {
+        if (debug) {
+            int i = 0;
+            StringBuilder log = new StringBuilder();
+            for (JFile file: files) {
+                i++;
+                if (file.getBuggyReleases().isEmpty()) continue;
+                log = new StringBuilder("File n°" + i + ":\n" +
+                        "    filename: " + file.getName() +
+                        "    filepath: " + file.getRelPath());
+                for (Release release: file.getReleases()) {
+                    log.append("Release: ")
+                            .append("    release name: ")
+                            .append(release.getName())
+                            .append("    release date: ")
+                            .append(release.getDate())
+                            .append("    release index: ")
+                            .append(release.getIndex());
+                }
+                for (Release release: file.getBuggyReleases()) {
+                    log.append("Buggy Release: ")
+                            .append("    release name: ")
+                            .append(release.getName())
+                            .append("    release date: ")
+                            .append(release.getDate())
+                            .append("    release index: ")
+                            .append(release.getIndex());
+                }
+            }
+            String s = log.toString();
+            Logger.getGlobal().log(Level.FINE, s);
+        }
+    }
+
+    public static void debugIssues(List<Issue> issues) {
+        int i = 0;
+        StringBuilder log = new StringBuilder();
+        if (debug) {
+            for (Issue issue: issues) {
+                i++;
+                log = new StringBuilder("\n" +
+                        "Issue n°" + i + ":\n" +
+                        "    issue id: " + issue.getId() +
+                        "    issue key: " + issue.getKey() +
+                        "    resolution: " + issue.getResolution());
+                for (Commit commit: issue.getFixedCommits()) {
+                    log.append("Fixed Commits: ").append("    commit id: ").append(commit.getDate()).append("    message: ").append(commit.getMessage());
+                }
+            }
+            String s = log.toString();
+            Logger.getGlobal().log(Level.FINE, s);
+        }
+    }
+
+    public static void debugCommits(List<Commit> commits) {
+        int i = 0;
+        StringBuilder log = new StringBuilder();
+        if (debug) {
+            for (Commit commit: commits) {
+                i++;
+                log = new StringBuilder("\n" +
+                        "Commit n°" + i + ":\n" +
+                        "    commit id: " + commit.getShaId() +
+                        "    author: " + commit.getAuthor() +
+                        "    message: " + commit.getMessage() +
+                        "    date: " + commit.getDate());
+
+                for (JFile file: commit.getCommittedFiles()) {
+                    log.append("- ").append(file.getName());
+                }
+            }
+            String s = log.toString();
+            Logger.getGlobal().log(Level.FINE, s);
+        }
+    }
 
     public static void main(String [] args) throws IOException {
 //		main flow of the application
@@ -23,7 +117,7 @@ public class InspectionController {
         String propFileName = "config.properties";
         String projName = "";
         String projDir = "";
-        String log = "";
+        StringBuilder log = new StringBuilder();
         int percent = 0;
 
         try (InputStream inputStream = InspectionController.class.getClassLoader().getResourceAsStream(propFileName)) {
@@ -33,12 +127,12 @@ public class InspectionController {
             projName = prop.getProperty("project_name");
             projDir = prop.getProperty("project_dir");
             percent = Integer.parseInt(prop.getProperty("percent"));
-            DEBUG = Boolean.parseBoolean(prop.getProperty("debug"));
-            FULL_DEBUG = Boolean.parseBoolean(prop.getProperty("full_debug"));
+            debug = Boolean.parseBoolean(prop.getProperty("debug"));
+            fullDebug = Boolean.parseBoolean(prop.getProperty("full_debug"));
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log = new StringBuilder("Error collecting project properties");
+            Logger.getGlobal().log(Level.SEVERE, String.valueOf(log));
         }
 
         /* instantiate project */
@@ -46,144 +140,53 @@ public class InspectionController {
 
         /* calculate the average P value of the other 75 project apache:
         * warning: this is valid just as a starting value not having analyzed any issue */
-        COLD_PROPORTION = Issue.calculateColdStartProportion(projName, prop);
+        coldProportion = Issue.calculateColdStartProportion(projName, prop);
 
         /* inspect project */
-        if (DEBUG) {
-            log = "--> Inspecting project: " + proj.getProjName() +
-                    "\n" + "--> Versions selected: " + proj.getViewedPercentage() + "%\n" + "...";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Inspecting project: " + proj.getProjName() +
+                    "\n" + "--> Versions selected: " + proj.getViewedPercentage() + "%\n" + "...");
         ProjectInspector inspector = new ProjectInspector(proj);
 
         /* retrieve all the project commits */
-        if (DEBUG) {
-            log = "--> Looking for Commits...";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Looking for Commits...");
         List<Commit> commits = inspector.inspectProjectCommits();
+        debugCommits(commits);
 
-        if (DEBUG) {
-            int i = 0;
-            for (Commit commit: commits) {
-                i++;
-                System.out.println("\n");
-                System.out.println("Commit n°"+ i+":\n");
-                System.out.println("    commit id: "+commit.getShaId());
-                System.out.println("    author: "+commit.getAuthor());
-                System.out.println("    message: "+commit.getMessage());
-                System.out.println("    date: "+commit.getDate());
-                for (JFile file: commit.getCommittedFiles()) {
-                    System.out.println("- "+file.getName());
-                }
-                // TODO System.out.println("    version: "+commit.getVersion().getName());
-            }
-        }
-
-        List<JFile> files = inspector.inspectProjectFiles();
-
-        System.out.println(files);
+        /* Retrieve all project files */
+        simpleDebug("--> Retrieving project files...");
+        inspector.inspectProjectFiles();
 
         /* get project issues on JIRA */
-        if (DEBUG) {
-            log = "--> Setting bug issues...";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Setting bug issues...");
         List<Issue> issues = inspector.inspectProjectIssues();
+        debugIssues(issues);
 
-        if (DEBUG) {
-            int i = 0;
-            for (Issue issue: issues) {
-                i++;
-                System.out.println("\n");
-                System.out.println("Issue n°"+ i+":\n");
-                System.out.println("    issue id: "+issue.getId());
-                System.out.println("    issue key: "+issue.getKey());
-                System.out.println("    resolution: "+issue.getResolution());
-                for (Commit commit: issue.getFixedCommits()) {
-                    System.out.println("Fixed Commits: ");
-                    System.out.println("    commit id: "+commit.getDate());
-                    System.out.println("    message: "+commit.getMessage());
-                }
-            }
-        }
-
-        if (DEBUG) {
-            log = "--> Update bugginess...";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Update bugginess...");
         inspector.updateBugginess(issues);
+        debugFiles(proj.getJavaFiles());
 
-        if (DEBUG) {
-            int i = 0;
-            for (JFile file: proj.getJavaFiles()) {
-                i++;
-                if (file.getBuggyReleases().isEmpty()) continue;
-                System.out.println("File n°"+i+":\n");
-                System.out.println("    filename: "+file.getName());
-                System.out.println("    filepath: "+file.getRelPath());
-                for (Release release: file.getReleases()) {
-                    System.out.println("Release: ");
-                    System.out.println("    release name: "+ release.getName());
-                    System.out.println("    release date: "+ release.getDate());
-                    System.out.println("    release index: "+release.getIndex());
-                }
-                for (Release release: file.getBuggyReleases()) {
-                    System.out.println("Buggy Release: ");
-                    System.out.println("    release name: "+ release.getName());
-                    System.out.println("    release date: "+ release.getDate());
-                    System.out.println("    release index: "+release.getIndex());
-                }
-            }
-        }
+        simpleDebug("--> Producing dataset...");
+        inspector.produceRecords();
 
+        simpleDebug("--> Calculating features...");
+        List<Record> obs = inspector.calculateFeatures();
 
-        if (DEBUG) {
-            log = "--> Producing dataset...";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
-        List<Record> obs = inspector.produceRecords();
-
-        if (DEBUG) {
-            log = "--> Calculating features...";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
-        obs = inspector.calculateFeatures();
-
-        if (DEBUG) {
-            log = "--> Selecting first "+percent+"% of instances...";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Selecting first " + percent + "% of instances...");
         obs = inspector.selectRecords(obs);
 
-        if (DEBUG) {
-            log = "--> Writing version information to file: "+proj.getProjName()+"Versions.csv";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Writing version information to file: " + proj.getProjName() + "Versions.csv");
         CSVWriter.getInstance().writeReleaseInfo(proj.getVersions(), "Versions", proj.getProjName());
 
-        if (DEBUG) {
-            log = "--> Writing tickets information to file: "+proj.getProjName()+"Tickets.csv";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Writing tickets information to file: " + proj.getProjName() + "Tickets.csv");
         CSVWriter.getInstance().writeTicketsInfo(proj.getBugIssues(), "Tickets", proj.getProjName());
 
-        if (DEBUG) {
-            log = "--> Writing commits information to file: "+proj.getProjName()+"Commits.csv";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Writing commits information to file: " + proj.getProjName() + "Commits.csv");
         CSVWriter.getInstance().writeCommitsInfo(proj.getRefCommits(), "Commits", proj.getProjName());
 
-        if (DEBUG) {
-            log = "--> Writing dataset: "+proj.getProjName()+"dataset.csv";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Writing dataset: " + proj.getProjName() + "dataset.csv");
         CSVWriter.getInstance().writeDataset(obs, proj.getProjName());
 
-        if (DEBUG) {
-            log = "--> Converting CSV file to ARFF file";
-            Logger.getGlobal().log(Level.INFO, log);
-        }
+        simpleDebug("--> Converting CSV file to ARFF file");
         ARFFWriter.getInstance().convertCvsToArff(proj.getProjName()+"dataset.csv");
     }
 }

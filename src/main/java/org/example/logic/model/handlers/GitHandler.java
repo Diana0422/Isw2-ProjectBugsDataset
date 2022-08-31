@@ -48,6 +48,10 @@ public class GitHandler {
         throw new CommandException("Command malformed");
     }
 
+    /**
+     * Uses git to retrieve commits for the project specified in class field @project
+     * @return the list of the commits retrieved
+     */
     public List<Commit> lookupForCommits() {
         String [] args = {"git", "log", "--full-history", "--date-order", "--reverse",
                 "--pretty=format:\"%h<%as<MES=%s<AUTHOR=%an\"",
@@ -72,13 +76,17 @@ public class GitHandler {
                         LocalDateTime date = Parser.getInstance().parseDateToLocalDateTime(st.nextToken());
                         String ticketRef = st.nextToken();
                         String author = st.nextToken();
+
+                        /* create a new commit instance with the parameters retrieved */
                         Commit commit = new Commit(project, sha, ticketRef, date, author);
+                        /* assign a version to the new commit */
                         Release commitRelease = Release.findVersionByDate(project.getVersions(), commit.getDate());
                         commit.setVersion(commitRelease);
                         return commit;
                     }).collect(Collectors.toList());
 
-            cs.sort(Comparator.comparing(Commit::getDate)); // order commits by date
+            /* Order commits retrieved by date */
+            cs.sort(Comparator.comparing(Commit::getDate));
         }catch (CommandException e) {
             e.printStackTrace();
         }
@@ -86,6 +94,13 @@ public class GitHandler {
         return cs;
     }
 
+    /**
+     * Search using git command "git show".This command takes the sha of a commit and lists all the files modified
+     * (added, deleted, modified) by the specified commit.
+     * @param commit the commit that modified the file
+     * @return the list of unique files touched by the commit, also calculating file features
+     * like additions and deletions
+     */
     public List<JFile> lookupForFiles(Commit commit) {
         String [] args = {"git", "show", commit.getShaId(),
                 "--pretty=format:\"%h<%as<MES=%s<AUTHOR=%an\"",
@@ -98,11 +113,9 @@ public class GitHandler {
                     .replace("\r", "")
                     .split("\n");
             List<String> linesJavaList = Arrays.stream(lines).toList();
-//            System.out.println(commit.getShaId()+"->"+linesJavaList);
-//            System.out.println("\n");
 
             /* renamed files */
-            files = linesJavaList.parallelStream()
+            files = linesJavaList.stream()
                     .filter(line -> line.contains(".java") && !line.contains("<"))
                     .map(line -> {
                         StringTokenizer stringTokenizer = new StringTokenizer(line, "\t");
@@ -110,9 +123,13 @@ public class GitHandler {
                         int deletion = Integer.parseInt(stringTokenizer.nextToken());
                         String file = stringTokenizer.nextToken();
                         if (line.contains("=>")) {
-                            String filepath = Parser.getInstance().parseFilepathFromChangesLine(file, false);
+                            /* this branch implements the case in which the file is renamed by the commit:
+                               this case is handled adding a new file, that takes the characteristics of the
+                               old file.
+                             */
+                            String filepath = Parser.getInstance().parseFilePathFromLine(file, false);
                             String filename = Parser.getInstance().parseFilenameFromFilepath(filepath);
-                            String filepathOld = Parser.getInstance().parseFilepathFromChangesLine(file, true);
+                            String filepathOld = Parser.getInstance().parseFilePathFromLine(file, true);
                             String filenameOld = Parser.getInstance().parseFilenameFromFilepath(filepathOld);
                             // cerca il vecchio file, oppure creane uno nuovo
                             JFile oldFile = project.getFile(commit, filenameOld, filepathOld);
@@ -137,7 +154,7 @@ public class GitHandler {
                             return newFile;
                         } else if (deletion != 0 && addition == 0) {
                             /* file is deleted */
-                            String filepath = Parser.getInstance().parseFilepathFromChangesLine(file, false);
+                            String filepath = Parser.getInstance().parseFilePathFromLine(file, false);
                             String filename = Parser.getInstance().parseFilenameFromFilepath(file);
                             // cerca il file, altrimenti creane uno nuovo
                             JFile f = project.getFile(commit, filename, filepath);
@@ -150,7 +167,7 @@ public class GitHandler {
                             return f;
                         } else {
                             /* file is added or modified */
-                            String filepath = Parser.getInstance().parseFilepathFromChangesLine(file, false);
+                            String filepath = Parser.getInstance().parseFilePathFromLine(file, false);
                             String filename = Parser.getInstance().parseFilenameFromFilepath(file);
 
                             // cerca il file, altrimenti creane uno nuovo

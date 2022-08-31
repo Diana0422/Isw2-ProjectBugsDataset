@@ -7,6 +7,8 @@ import java.util.List;
 
 public class FeatureCalculator {
 
+    private FeatureCalculator() {}
+
     private static List<HashMap<String, Record>> hashMaps;
 
     public static List<HashMap<String, Record>> getHashMaps() {
@@ -135,8 +137,6 @@ public class FeatureCalculator {
     public static void calculateWeightedAge(Record rec) {
         int age = rec.getAge();
         int locTouched = rec.getLocTouched();
-        System.out.println(age);
-        System.out.println(locTouched);
         if (locTouched == 0) {
             rec.setWeightedAge(0);
         } else {

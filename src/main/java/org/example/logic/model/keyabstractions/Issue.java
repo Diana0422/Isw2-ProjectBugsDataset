@@ -79,7 +79,7 @@ public class Issue {
 
         /* get issue's affected versions retrieved from JIRA */
         List<Release> affected = issue.getAffectedVersions();
-        if (InspectionController.FULL_DEBUG) {
+        if (InspectionController.isFullDebug()) {
             String log = "after fixed merge: "+affected;
             Logger.getGlobal().log(Level.WARNING, log);
         }
@@ -87,10 +87,10 @@ public class Issue {
 
         /* get fixed version index */
         if (fixed.isEmpty()) {
-            if (InspectionController.FULL_DEBUG) Logger.getGlobal().log(Level.WARNING, "fixed is empty.");
+            if (InspectionController.isFullDebug()) Logger.getGlobal().log(Level.WARNING, "fixed is empty.");
             fixedIdx = -1;
         } else {
-            if (InspectionController.FULL_DEBUG) Logger.getGlobal().log(Level.WARNING, "fixed is not empty.");
+            if (InspectionController.isFullDebug()) Logger.getGlobal().log(Level.WARNING, "fixed is not empty.");
             fixedIdx = fixed.get(0).getIndex();
         }
 
@@ -223,7 +223,7 @@ public class Issue {
 
         if (numAffected == 0) {
             /* no affected values to work on - take the average P value of the other projects */
-            p = InspectionController.COLD_PROPORTION; // this will be 0.0 if the issue belong to a project that is not analysed
+            p = InspectionController.getColdProportion(); // this will be 0.0 if the issue belong to a project that is not analysed
         } else {
             /* there are affected versions for the issue */
             int injIdx = affectedVersions.get(0).getIndex();
@@ -254,6 +254,7 @@ public class Issue {
             if (name.equals(mainProjectName)) continue;
             Project project = new Project(name, prop);
             ProjectInspector inspector = new ProjectInspector(project);
+            /* get each project's issues */
             List<Issue> projIssues = inspector.inspectProjectIssues();
             for (Issue issue : projIssues) {
                 Issue.prepareIssue(issue);

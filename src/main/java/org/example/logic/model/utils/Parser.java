@@ -73,42 +73,57 @@ public class Parser {
     public String parseFilePathFromLine(String line, boolean old) {
         boolean splits = false;
         String firstSplit = "";
+        StringTokenizer splitTokenize;
+        String remainingPart = "";
 
         // If string doesn't contain "=>" then just return line, because the file was not renamed
         if (!line.contains("=>")) return line;
 
-        // Extract modified part from line
-        StringTokenizer tokenizer = new StringTokenizer(line, "{");
-        if (line.charAt(0) != '{') {
-            firstSplit = tokenizer.nextToken();
-            splits = true;
-        }
-        String modifiedPart = tokenizer.nextToken("}") + "}";
+        if (line.contains("{")) {
+            // Extract modified part from line
+            StringTokenizer tokenizer = new StringTokenizer(line, "{");
+            if (line.charAt(0) != '{') {
+                firstSplit = tokenizer.nextToken();
+                splits = true;
+            }
+            String modifiedPart = tokenizer.nextToken("}") + "}";
 
-        // Extract remaining part
-        int startIdx;
-        int endIdx;
-        if (splits) {
-            String totalFirstSplit = firstSplit+modifiedPart;
-            startIdx = totalFirstSplit.length();
+            // Extract remaining part
+            int startIdx;
+            int endIdx;
+            if (splits) {
+                String totalFirstSplit = firstSplit+modifiedPart;
+                startIdx = totalFirstSplit.length();
+            } else {
+                startIdx = modifiedPart.length();
+            }
+            endIdx = line.length();
+            remainingPart = line.substring(startIdx, endIdx);
+
+            // tokenize modifiedPart on =>
+            splitTokenize = new StringTokenizer(modifiedPart, "=>");
         } else {
-            startIdx = modifiedPart.length();
+            // tokenize all line on =>
+            splitTokenize = new StringTokenizer(line, "=>");
         }
-        endIdx = line.length();
-        String remainingPart = line.substring(startIdx, endIdx);
 
-        // tokenize modifiedPart on =>
-        StringTokenizer splitTokenize = new StringTokenizer(modifiedPart, "=>");
         String oldPathSpaced = splitTokenize.nextToken().replace("{", "");
         String newPathSpaced = splitTokenize.nextToken().replace("}", "");
         // remove useless spaces
         String oldPath = oldPathSpaced.substring(0, oldPathSpaced.length()-1);
-        String newPath = newPathSpaced.substring(1, newPathSpaced.length());
+        String newPath = newPathSpaced.substring(1);
 
+        return produceOutputFilename(old, splits, oldPath, newPath, firstSplit, remainingPart);
+    }
+
+    private String produceOutputFilename(boolean old, boolean splits,
+                                         String oldPath, String newPath, String firstSplit, String remainingPart) {
         if (old) {
+            if (oldPath.equals("")) return firstSplit+remainingPart.substring(1);
             if (splits) return firstSplit+oldPath+remainingPart;
             return oldPath+remainingPart;
         } else {
+            if (newPath.equals("")) return firstSplit+remainingPart.substring(1);
             if (splits) return firstSplit+newPath+remainingPart;
             return newPath+remainingPart;
         }
