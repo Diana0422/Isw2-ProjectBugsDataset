@@ -7,11 +7,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 
 /**
  * Unit test for simple App.
@@ -34,6 +35,7 @@ public class ReplicateReleaseTest {
             releases.add(rel);
             file.addRelease(rel);
         }
+        System.out.println(file.getReleases());
 
         for (int i = 0; i < resultIndexes.size(); i++) {
             Release rel = new Release(String.valueOf(i), String.valueOf(i), LocalDateTime.now());
@@ -52,7 +54,8 @@ public class ReplicateReleaseTest {
 
     @Test
     public void testReplication() {
-        file.fill(this.releases);
+        assertNotNull(releases);
+//        file.fill(this.releases);
         for (int i = 0; i < expectedResult.size(); i++) {
             assertEquals(expectedResult.get(i).getIndex(), file.getReleases().get(i).getIndex());
         }
