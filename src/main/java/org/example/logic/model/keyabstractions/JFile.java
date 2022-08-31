@@ -60,39 +60,42 @@ public class JFile {
         this.releases = releases;
     }
 
-    public void fillReleaseGaps(List<Release> releases) {
-        // FIXME check
-        Release lastRelease = releases.get(0);
+
+    /**
+     * Fills gaps between releases in which a file is present
+     * @param releases the releases of the file
+     */
+    public void fill(List<Release> releases) {
+        int i;
         Release currentRelease;
-        for (int i=lastRelease.getIndex(); i<releases.size(); i++) {
+        Release nextRelease;
+        for (i=0; i<releases.size()-1; i++) {
+            /* iterate on list of releases */
             currentRelease = releases.get(i);
-            int currentReleaseIdx = currentRelease.getIndex();
-            int lastReleaseIdx = lastRelease.getIndex();
-            if (currentReleaseIdx == lastReleaseIdx+1) {
-                lastRelease = currentRelease;
-            } else {
+            nextRelease = releases.get(i+1);
+            int currentReleaseIndex = currentRelease.getIndex();
+            int nextReleaseIndex = nextRelease.getIndex();
+            /* check the offset between the two indices of the releases */
+            int offset = nextReleaseIndex - currentReleaseIndex;
+            if (offset>1) {
                 /* fill the gap replicating the missing releases */
-                this.getReleases().sort(Comparator.comparing(Release::getDate));
-                replicateRelease(lastRelease, currentRelease);
+                replicate(currentRelease, nextRelease);
             }
         }
+        this.getReleases().sort(Comparator.comparing(Release::getIndex));
     }
 
-    private void replicateRelease(Release lastRelease, Release currentRelease) {
-        // FIXME check
-        int lastReleaseIdx = lastRelease.getIndex();
+    private void replicate(Release currentRelease, Release nextRelease) {
         int currentReleaseIdx = currentRelease.getIndex();
+        int nextReleaseIdx = nextRelease.getIndex();
 
-        for (int idx=lastReleaseIdx+1; idx<currentReleaseIdx; idx++) {
+        for (int idx=currentReleaseIdx+1; idx<nextReleaseIdx; idx++) {
             Release rel = Release.findVersionByIndex(project.getVersions(), idx);
             addRelease(rel);
-            if (additions.containsKey(lastReleaseIdx)) updateAdditions(rel.getIndex(), additions.get(lastReleaseIdx));
-            if (deletions.containsKey(lastReleaseIdx)) updateDeletions(rel.getIndex(), deletions.get(lastReleaseIdx));
-            if (changes.containsKey(lastReleaseIdx)) updateChanges(rel.getIndex(), changes.get(lastReleaseIdx));
-            if (content.containsKey(lastReleaseIdx)) updateContent(rel.getIndex(), content.get(lastReleaseIdx));
-            lastRelease = currentRelease;
-            lastReleaseIdx = lastRelease.getIndex();
-            currentReleaseIdx = currentRelease.getIndex();
+            if (additions.containsKey(currentReleaseIdx)) updateAdditions(rel.getIndex(), additions.get(currentReleaseIdx));
+            if (deletions.containsKey(currentReleaseIdx)) updateDeletions(rel.getIndex(), deletions.get(currentReleaseIdx));
+            if (changes.containsKey(currentReleaseIdx)) updateChanges(rel.getIndex(), changes.get(currentReleaseIdx));
+            if (content.containsKey(currentReleaseIdx)) updateContent(rel.getIndex(), content.get(currentReleaseIdx));
         }
     }
 
@@ -170,6 +173,10 @@ public class JFile {
             if (!this.getBuggyReleases().contains(release)) {
                 this.getBuggyReleases().add(release);
             }
+            /* add to the releases list if not already present */
+            if (!this.getReleases().contains(release)) {
+                this.getReleases().add(release);
+            }
         }
     }
 
@@ -180,7 +187,7 @@ public class JFile {
     public void addAndFillAffectedRelease(List<Release> affRelease) {
         addBuggyReleases(affRelease);
         this.buggyReleases.sort(Comparator.comparing(Release::getDate));
-        fillReleaseGaps(this.buggyReleases);
+        fill(this.buggyReleases);
     }
 
     /***
@@ -190,7 +197,7 @@ public class JFile {
     public void addAndFillRelease(Release release) {
         addRelease(release);
         this.releases.sort(Comparator.comparing(Release::getDate));
-        fillReleaseGaps(this.releases);
+        fill(this.releases);
     }
 
     /***
@@ -212,7 +219,7 @@ public class JFile {
 
     /***
      * updates file age given a commit
-     * @param version
+     * @param version the release index to consider to update age
      */
     public void updateAge(int version) {
         LocalDate releaseDate = Release.findVersionByIndex(project.getVersions(), version).getDate().toLocalDate();

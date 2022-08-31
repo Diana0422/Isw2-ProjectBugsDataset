@@ -8,6 +8,8 @@ import org.example.logic.model.keyabstractions.Record;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CSVWriter {
 
@@ -40,7 +42,7 @@ public class CSVWriter {
                 fileWriter.append("\n");
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -69,7 +71,7 @@ public class CSVWriter {
                 }
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -100,7 +102,7 @@ public class CSVWriter {
                 fileWriter.append("\n");
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -153,7 +155,7 @@ public class CSVWriter {
                 fileWriter.append("\n");
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
 

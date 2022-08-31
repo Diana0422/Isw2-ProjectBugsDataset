@@ -8,6 +8,7 @@ import org.example.logic.model.keyabstractions.*;
 import org.example.logic.model.keyabstractions.Record;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,16 +46,14 @@ public class ProjectInspector {
 
     /***
      * Retrieves all the files of the project selected in the config file
-     * @return the list of files of the project
      */
-    public List<JFile> inspectProjectFiles() {
+    public void inspectProjectFiles() {
         List<Commit> commitList = project.getCommits();
         List<JFile> files = commitList.stream()
                 .map(git::lookupForFiles)
                 .flatMap(List::stream).distinct().toList();
 
         project.setJavaFiles(files.stream().distinct().toList());
-        return files;
     }
 
     /***
@@ -69,11 +68,31 @@ public class ProjectInspector {
                 /* retrieve the fixed commits of the issue */
                 if (!project.isExternal()) i.setFixedCommits(findLinkedToIssueCommits(project, i.getKey()));
             }
-            /* TODO order defects by their fix date */
-            project.setBugIssues(bugs);
+
+            /* Order defects by their fix date */
+            List<Issue> sortedBugs = bugs
+                    .stream()
+                    .sorted((o1, o2) -> {
+                        List<Release> o1FixedVersions = o1.getFixedVersions();
+                        List<Release> o2FixedVersions = o2.getFixedVersions();
+                        if (!o2FixedVersions.isEmpty() && !o1FixedVersions.isEmpty()) {
+                            Release fixedRelease1 = o1FixedVersions.get(0);
+                            Release fixedRelease2 = o2FixedVersions.get(0);
+                            LocalDateTime date1 = fixedRelease1.getDate();
+                            LocalDateTime date2 = fixedRelease2.getDate();
+                            return date1.compareTo(date2);
+                        } else if (!o1FixedVersions.isEmpty()) {
+                            return -1;
+                        } else if (!o2FixedVersions.isEmpty()) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+            }).toList();
+            project.setBugIssues(sortedBugs);
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
 
@@ -125,9 +144,8 @@ public class ProjectInspector {
      * produce dataset using project information about issues and commits that fix the issues.
      * The sample unit in the data is of type Record.
      */
-    public List<Record> produceRecords() {
+    public void produceRecords() {
         List<HashMap<String, Record>> hashMaps = new ArrayList<>(); //list of hashmaps for release: String (filename), Record (dataset record)
-        List<Record> observations = new ArrayList<>();
 
         List<Release> releases = project.getVersions(); // consider only the selected percentage of the versions to create the dataset
         int releaseNum = releases.size(); // we consider only a portion of the releases
@@ -148,13 +166,8 @@ public class ProjectInspector {
                     .filter(file -> file.getReleases().contains(commitRelease))
                     .forEach(file -> setRecordsBugginess(file, hashMaps));
         }
-
-        for (HashMap<String, Record> hashmap: hashMaps) {
-            hashmap.forEach((s, r) -> observations.add(r));
-        }
         /* Set the hashmap into the FeatureCalculator class */
         FeatureCalculator.setHashMaps(hashMaps);
-        return observations;
     }
 
     /***

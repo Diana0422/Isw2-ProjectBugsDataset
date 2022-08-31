@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ARFFWriter {
 
@@ -50,7 +52,7 @@ public class ARFFWriter {
                 writer.append(rec).append("\n");
             }
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
+            Logger.getGlobal().log(Level.SEVERE, e1.getMessage());
             e1.printStackTrace();
         }
 
@@ -61,9 +63,11 @@ public class ARFFWriter {
         StringBuilder sb = new StringBuilder("{");
         String line;
         String value=null;
+        int countLines = 0;
 
-        line = read.readLine();//discard first line
         while ((line = read.readLine()) != null) {
+            countLines++; // increment lines counter
+            if (countLines == 1) continue;
             line = line.replace(";", ",");
             StringTokenizer st = new StringTokenizer(line, ",");
             int attNum = attributeNum;

@@ -130,13 +130,12 @@ public class Issue {
             fixedV = issue.getFixedVersions().get(0).getIndex();
         }
 
-        //If the opening version is greater the the fixed version they are inverted
-        // FIXME probably useless part
-//        if (openV > fixedV) {
-//            int temp = fixedV;
-//            fixedV = openV;
-//            openV = temp;
-//        }
+        //If the opening version is greater the fixed version they are inverted
+        if (openV > fixedV) {
+            int temp = fixedV;
+            fixedV = openV;
+            openV = temp;
+        }
 
         p = calculateProportionMovingWindow(issue, openV, fixedV);
         /* update the issue with corresponding P value */

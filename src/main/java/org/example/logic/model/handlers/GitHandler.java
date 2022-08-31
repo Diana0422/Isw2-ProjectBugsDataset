@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -42,7 +44,7 @@ public class GitHandler {
             input = new BufferedReader(new InputStreamReader(inputProcess.getInputStream()));
             return input;
         } catch (IOException e) {
-            // TODO : handle exception
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
         throw new CommandException("Command malformed");
@@ -199,7 +201,7 @@ public class GitHandler {
             file.updateContent(version, getFileContent(file.getRelPath(), commit));
             file.updateAge(version);
         } catch (IOException e) {
-            // TODO: handle exception
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -225,7 +227,7 @@ public class GitHandler {
                 temp.add(line);
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
 
