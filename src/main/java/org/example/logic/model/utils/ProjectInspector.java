@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ProjectInspector {
 
@@ -237,12 +238,48 @@ public class ProjectInspector {
             int releaseIdx = i + 1;
             HashMap<String, JFile> fileHashMap = files.get(i);
             fileHashMap.forEach((s, file) -> {
+                if (file.getRelPath().equals("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
+                    System.out.println(releaseIdx+" "+file.getRelPath());
+                }
                 Record rec = updateRecord(releaseIdx, file);
-                if (rec!=null) recordsLists.add(rec);
+                if (file.getRelPath().equals("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
+                    System.out.println("rec:"+rec);
+                }
+                if (rec != null) recordsLists.add(rec);
             });
         }
 
-        return recordsLists.stream().distinct().toList();
+        System.out.println("\n\n");
+        recordsLists.stream().distinct().forEach(record -> {
+            if (record.getFileName().contains("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
+                System.out.println(record.getVersion() + "-" + record.getFileName());
+            }
+        });
+
+        System.out.println("\n\n");
+        recordsLists.stream().forEach(record -> {
+            if (record.getFileName().contains("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
+                System.out.println(record.getVersion() + "-" + record.getFileName());
+            }
+        });
+
+        List<Record> instances = recordsLists.stream().distinct().collect(Collectors.toList());
+
+        /* order records by version index */
+        List<Record> records = instances.stream().sorted((o1, o2) -> {
+            int version1 = o1.getVersion();
+            int version2 = o2.getVersion();
+            return Integer.compare(version1, version2);
+        }).toList();
+
+        System.out.println("\n\n");
+        records.stream().forEach(record -> {
+            if (record.getFileName().contains("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
+                System.out.println(record.getVersion() + "-" + record.getFileName());
+            }
+        });
+        return  records;
+
     }
 
     /**
@@ -267,7 +304,7 @@ public class ProjectInspector {
             releaseRecords.remove(recordKey);
         } else {
             /* update the record of the file in release */
-            releaseRecords.computeIfPresent(recordKey, (s, rec) -> {
+            return releaseRecords.computeIfPresent(recordKey, (s, rec) -> {
                 FeatureCalculator.setAdditions(rec, additions);
                 FeatureCalculator.setMaxLocAdded(rec, maxAdditions);
                 FeatureCalculator.setDeletions(rec, deletions);
@@ -298,7 +335,7 @@ public class ProjectInspector {
             Record rec = releaseRecords.get(recordKey);
             FeatureCalculator.updateNAuth(author, rec);
             FeatureCalculator.updateChgSetSize(chgSetSize, rec);
-            if (project.getRefCommits().contains(commit)) FeatureCalculator.updateNFix(rec, commit.getTicketTag());
+            if (project.getRefCommits().contains(commit)) FeatureCalculator.updateNFix(rec);
             FeatureCalculator.updateNR(rec);
             releaseRecords.put(recordKey, rec);
             return rec;
@@ -311,14 +348,7 @@ public class ProjectInspector {
      * Select first percentage of records as specified by percentage size
      * @return listo of records selected
      */
-    public List<Record> selectRecords(List<Record> instances) {
-        /* order records by version index */
-        List<Record> records = instances.stream().sorted((o1, o2) -> {
-            int version1 = o1.getVersion();
-            int version2 = o2.getVersion();
-            return Integer.compare(version1, version2);
-        }).toList();
-
+    public List<Record> selectRecords(List<Record> records) {
         /* select record if belongs to selected releases (e.g first 50%) */
         return records.stream().filter(rec -> {
             Release recRelease = Release.findVersionByIndex(project.getVersions(), rec.getVersion());

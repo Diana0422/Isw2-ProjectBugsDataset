@@ -126,7 +126,7 @@ public class InspectionController {
             // get the project properties
             projName = prop.getProperty("project_name");
             projDir = prop.getProperty("project_dir");
-            percent = Integer.parseInt(prop.getProperty("percentage"));
+            percent = Integer.parseInt(prop.getProperty("percent"));
             debug = Boolean.parseBoolean(prop.getProperty("debug"));
             fullDebug = Boolean.parseBoolean(prop.getProperty("full_debug"));
 

@@ -20,10 +20,9 @@ public class Record {
     private int maxChgSetSize;
     private int numFix;
     private List<String> authors;
-    private List<String> tickets;
+    private final List<String> tickets;
     private int age;
     private double weightedAge;
-    private int nSmells;
 
 
     public Record(int version, String filename) {
@@ -42,7 +41,6 @@ public class Record {
         this.numFix = 0;
         this.age = 0;
         this.weightedAge = 0;
-        this.nSmells = 0;
         this.buggy = "No";
         this.authors = new ArrayList<>();
         this.tickets = new ArrayList<>();
@@ -58,10 +56,6 @@ public class Record {
 
     public String getFileName() {
         return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     public String getBuggy() {
@@ -108,7 +102,7 @@ public class Record {
 
         float avg;
 
-        if (this.locAdded == 0) {
+        if (this.locAdded == 0 || this.numRevisions == 0) {
             avg = 0;
         } else {
             avg = (float)this.locAdded/this.numRevisions;
@@ -160,7 +154,7 @@ public class Record {
     public float getAvgChgSetSize() {
         float avg;
 
-        if (this.chgSetSize == 0) {
+        if (this.chgSetSize == 0 || this.numRevisions == 0) {
             avg = 0;
         } else {
             avg = (float)this.chgSetSize/this.numRevisions;
@@ -215,7 +209,7 @@ public class Record {
     public float getAvgChurn() {
         float avg;
 
-        if (this.churn == 0) {
+        if (this.churn == 0 || this.numRevisions == 0) {
             avg = 0;
         } else {
             avg = (float)this.churn/this.numRevisions;
@@ -249,14 +243,6 @@ public class Record {
         this.weightedAge = weightedAge;
     }
 
-    public int getNSmells() {
-        return nSmells;
-    }
-
-    public void setNSmells(int nSmells) {
-        this.nSmells = nSmells;
-    }
-
     public int getNFix() {
         return numFix;
     }
@@ -267,11 +253,5 @@ public class Record {
 
     public List<String> getTickets() {
         return tickets;
-    }
-
-    public void addTicket(String ticket) {
-        if (!getTickets().contains(ticket)) {
-            tickets.add(ticket);
-        }
     }
 }

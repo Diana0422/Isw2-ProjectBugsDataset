@@ -23,6 +23,11 @@ public class JFile {
     private List<Release> buggyReleases;
 
 
+    /**
+     * Constructor used for file replication (doesn't inherit previous stats)
+     * @param releaseIndex
+     * @param prevInstance
+     */
     public JFile(int releaseIndex, JFile prevInstance) {
         /* Inherit prev instance file stats */
         this.project = prevInstance.project;
@@ -41,9 +46,9 @@ public class JFile {
         this.ages = prevInstance.ages;
         this.revisions = prevInstance.revisions;
         /* Update features */
-        updateAdditions(releaseIndex, additions.get(releaseIndex-1));
-        updateDeletions(releaseIndex, deletions.get(releaseIndex-1));
-        updateChanges(releaseIndex, changes.get(releaseIndex-1));
+        updateAdditions(releaseIndex, 0);
+        updateDeletions(releaseIndex, 0);
+        updateChanges(releaseIndex, 0);
         updateContent(releaseIndex, content.get(releaseIndex-1));
         updateAge(releaseIndex);
     }
@@ -191,7 +196,7 @@ public class JFile {
         for (int i = createdIdx-1; i < deletedIdx; i++) {
             HashMap<String, JFile> fileHashMap = files.get(i);
             if (fileHashMap.containsKey(relpath)) {
-                prevInstance = fileHashMap.get(relpath);
+                prevInstance = fileHashMap.get(relpath); // project.replicateRelease(inserire sopra)
                 continue;
             }
             project.replicateMissingFile(i+1, i+2, prevInstance);

@@ -101,11 +101,9 @@ public class FeatureCalculator {
         rec.getAuthors().add(authorName);
     }
 
-    public static void updateNFix(Record rec, String ticketRef) {
-        if (!rec.getTickets().contains(ticketRef)) {
-            int fix = rec.getNFix();
-            rec.setNFix(fix + 1);
-        }
+    public static void updateNFix(Record rec) {
+        int fix = rec.getNFix();
+        rec.setNFix(fix + 1);
     }
 
     /***
