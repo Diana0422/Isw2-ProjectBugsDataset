@@ -35,6 +35,7 @@ public class ProjectInspector {
         /* filter only commits that reference an issue (contains in the message something like:
             "[PROJECTNAME-#]" or PROJECTNAME-
          */
+
         List<Commit> refCommits = commits.parallelStream()
                 .filter(commit -> commit.getMessage().contains(project.getProjName() + "-"))
                 .toList();
@@ -48,12 +49,19 @@ public class ProjectInspector {
      * Retrieves all the files of the project selected in the config file
      */
     public void inspectProjectFiles() {
+        /* retrieve files from git */
         List<Commit> commitList = project.getCommits();
-        List<JFile> files = commitList.stream()
-                .map(git::lookupForFiles)
-                .flatMap(List::stream).distinct().toList();
+        commitList.forEach(git::lookupForFiles);
+    }
 
-        project.setJavaFiles(files.stream().distinct().toList());
+    public void fixReleaseGaps() {
+        /* fix release gaps */
+        int numReleases = project.getVersions().size();
+        List<HashMap<String, JFile>> files = project.getFiles();
+        for (int i = 0; i < numReleases; i++) {
+            HashMap<String, JFile> fileHashMap = files.get(i);
+            fileHashMap.forEach((s, file) -> file.fillReleases());
+        }
     }
 
     /***
@@ -134,7 +142,7 @@ public class ProjectInspector {
                 }
                 for (JFile file: touchedFiles) {
                     /* file is buggy in AV */
-                    file.addAndFillAffectedRelease(av);
+                    file.addAffectedRelease(av);
                 }
             }
         }
@@ -146,63 +154,53 @@ public class ProjectInspector {
      */
     public void produceRecords() {
         List<HashMap<String, Record>> hashMaps = new ArrayList<>(); //list of hashmaps for release: String (filename), Record (dataset record)
-
+        List<HashMap<String, JFile>> files = project.getFiles();
         List<Release> releases = project.getVersions(); // consider only the selected percentage of the versions to create the dataset
         int releaseNum = releases.size(); // we consider only a portion of the releases
 
-        /* create new hash map for each release to store records */
+        /* Initialize the dataset */
         for (int i = 0; i < releaseNum; i++) {
+            int releaseIdx = i + 1;
+            // create new hash map for each release to store records
             hashMaps.add(new HashMap<>());
+            // add releases and filenames in the dataset as new records
+            HashMap<String, JFile> fileHashMap = files.get(i);
+            fileHashMap.forEach((s, file) -> addMissingRecord(releaseIdx, file, hashMaps));
         }
 
-        /* get project commits */
-        List<Commit> commits = project.getCommits();
-
-        for (Commit commit: commits) {
-            /* get touched files from commit */
-            Release commitRelease = commit.getVersion();
-            List<JFile> touchedFiles = commit.getCommittedFiles();
-            touchedFiles.parallelStream()
-                    .filter(file -> file.getReleases().contains(commitRelease))
-                    .forEach(file -> setRecordsBugginess(file, hashMaps));
+        for (int i = 0; i < releaseNum; i++) {
+            HashMap<String, JFile> fileHashMap = files.get(i);
+            fileHashMap.forEach((s, file) -> setRecordsBugginess(file, hashMaps));
         }
+
         /* Set the hashmap into the FeatureCalculator class */
         FeatureCalculator.setHashMaps(hashMaps);
     }
 
-    /***
-     * Sets the bugginess of the entries in the dataset
-     * @param file:
-     * @param hashMaps:
-     */
-    private void setRecordsBugginess(JFile file, List<HashMap<String, Record>> hashMaps) {
-        List<Release> av; //affected versions
-        List<Release> pv; //present versions
-        String filepath; //complete file name
-
-        /* for each file get versions in which the file is present */
-        pv = file.getReleases();
-        filepath = file.getRelPath();
+    private void addMissingRecord(int releaseIdx, JFile file, List<HashMap<String, Record>> hashMaps) {
+        String filepath = file.getRelPath(); //complete file name
+        int i = releaseIdx - 1;
         /* by default the file is not buggy in the releases in which it's present. */
-        for (Release presRel : pv) {
-            int index = presRel.getIndex();
-            int i = index - 1;
-
-            if (InspectionController.isFullDebug()) {
-                String log = "Index: " + index;
-                Logger.getGlobal().log(Level.WARNING, log);
-                log = "Index-1: " + i;
-                Logger.getGlobal().log(Level.WARNING, log);
-            }
-            if (hashMaps.get(i).containsKey(filepath)) continue; //file already inserted as a record in the dataset
-            Record rec = new Record(index, filepath);
+        if (!hashMaps.get(i).containsKey(filepath)) {
+            /* record with release index and filename specified is not already present in dataset */
+            Record rec = new Record(releaseIdx, filepath);
             rec.setBuggy("No");
             /* add a new record to the release hashmap (acceding the list with the version index) */
             hashMaps.get(i).put(filepath, rec);
         }
+    }
 
+    /***
+     * Sets the bugginess of the entries in the dataset
+     * @param file :
+     * @param hashMaps :
+     */
+    private void setRecordsBugginess(JFile file, List<HashMap<String, Record>> hashMaps) {
+        List<Release> av; //affected versions
+        String filepath = file.getRelPath(); //complete file name
+
+        /* Set Yes if file is buggy in the version */
         av = file.getBuggyReleases();
-
         if (!av.isEmpty()) {
             /* file is buggy in those releases specified in affected versions (av) - need to modify the record in the hashmap corresponding the version */
             for (Release bugRel : av) {
@@ -221,23 +219,41 @@ public class ProjectInspector {
      */
     public List<Record> calculateFeatures() {
         List<Commit> commits = project.getCommits();
-        List<List<Record>> recordsLists = new ArrayList<>();
+        List<Record> recordsLists = new ArrayList<>();
+        /* update record based on commit */
         for (Commit commit : commits) {
             List<JFile> touchedFiles = commit.getCommittedFiles();
             List<Record> records = touchedFiles.parallelStream()
                     .map(file -> updateRecord(file, commit))
-                    .filter(Objects::nonNull).toList();
-            recordsLists.add(records);
+                    .filter(Objects::nonNull)
+                    .toList();
+            recordsLists.addAll(records);
         }
-        return recordsLists.parallelStream()
-                .flatMap(Collection::stream).distinct().toList();
+
+        /* update record with non-commit based features */
+        List<HashMap<String, JFile>> files = project.getFiles();
+        int numReleases = project.getVersions().size();
+        for (int i = 0; i < numReleases; i++) {
+            int releaseIdx = i + 1;
+            HashMap<String, JFile> fileHashMap = files.get(i);
+            fileHashMap.forEach((s, file) -> {
+                Record rec = updateRecord(releaseIdx, file);
+                if (rec!=null) recordsLists.add(rec);
+            });
+        }
+
+        return recordsLists.stream().distinct().toList();
     }
 
-    private Record updateRecord(JFile file, Commit commit) {
-        Release commitRelease = commit.getVersion();
-        int releaseIdx = commitRelease.getIndex();
+    /**
+     * Non commit-based update record to update features
+     * @param releaseIdx
+     * @param file
+     * @return
+     */
+    private Record updateRecord(int releaseIdx, JFile file) {
         HashMap<String, Record> releaseRecords = FeatureCalculator.getHashMaps()
-                .get(commitRelease.getIndex()-1);
+                .get(releaseIdx - 1);
         String recordKey = file.getRelPath();
 
         String[] content = file.getContent().get(releaseIdx);
@@ -245,31 +261,47 @@ public class ProjectInspector {
         int maxAdditions = file.getMaxAdditions().get(releaseIdx);
         int deletions = file.getDeletions().get(releaseIdx);
         int age = file.getAges().get(releaseIdx);
-        String author = commit.getAuthor();
-        int chgSetSize = commit.getCommittedFiles().size() - 1;
 
         if (content.length == 0) {
             /* last commit in release deleted the file */
             releaseRecords.remove(recordKey);
         } else {
             /* update the record of the file in release */
-            if (releaseRecords.containsKey(recordKey)) {
-                Record rec = releaseRecords.get(recordKey);
+            releaseRecords.computeIfPresent(recordKey, (s, rec) -> {
                 FeatureCalculator.setAdditions(rec, additions);
                 FeatureCalculator.setMaxLocAdded(rec, maxAdditions);
                 FeatureCalculator.setDeletions(rec, deletions);
                 FeatureCalculator.updateLOC(content, rec);
                 FeatureCalculator.calculateLOCTouched(rec);
                 FeatureCalculator.updateChurn(rec);
-                FeatureCalculator.updateNR(rec);
-                FeatureCalculator.updateNAuth(author, rec);
-                FeatureCalculator.updateChgSetSize(chgSetSize, rec);
-                if (project.getRefCommits().contains(commit)) FeatureCalculator.updateNFix(rec, commit.getTicketTag());
                 FeatureCalculator.calculateAge(age, rec);
                 FeatureCalculator.calculateWeightedAge(rec);
                 releaseRecords.put(recordKey, rec);
                 return rec;
-            }
+            });
+        }
+
+        return null;
+    }
+
+    private Record updateRecord(JFile file, Commit commit) {
+        Release commitRelease = commit.getVersion();
+        int releaseIdx = commitRelease.getIndex();
+        HashMap<String, Record> releaseRecords = FeatureCalculator.getHashMaps()
+                .get(releaseIdx-1);
+        String recordKey = file.getRelPath();
+
+        String author = commit.getAuthor();
+        int chgSetSize = commit.getCommittedFiles().size() - 1;
+        /* update the record of the file in release */
+        if (releaseRecords.containsKey(recordKey)) {
+            Record rec = releaseRecords.get(recordKey);
+            FeatureCalculator.updateNAuth(author, rec);
+            FeatureCalculator.updateChgSetSize(chgSetSize, rec);
+            if (project.getRefCommits().contains(commit)) FeatureCalculator.updateNFix(rec, commit.getTicketTag());
+            FeatureCalculator.updateNR(rec);
+            releaseRecords.put(recordKey, rec);
+            return rec;
         }
 
         return null;
@@ -280,7 +312,15 @@ public class ProjectInspector {
      * @return listo of records selected
      */
     public List<Record> selectRecords(List<Record> instances) {
-        return instances.parallelStream().filter(rec -> {
+        /* order records by version index */
+        List<Record> records = instances.stream().sorted((o1, o2) -> {
+            int version1 = o1.getVersion();
+            int version2 = o2.getVersion();
+            return Integer.compare(version1, version2);
+        }).toList();
+
+        /* select record if belongs to selected releases (e.g first 50%) */
+        return records.stream().filter(rec -> {
             Release recRelease = Release.findVersionByIndex(project.getVersions(), rec.getVersion());
             return project.getViewedVersions().contains(recRelease);
         }).toList();

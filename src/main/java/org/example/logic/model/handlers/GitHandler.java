@@ -52,6 +52,7 @@ public class GitHandler {
 
     /**
      * Uses git to retrieve commits for the project specified in class field @project
+     * Commits on side branches are excluded, because may affect "git show" output filenames
      * @return the list of the commits retrieved
      */
     public List<Commit> lookupForCommits() {
@@ -133,61 +134,82 @@ public class GitHandler {
                             String filename = Parser.getInstance().parseFilenameFromFilepath(filepath);
                             String filepathOld = Parser.getInstance().parseFilePathFromLine(file, true);
                             String filenameOld = Parser.getInstance().parseFilenameFromFilepath(filepathOld);
-                            // cerca il vecchio file, oppure creane uno nuovo
+
+                            /* OLD FILE
+                                - search old file from existing files
+                                - remove the commit release from the list of releases of the file
+                            */
                             JFile oldFile = project.getFile(commit, filenameOld, filepathOld);
-                            // cerca il nuovo file, oppure creane uno nuovo
-                            JFile newFile = project.getFile(commit, filename, filepath);
-                            // aggiungi la release del commit al file nuovo
+
+                            /* NEW FILE
+                                - create new file inheriting old file stats
+                                - add commit release to the list of the releases in file
+                                - add the commit to the list of revisions
+                                - update file stats (additions, deletions...)
+                                - add file to list of files touched by the commit
+                             */
+                            JFile newFile = new JFile(commit.getVersion(), filename, filepath, oldFile);
                             newFile.addAndFillRelease(commit.getVersion());
-                            // elimina la release del commit dal file vecchio
-                            oldFile.getReleases().remove(commit.getVersion());
-                            // aggiungi il commit alla lista delle revisioni del file
-                            oldFile.addRevision(commit);
-                            // aggiungi il commit alla lista delle revisioni del file
                             newFile.addRevision(commit);
-                            // aggiungi il vecchio e il nuovo file nella hashmap contenente le rinominazioni dei file per release
-                            project.addRenomination(commit.getVersion().getIndex(), oldFile, newFile);
-                            // aggiorna le caratteristiche del file
-                            updateFileFeatures(oldFile, commit, addition, deletion);
-                            // aggiorna le caratteristiche del file
                             updateFileFeatures(newFile, commit, addition, deletion);
-                            // aggiungi il nuovo file alla lista dei file committati
                             commit.addTouchedFile(newFile);
+
+                            // set renaming of the file
+                            oldFile.setRenamed(commit.getVersion(), newFile);
+                            project.removeFile(commit.getVersion().getIndex(), oldFile);
                             return newFile;
-                        } else if (deletion != 0 && addition == 0) {
-                            /* file is deleted */
-                            String filepath = Parser.getInstance().parseFilePathFromLine(file, false);
-                            String filename = Parser.getInstance().parseFilenameFromFilepath(file);
-                            // cerca il file, altrimenti creane uno nuovo
-                            JFile f = project.getFile(commit, filename, filepath);
-                            // aggiungi il commit alla lista delle revisioni del file
-                            f.addRevision(commit);
-                            // aggiorna le caratteristiche del file
-                            updateFileFeatures(f, commit, addition, deletion);
-                            // aggiungi il nuovo file alla lista dei file committati
-                            commit.addTouchedFile(f);
-                            return f;
-                        } else {
-                            /* file is added or modified */
+                        }
+
+                        if (deletion != 0 && addition == 0) {
+                            /* file is candidate to be deleted */
                             String filepath = Parser.getInstance().parseFilePathFromLine(file, false);
                             String filename = Parser.getInstance().parseFilenameFromFilepath(file);
 
-                            // cerca il file, altrimenti creane uno nuovo
-                            JFile f = project.getFile(commit, filename, filepath);
-                            // aggiungi il commit alla lista delle revisioni del file
-                            f.addRevision(commit);
-                            //aggiungi la release del commit al file
-                            f.addAndFillRelease(commit.getVersion());
-                            // aggiorna le caratteristiche del file
-                            updateFileFeatures(f, commit, addition, deletion);
-                            commit.addTouchedFile(f);
-                            return f;
+                            if (checkGitIfDeleted(commit.getShaId(), filepath)) {
+                                JFile f = project.getFile(commit, filename, filepath);
+                                // aggiungi il commit alla lista delle revisioni del file
+                                f.addRevision(commit);
+                                // aggiorna le caratteristiche del file
+                                updateFileFeatures(f, commit, addition, deletion);
+                                // aggiungi il nuovo file alla lista dei file committati
+                                commit.addTouchedFile(f);
+                                // set deletion release of file
+                                f.setDeleted(commit.getVersion());
+                                project.removeFile(commit.getVersion().getIndex(), f);
+                                return f;
+                            }
                         }
+                        /* file is added or modified */
+                        String filepath = Parser.getInstance().parseFilePathFromLine(file, false);
+                        String filename = Parser.getInstance().parseFilenameFromFilepath(file);
+
+                        // cerca il file, altrimenti creane uno nuovo
+                        JFile f = project.getFile(commit, filename, filepath);
+                        // aggiungi il commit alla lista delle revisioni del file
+                        f.addRevision(commit);
+                        //aggiungi la release del commit al file
+                        f.addAndFillRelease(commit.getVersion());
+                        // aggiorna le caratteristiche del file
+                        updateFileFeatures(f, commit, addition, deletion);
+                        commit.addTouchedFile(f);
+                        return f;
                             }).toList();
         } catch (CommandException e) {
             e.printStackTrace();
         }
         return files;
+    }
+
+    private boolean checkGitIfDeleted(String shaId, String filepath) {
+        String [] args = {"git", "show", "--name-status", "--diff-filter=D", shaId};
+        try {
+            BufferedReader commandOutput = getCommandOutput(args);
+            List<String> strings = commandOutput.lines().filter(s -> s.contains(filepath)).toList();
+            return !strings.isEmpty();
+        } catch (CommandException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void updateFileFeatures(JFile file, Commit commit, int addition, int deletion) {

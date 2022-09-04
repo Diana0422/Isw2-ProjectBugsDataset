@@ -26,7 +26,7 @@ public class ReplicateReleaseTest {
 
     public ReplicateReleaseTest(int[] releaseIndexes, List<Integer> resultIndexes) {
         this.file = new JFile(new Project("", new Properties(2)), "", "",
-                LocalDateTime.now());
+                null);
         this.releases = new ArrayList<>();
         this.expectedResult = new ArrayList<>();
         for (int i = 0; i < releaseIndexes.length; i++) {

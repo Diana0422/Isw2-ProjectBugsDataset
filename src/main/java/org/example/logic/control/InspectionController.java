@@ -126,7 +126,7 @@ public class InspectionController {
             // get the project properties
             projName = prop.getProperty("project_name");
             projDir = prop.getProperty("project_dir");
-            percent = Integer.parseInt(prop.getProperty("percent"));
+            percent = Integer.parseInt(prop.getProperty("percentage"));
             debug = Boolean.parseBoolean(prop.getProperty("debug"));
             fullDebug = Boolean.parseBoolean(prop.getProperty("full_debug"));
 
@@ -153,17 +153,19 @@ public class InspectionController {
         debugCommits(commits);
 
         /* Retrieve all project files */
-        simpleDebug("--> Retrieving project files...");
+        simpleDebug("--> OK Retrieving project files...");
         inspector.inspectProjectFiles();
 
         /* get project issues on JIRA */
-        simpleDebug("--> Setting bug issues...");
+        simpleDebug("--> OK Setting bug issues...");
         List<Issue> issues = inspector.inspectProjectIssues();
         debugIssues(issues);
 
-        simpleDebug("--> Update bugginess...");
+        simpleDebug("--> OK Update bugginess...");
         inspector.updateBugginess(issues);
-        debugFiles(proj.getJavaFiles());
+
+        simpleDebug("--> Fixing release gaps");
+        inspector.fixReleaseGaps();
 
         simpleDebug("--> Producing dataset...");
         inspector.produceRecords();
@@ -171,7 +173,7 @@ public class InspectionController {
         simpleDebug("--> Calculating features...");
         List<Record> obs = inspector.calculateFeatures();
 
-        simpleDebug("--> Selecting first " + percent + "% of instances...");
+        simpleDebug("--> OK Selecting first " + percent + "% of instances...");
         obs = inspector.selectRecords(obs);
 
         simpleDebug("--> Writing version information to file: " + proj.getProjName() + "Versions.csv");

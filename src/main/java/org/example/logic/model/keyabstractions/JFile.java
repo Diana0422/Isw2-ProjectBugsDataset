@@ -1,7 +1,6 @@
 package org.example.logic.model.keyabstractions;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.*;
 
@@ -10,38 +9,113 @@ public class JFile {
     private final Project project;
     private String name;
     private final String relpath;
-    private final String oldPath;
-    private final LocalDateTime creation;
+    private final Release created;
+    private Release deleted;
+    private final HashMap<Release, JFile> renamed;
     private final HashMap<Integer,Integer> additions; // (version, addition)
     private final HashMap<Integer,Integer> maxAdditions;
     private final HashMap<Integer,Integer> deletions; // (version, deletion)
     private final HashMap<Integer,Integer> changes; // (version, changes)
     private final HashMap<Integer, String[]> content; // (version, content)
     private final HashMap<Integer, Integer> ages; // (version, age)
-    private final List<Commit> revisions;
+    private final HashMap<Integer, List<Commit>> revisions;
     private List<Release> releases;
     private List<Release> buggyReleases;
 
 
-    public JFile(Project project, String name, String relpath, LocalDateTime creation) {
+    public JFile(int releaseIndex, JFile prevInstance) {
+        /* Inherit prev instance file stats */
+        this.project = prevInstance.project;
+        this.name = prevInstance.name;
+        this.relpath = prevInstance.relpath;
+        this.created = prevInstance.created;
+        this.renamed = prevInstance.renamed;
+        this.releases = prevInstance.releases;
+        this.buggyReleases = prevInstance.buggyReleases;
+        /* Inherit prev instance features */
+        this.additions = prevInstance.additions;
+        this.maxAdditions = prevInstance.maxAdditions;
+        this.deletions = prevInstance.deletions;
+        this.changes = prevInstance.changes;
+        this.content = prevInstance.content;
+        this.ages = prevInstance.ages;
+        this.revisions = prevInstance.revisions;
+        /* Update features */
+        updateAdditions(releaseIndex, additions.get(releaseIndex-1));
+        updateDeletions(releaseIndex, deletions.get(releaseIndex-1));
+        updateChanges(releaseIndex, changes.get(releaseIndex-1));
+        updateContent(releaseIndex, content.get(releaseIndex-1));
+        updateAge(releaseIndex);
+    }
+
+    public JFile(JFile prevInstance) {
+        /* Inherit prev instance file stats */
+        this.project = prevInstance.project;
+        this.name = prevInstance.name;
+        this.relpath = prevInstance.relpath;
+        this.created = prevInstance.created;
+        this.renamed = prevInstance.renamed;
+        this.releases = prevInstance.releases;
+        this.buggyReleases = prevInstance.buggyReleases;
+        this.revisions = prevInstance.revisions;
+        /* Inherit prev instance features */
+        this.additions = prevInstance.additions;
+        this.maxAdditions = prevInstance.maxAdditions;
+        this.deletions = prevInstance.deletions;
+        this.changes = prevInstance.changes;
+        this.content = prevInstance.content;
+        this.ages = prevInstance.ages;
+    }
+
+    /* when the file gets renamed */
+    public JFile(Release created, String filename, String filepath, JFile oldFile) {
+        this.project = oldFile.project;
+        this.name = filename;
+        this.relpath = filepath;
+        this.created = created;
+        this.renamed = new HashMap<>(1);
+        /* Inherit old file stats */
+        this.additions = oldFile.additions;
+        this.maxAdditions = oldFile.maxAdditions;
+        this.deletions = oldFile.deletions;
+        this.changes = oldFile.changes;
+        this.content = oldFile.content;
+        this.ages = oldFile.ages;
+        this.revisions = oldFile.revisions;
+        /* Init releases as brand new */
+        this.releases = new ArrayList<>();
+        this.buggyReleases = new ArrayList<>();
+        /* add file to the list of files */
+        project.addFile(created.getIndex(), this);
+        /* remove old file from the list of files */
+        project.removeFile(created.getIndex(), oldFile);
+    }
+
+    public JFile(Project project, String name, String relpath, Release created) {
         this.name = name;
         this.project = project;
         this.relpath = relpath;
-        this.creation = creation;
+        this.created = created;
+        this.renamed = new HashMap<>(1);
         this.additions = new HashMap<>();
         this.maxAdditions = new HashMap<>();
         this.deletions = new HashMap<>();
         this.changes = new HashMap<>();
         this.content = new HashMap<>();
         this.ages = new HashMap<>();
-        this.revisions = new ArrayList<>();
+        this.revisions = new HashMap<>();
         this.releases = new ArrayList<>();
         this.buggyReleases = new ArrayList<>();
-        this.oldPath = relpath;
     }
 
-    public String getOldPath() {
-        return oldPath;
+    public void setRenamed(Release release, JFile newFile) {
+        this.renamed.put(release, newFile);
+        /* mark file as deleted in that release */
+        this.deleted = release;
+    }
+
+    public void setDeleted(Release release) {
+        this.deleted = release;
     }
 
     public String getName() {
@@ -96,6 +170,32 @@ public class JFile {
             if (deletions.containsKey(currentReleaseIdx)) updateDeletions(rel.getIndex(), deletions.get(currentReleaseIdx));
             if (changes.containsKey(currentReleaseIdx)) updateChanges(rel.getIndex(), changes.get(currentReleaseIdx));
             if (content.containsKey(currentReleaseIdx)) updateContent(rel.getIndex(), content.get(currentReleaseIdx));
+        }
+    }
+
+
+    /**
+     *
+     */
+    public void fillReleases() {
+        /* add file instance to missing releases in files hashmap */
+        List<HashMap<String, JFile>> files = project.getFiles();
+        JFile prevInstance = this;
+        int deletedIdx;
+        if (deleted != null) {
+            deletedIdx = this.deleted.getIndex();
+        } else {
+            deletedIdx = project.getVersions().size();
+        }
+        int createdIdx = this.created.getIndex();
+        for (int i = createdIdx-1; i < deletedIdx; i++) {
+            HashMap<String, JFile> fileHashMap = files.get(i);
+            if (fileHashMap.containsKey(relpath)) {
+                prevInstance = fileHashMap.get(relpath);
+                continue;
+            }
+            project.replicateMissingFile(i+1, i+2, prevInstance);
+            project.replicateRelease(i+1, prevInstance);
         }
     }
 
@@ -184,10 +284,9 @@ public class JFile {
      * adds a new release to the list of releases in which the file is present
      * and fills the gaps between releases
      */
-    public void addAndFillAffectedRelease(List<Release> affRelease) {
+    public void addAffectedRelease(List<Release> affRelease) {
         addBuggyReleases(affRelease);
         this.buggyReleases.sort(Comparator.comparing(Release::getDate));
-        fill(this.buggyReleases);
     }
 
     /***
@@ -207,11 +306,13 @@ public class JFile {
         if (!getReleases().contains(release)) getReleases().add(release);
     }
 
-    public List<Commit> getRevisions() {
-        return revisions;
+    public void addRevision(Commit commit) {
+        int releaseIdx = commit.getVersion().getIndex();
+        List<Commit> commits = revisions.get(releaseIdx-1);
+        if (commits == null) commits = new ArrayList<>();
+        commits.add(commit);
+        revisions.put(releaseIdx-1, commits);
     }
-
-    public void addRevision(Commit commit) {this.revisions.add(commit);}
 
     public void setBuggyReleases(List<Release> buggyReleases) {
         this.buggyReleases = buggyReleases;
@@ -223,13 +324,20 @@ public class JFile {
      */
     public void updateAge(int version) {
         LocalDate releaseDate = Release.findVersionByIndex(project.getVersions(), version).getDate().toLocalDate();
-        LocalDate created = this.creation.toLocalDate();
-        int daysAge = Period.between(created, releaseDate).getDays();
-        int weeksAge = (int) Math.ceil((daysAge / 7.0));
+        LocalDate creation = this.created.getDate().toLocalDate();
+        Period period = Period.between(creation, releaseDate);
+        int daysAge = period.getDays();
+        int months = period.getMonths();
+        int years = period.getYears();
+        int weeksAge = (int) Math.ceil(((daysAge+30*months+365*years)/ 7.0));
         this.ages.put(version, weeksAge);
     }
 
     public Map<Integer, Integer> getAges() {
         return ages;
+    }
+
+    public Release getDeleted() {
+        return deleted;
     }
 }

@@ -19,7 +19,6 @@ public class Project {
     private final String projName;
     private String projDir;
     private boolean external; //the project is an external project and needed only to calculate average P for Cold Start Proportion
-    private List<JFile> javaFiles;
     private final List<Release> versions;
     private final List<Release> viewedVersions;
     private final int viewedPercentage;
@@ -40,7 +39,6 @@ public class Project {
         this.bugIssues = new ArrayList<>();
         this.commits = new ArrayList<>();
         this.refCommits = new ArrayList<>();
-        this.javaFiles = new ArrayList<>();
         this.external = false;
         this.renames = new ArrayList<>();
         this.files = new ArrayList<>();
@@ -75,8 +73,6 @@ public class Project {
         String url = "https://issues.apache.org/jira/rest/api/2/project/" + projName;
         JSONObject json;
 
-        int skipped = 0;
-
         try (FileOutputStream fileOutputStream = new FileOutputStream(
                 Objects.requireNonNull(
                         Project.class.getClassLoader().getResource("config.properties"))
@@ -93,24 +89,20 @@ public class Project {
                     /* Select only the releases with a name */
                     if (releases.getJSONObject(i).has("name")) {
                         relName = releases.getJSONObject(i).get("name").toString();
-                    } else {
-                        skipped++;
                     }
                     /* Select only the releases with a id */
                     if (releases.getJSONObject(i).has("id")) {
                         relId = releases.getJSONObject(i).get("id").toString();
-                    } else {
-                        skipped++;
                     }
-                    /* Add release to the list of project releases */
-                    addRelease(releases.getJSONObject(i).get("releaseDate").toString(),relName,relId);
-                } else {
-                    skipped++;
+
+                    /* Select only RELEASED and NOT ARCHIVED */
+                    boolean released = Boolean.parseBoolean(releases.getJSONObject(i).get("released").toString());
+                    boolean archived = Boolean.parseBoolean(releases.getJSONObject(i).get("archived").toString());
+                    if (released && !archived) {
+                        /* Add release to the list of project releases */
+                        addRelease(releases.getJSONObject(i).get("releaseDate").toString(),relName,relId);
+                    }
                 }
-            }
-            if (InspectionController.isFullDebug()) {
-                String log = "Skipped versions: "+skipped;
-                Logger.getGlobal().log(Level.WARNING, log);
             }
             /* order releases by date */
             versions.sort(Comparator.comparing(Release::getDate));
@@ -121,7 +113,7 @@ public class Project {
             // store on properties to commit changes
             prop.store(fileOutputStream, "");
         } catch (JSONException | IOException e) {
-            // TODO Auto-generated catch block
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -187,25 +179,12 @@ public class Project {
         this.commits = commits;
     }
 
-    public List<JFile> getJavaFiles() {
-        return javaFiles;
-    }
-
-    public void setJavaFiles(List<JFile> javaFiles) {
-        this.javaFiles = javaFiles;
-    }
-
     public List<Commit> getRefCommits() {
         return refCommits;
     }
 
     public void setRefCommits(List<Commit> refCommits) {
         this.refCommits = refCommits;
-    }
-    public void addRenomination(int releaseIdx, JFile oldFile, JFile newFile) {
-        int hashIdx = releaseIdx-1;
-        HashMap<JFile, JFile> renomination = this.renames.get(hashIdx);
-        renomination.put(newFile, oldFile);
     }
 
     public boolean checkFile(Integer releaseIdx, String filepath) {
@@ -223,19 +202,73 @@ public class Project {
         addFileRelease(file, releaseIdx);
     }
 
+    public void removeFile(Integer releaseIdx, JFile file) {
+        /* Remove the file from the release specified - current */
+        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
+        relFiles.remove(file.getRelPath());
+        /* remove releases from release */
+        file.getReleases().remove(Release.findVersionByIndex(versions,releaseIdx));
+    }
+
+    /**
+     * @param commit
+     * @param filename
+     * @param filepath
+     * @return
+     */
     public JFile getFile(Commit commit, String filename, String filepath) {
         int releaseIdx = commit.getVersion().getIndex();
-        LocalDateTime creation = commit.getDate();
+        Release creation = commit.getVersion();
+
         if (checkFile(releaseIdx, filepath)) {
-            /* the file is already created - take the existing instance */
+            /* the file is already created in the current release - take the existing instance */
             HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
             return relFiles.get(filepath);
-        } else {
-            /* the file is new - create a new instance */
-            JFile file = new JFile(this, filename, filepath, creation);
-            addFile(releaseIdx, file);
-            return file;
         }
+
+        for (int index = releaseIdx-1; index >= 1; index--) {
+            if (checkFile(index, filepath)) {
+                /* the file was already created in a previous release - take the existing instance */
+                HashMap<String, JFile> relFiles = files.get(index-1);
+                JFile prevInstance = relFiles.get(filepath);
+                JFile file = new JFile(prevInstance);
+                addFile(releaseIdx, file);
+
+                /* replicate file in intermediate releases */
+                replicateMissingFile(index, releaseIdx, prevInstance);
+                return file;
+            }
+        }
+
+        /* the file is new - create a new instance */
+        JFile file = new JFile(this, filename, filepath, creation);
+        addFile(releaseIdx, file);
+        return file;
+    }
+
+    /**
+     * @param startingIndex
+     * @param currentReleaseIdx
+     * @param prevInstance
+     */
+    public void replicateMissingFile(int startingIndex, int currentReleaseIdx, JFile prevInstance) {
+        String filepath = prevInstance.getRelPath();
+        /* replicate file in intermediate releases */
+        for (int i = startingIndex; i < currentReleaseIdx; i++) {
+            if (!checkFile(i, filepath)) {
+                JFile file = new JFile(i, prevInstance);
+                addFile(i, file);
+            }
+        }
+    }
+
+    /**
+     * @param releaseIdx
+     * @param prevInstance
+     */
+    public void replicateRelease(int releaseIdx, JFile prevInstance) {
+        Release versionByIndex = Release.findVersionByIndex(versions, releaseIdx);
+        prevInstance.addRelease(versionByIndex);
     }
 
     private void addFileRelease(JFile file, int releaseIdx) {
@@ -254,6 +287,10 @@ public class Project {
         } else {
             filesReleases.put(filepath, new ArrayList<>());
         }
+    }
+
+    public List<HashMap<String, JFile>> getFiles() {
+        return files;
     }
 
     private boolean checkGap(int currRel, int prevRel) {

@@ -74,6 +74,12 @@ public class Release {
         this.tag = tag;
     }
 
+    /**
+     * Given a date, returns the corresponding project release
+     * @param versions the list of project releases
+     * @param created date of the commit
+     * @return the release to be assigned to the commit
+     */
     public static Release findVersionByDate(List<Release> versions, LocalDateTime created) {
         Release version = null;
 
