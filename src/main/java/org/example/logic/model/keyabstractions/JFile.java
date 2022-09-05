@@ -12,15 +12,15 @@ public class JFile {
     private final Release created;
     private Release deleted;
     private final HashMap<Release, JFile> renamed;
-    private final HashMap<Integer,Integer> additions; // (version, addition)
-    private final HashMap<Integer,Integer> maxAdditions;
-    private final HashMap<Integer,Integer> deletions; // (version, deletion)
-    private final HashMap<Integer,Integer> changes; // (version, changes)
-    private final HashMap<Integer, String[]> content; // (version, content)
-    private final HashMap<Integer, Integer> ages; // (version, age)
-    private final HashMap<Integer, List<Commit>> revisions;
+    private HashMap<Integer,Integer> additions; // (version, addition)
+    private HashMap<Integer,Integer> maxAdditions;
+    private HashMap<Integer,Integer> deletions; // (version, deletion)
+    private HashMap<Integer,Integer> changes; // (version, changes)
+    private HashMap<Integer, String[]> content; // (version, content)
+    private HashMap<Integer, Integer> ages; // (version, age)
+    private HashMap<Integer, List<Commit>> revisions;
     private List<Release> releases;
-    private List<Release> buggyReleases;
+    private final List<Release> buggyReleases;
 
 
     /**
@@ -53,25 +53,6 @@ public class JFile {
         updateAge(releaseIndex);
     }
 
-    public JFile(JFile prevInstance) {
-        /* Inherit prev instance file stats */
-        this.project = prevInstance.project;
-        this.name = prevInstance.name;
-        this.relpath = prevInstance.relpath;
-        this.created = prevInstance.created;
-        this.renamed = prevInstance.renamed;
-        this.releases = prevInstance.releases;
-        this.buggyReleases = prevInstance.buggyReleases;
-        this.revisions = prevInstance.revisions;
-        /* Inherit prev instance features */
-        this.additions = prevInstance.additions;
-        this.maxAdditions = prevInstance.maxAdditions;
-        this.deletions = prevInstance.deletions;
-        this.changes = prevInstance.changes;
-        this.content = prevInstance.content;
-        this.ages = prevInstance.ages;
-    }
-
     /* when the file gets renamed */
     public JFile(Release created, String filename, String filepath, JFile oldFile) {
         this.project = oldFile.project;
@@ -102,21 +83,96 @@ public class JFile {
         this.relpath = relpath;
         this.created = created;
         this.renamed = new HashMap<>(1);
-        this.additions = new HashMap<>();
-        this.maxAdditions = new HashMap<>();
-        this.deletions = new HashMap<>();
-        this.changes = new HashMap<>();
-        this.content = new HashMap<>();
-        this.ages = new HashMap<>();
-        this.revisions = new HashMap<>();
+        this.additions = initAdditions();
+        this.maxAdditions = initMaxAdditions();
+        this.deletions = initDeletions();
+        this.changes = initChanges();
+        this.ages = initAges();
+        this.revisions = initRevisions();
+        this.content = initContent();
         this.releases = new ArrayList<>();
         this.buggyReleases = new ArrayList<>();
+    }
+
+    private HashMap<Integer, String[]> initContent() {
+        this.content = new HashMap<>();
+        int numReleases = project.getVersions().size();
+        for (int i = 0; i < numReleases; i++) {
+            this.content.put(i, new String[]{});
+        }
+        return content;
+    }
+
+    private HashMap<Integer, List<Commit>> initRevisions() {
+        this.revisions = new HashMap<>();
+        int numReleases = project.getVersions().size();
+        for (int i = 0; i < numReleases; i++) {
+            this.revisions.put(i, new ArrayList<>());
+        }
+        return revisions;
+    }
+
+    private HashMap<Integer, Integer> initAges() {
+        this.ages = new HashMap<>();
+        int numReleases = project.getVersions().size();
+        for (int i = 0; i < numReleases; i++) {
+            this.ages.put(i, 0);
+        }
+        return ages;
+    }
+
+    private HashMap<Integer, Integer> initChanges() {
+        this.changes = new HashMap<>();
+        int numReleases = project.getVersions().size();
+        for (int i = 0; i < numReleases; i++) {
+            this.changes.put(i, 0);
+        }
+        return changes;
+    }
+
+    private HashMap<Integer, Integer> initDeletions() {
+        this.deletions = new HashMap<>();
+        int numReleases = project.getVersions().size();
+        for (int i = 0; i < numReleases; i++) {
+            this.deletions.put(i, 0);
+        }
+        return deletions;
+    }
+
+    private HashMap<Integer, Integer> initMaxAdditions() {
+        this.maxAdditions = new HashMap<>();
+        int numReleases = project.getVersions().size();
+        for (int i = 0; i < numReleases; i++) {
+            this.maxAdditions.put(i, 0);
+        }
+        return maxAdditions;
+    }
+
+    private HashMap<Integer, Integer> initAdditions() {
+        this.additions = new HashMap<>();
+        int numReleases = project.getVersions().size();
+        for (int i = 0; i < numReleases; i++) {
+            this.additions.put(i, 0);
+        }
+        return additions;
     }
 
     public void setRenamed(Release release, JFile newFile) {
         this.renamed.put(release, newFile);
         /* mark file as deleted in that release */
         this.deleted = release;
+    }
+
+    public boolean checkRenamed() {
+        return renamed.size() != 0;
+    }
+
+    public Release getRenamedRelease() {
+        Release release = null;
+        for (Map.Entry<Release, JFile> entry : renamed.entrySet()) {
+            release = entry.getKey();
+        }
+        return release;
     }
 
     public void setDeleted(Release release) {
@@ -142,45 +198,6 @@ public class JFile {
 
     /**
      * Fills gaps between releases in which a file is present
-     * @param releases the releases of the file
-     */
-    public void fill(List<Release> releases) {
-        int i;
-        Release currentRelease;
-        Release nextRelease;
-        for (i=0; i<releases.size()-1; i++) {
-            /* iterate on list of releases */
-            currentRelease = releases.get(i);
-            nextRelease = releases.get(i+1);
-            int currentReleaseIndex = currentRelease.getIndex();
-            int nextReleaseIndex = nextRelease.getIndex();
-            /* check the offset between the two indices of the releases */
-            int offset = nextReleaseIndex - currentReleaseIndex;
-            if (offset>1) {
-                /* fill the gap replicating the missing releases */
-                replicate(currentRelease, nextRelease);
-            }
-        }
-        this.getReleases().sort(Comparator.comparing(Release::getIndex));
-    }
-
-    private void replicate(Release currentRelease, Release nextRelease) {
-        int currentReleaseIdx = currentRelease.getIndex();
-        int nextReleaseIdx = nextRelease.getIndex();
-
-        for (int idx=currentReleaseIdx+1; idx<nextReleaseIdx; idx++) {
-            Release rel = Release.findVersionByIndex(project.getVersions(), idx);
-            addRelease(rel);
-            if (additions.containsKey(currentReleaseIdx)) updateAdditions(rel.getIndex(), additions.get(currentReleaseIdx));
-            if (deletions.containsKey(currentReleaseIdx)) updateDeletions(rel.getIndex(), deletions.get(currentReleaseIdx));
-            if (changes.containsKey(currentReleaseIdx)) updateChanges(rel.getIndex(), changes.get(currentReleaseIdx));
-            if (content.containsKey(currentReleaseIdx)) updateContent(rel.getIndex(), content.get(currentReleaseIdx));
-        }
-    }
-
-
-    /**
-     *
      */
     public void fillReleases() {
         /* add file instance to missing releases in files hashmap */
@@ -201,6 +218,7 @@ public class JFile {
             }
             project.replicateMissingFile(i+1, i+2, prevInstance);
             project.replicateRelease(i+1, prevInstance);
+            project.replicateContent(i+1, prevInstance);
         }
     }
 
@@ -213,22 +231,14 @@ public class JFile {
     }
 
     public void updateAdditions(Integer version, Integer deltaAddition) {
-        if (this.additions.containsKey(version)) {
-            Integer addition = this.additions.get(version);
-            this.additions.put(version, addition+deltaAddition);
-        } else {
-            this.additions.put(version, deltaAddition);
-        }
+        Integer addition = this.additions.get(version-1);
+        this.additions.put(version-1, addition+deltaAddition);
         updateMaxAdditions(version, deltaAddition);
     }
 
     private void updateMaxAdditions(Integer version, Integer deltaAddition) {
-        if (this.maxAdditions.containsKey(version)) {
-            Integer max = this.maxAdditions.get(version);
-            if (deltaAddition >= max) this.maxAdditions.put(version, deltaAddition);
-        } else {
-            this.maxAdditions.put(version, deltaAddition);
-        }
+        Integer max = this.maxAdditions.get(version-1);
+        if (deltaAddition >= max) this.maxAdditions.put(version-1, deltaAddition);
     }
 
     public Map<Integer, Integer> getMaxAdditions() {
@@ -238,12 +248,8 @@ public class JFile {
     public Map<Integer, Integer> getDeletions() { return deletions; }
 
     public void updateDeletions(Integer version, Integer deltaDeletions) {
-        if (this.deletions.containsKey(version)) {
-            Integer del = this.deletions.get(version);
-            this.deletions.put(version, del+deltaDeletions);
-        } else {
-            this.deletions.put(version, deltaDeletions);
-        }
+        Integer del = this.deletions.get(version-1);
+        this.deletions.put(version-1, del+deltaDeletions);
     }
 
     public Map<Integer, Integer> getChanges() {
@@ -251,18 +257,14 @@ public class JFile {
     }
 
     public void updateChanges(Integer version, Integer deltaChanges) {
-        if (this.changes.containsKey(version)) {
-            Integer ch = this.changes.get(version);
-            this.changes.put(version, ch+deltaChanges);
-        } else {
-            this.changes.put(version, deltaChanges);
-        }
+        Integer ch = this.changes.get(version-1);
+        this.changes.put(version-1, ch+deltaChanges);
     }
 
     public Map<Integer, String[]> getContent() { return content;}
 
     public void updateContent(Integer version, String[] content) {
-        this.content.put(version, content);
+        this.content.put(version-1, content);
     }
 
     public List<Release> getBuggyReleases() {
@@ -301,7 +303,6 @@ public class JFile {
     public void addAndFillRelease(Release release) {
         addRelease(release);
         this.releases.sort(Comparator.comparing(Release::getDate));
-        fill(this.releases);
     }
 
     /***
@@ -314,13 +315,8 @@ public class JFile {
     public void addRevision(Commit commit) {
         int releaseIdx = commit.getVersion().getIndex();
         List<Commit> commits = revisions.get(releaseIdx-1);
-        if (commits == null) commits = new ArrayList<>();
         commits.add(commit);
         revisions.put(releaseIdx-1, commits);
-    }
-
-    public void setBuggyReleases(List<Release> buggyReleases) {
-        this.buggyReleases = buggyReleases;
     }
 
     /***
@@ -335,7 +331,7 @@ public class JFile {
         int months = period.getMonths();
         int years = period.getYears();
         int weeksAge = (int) Math.ceil(((daysAge+30*months+365*years)/ 7.0));
-        this.ages.put(version, weeksAge);
+        this.ages.put(version-1, weeksAge);
     }
 
     public Map<Integer, Integer> getAges() {
@@ -345,4 +341,6 @@ public class JFile {
     public Release getDeleted() {
         return deleted;
     }
+
+    public Release getCreated() {return created;}
 }

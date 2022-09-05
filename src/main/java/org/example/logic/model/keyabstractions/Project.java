@@ -231,7 +231,7 @@ public class Project {
                 /* the file was already created in a previous release - take the existing instance */
                 HashMap<String, JFile> relFiles = files.get(index-1);
                 JFile prevInstance = relFiles.get(filepath);
-                JFile file = new JFile(prevInstance);
+                JFile file = new JFile(index + 1, prevInstance);
                 addFile(releaseIdx, file);
 
                 /* replicate file in intermediate releases */
@@ -269,6 +269,19 @@ public class Project {
     public void replicateRelease(int releaseIdx, JFile prevInstance) {
         Release versionByIndex = Release.findVersionByIndex(versions, releaseIdx);
         prevInstance.addRelease(versionByIndex);
+    }
+
+    public void replicateContent(int releaseIdx, JFile file) {
+        int created = file.getCreated().getIndex();
+        for (int i = created-1; i < releaseIdx; i++) {
+            if (created == 1) continue;
+            String[] currentContent = file.getContent().get(i);
+            String[] prevContent = file.getContent().get(i - 1);
+            if (currentContent.length == 0) {
+                file.getContent().put(i, prevContent);
+            }
+        }
+
     }
 
     private void addFileRelease(JFile file, int releaseIdx) {

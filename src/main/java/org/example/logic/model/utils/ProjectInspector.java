@@ -181,6 +181,11 @@ public class ProjectInspector {
     private void addMissingRecord(int releaseIdx, JFile file, List<HashMap<String, Record>> hashMaps) {
         String filepath = file.getRelPath(); //complete file name
         int i = releaseIdx - 1;
+        /* if the file was renamed in a previous release, then do not include in the dataset */
+        if (file.checkRenamed()) {
+            int renameIdx = file.getRenamedRelease().getIndex();
+            if (releaseIdx >= renameIdx) return; // fixme metti l'uguale anche nella condizione
+        }
         /* by default the file is not buggy in the releases in which it's present. */
         if (!hashMaps.get(i).containsKey(filepath)) {
             /* record with release index and filename specified is not already present in dataset */
@@ -224,11 +229,10 @@ public class ProjectInspector {
         /* update record based on commit */
         for (Commit commit : commits) {
             List<JFile> touchedFiles = commit.getCommittedFiles();
-            List<Record> records = touchedFiles.parallelStream()
-                    .map(file -> updateRecord(file, commit))
-                    .filter(Objects::nonNull)
-                    .toList();
-            recordsLists.addAll(records);
+            touchedFiles.forEach(file -> {
+                Record rec = updateRecord(file, commit);
+                if (rec != null) recordsLists.add(rec);
+            });
         }
 
         /* update record with non-commit based features */
@@ -238,47 +242,19 @@ public class ProjectInspector {
             int releaseIdx = i + 1;
             HashMap<String, JFile> fileHashMap = files.get(i);
             fileHashMap.forEach((s, file) -> {
-                if (file.getRelPath().equals("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
-                    System.out.println(releaseIdx+" "+file.getRelPath());
-                }
                 Record rec = updateRecord(releaseIdx, file);
-                if (file.getRelPath().equals("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
-                    System.out.println("rec:"+rec);
-                }
                 if (rec != null) recordsLists.add(rec);
             });
         }
 
-        System.out.println("\n\n");
-        recordsLists.stream().distinct().forEach(record -> {
-            if (record.getFileName().contains("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
-                System.out.println(record.getVersion() + "-" + record.getFileName());
-            }
-        });
-
-        System.out.println("\n\n");
-        recordsLists.stream().forEach(record -> {
-            if (record.getFileName().contains("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
-                System.out.println(record.getVersion() + "-" + record.getFileName());
-            }
-        });
-
         List<Record> instances = recordsLists.stream().distinct().collect(Collectors.toList());
 
         /* order records by version index */
-        List<Record> records = instances.stream().sorted((o1, o2) -> {
+        return instances.stream().sorted((o1, o2) -> {
             int version1 = o1.getVersion();
             int version2 = o2.getVersion();
             return Integer.compare(version1, version2);
         }).toList();
-
-        System.out.println("\n\n");
-        records.stream().forEach(record -> {
-            if (record.getFileName().contains("lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java")) {
-                System.out.println(record.getVersion() + "-" + record.getFileName());
-            }
-        });
-        return  records;
 
     }
 
@@ -293,11 +269,11 @@ public class ProjectInspector {
                 .get(releaseIdx - 1);
         String recordKey = file.getRelPath();
 
-        String[] content = file.getContent().get(releaseIdx);
-        int additions = file.getAdditions().get(releaseIdx);
-        int maxAdditions = file.getMaxAdditions().get(releaseIdx);
-        int deletions = file.getDeletions().get(releaseIdx);
-        int age = file.getAges().get(releaseIdx);
+        String[] content = file.getContent().get(releaseIdx-1);
+        int additions = file.getAdditions().get(releaseIdx-1);
+        int maxAdditions = file.getMaxAdditions().get(releaseIdx-1);
+        int deletions = file.getDeletions().get(releaseIdx-1);
+        int age = file.getAges().get(releaseIdx-1);
 
         if (content.length == 0) {
             /* last commit in release deleted the file */
