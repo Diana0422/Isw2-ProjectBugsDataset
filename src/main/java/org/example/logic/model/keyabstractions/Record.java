@@ -11,6 +11,7 @@ public class Record {
     private String buggy;
     private int size;
     private int locTouched;
+    private int totalLocTouched;
     private int locAdded;
     private int maxLocAdded;
     private int locDeleted;
@@ -31,6 +32,7 @@ public class Record {
         this.numRevisions = 0;
         this.size = 0;
         this.locTouched = 0;
+        this.totalLocTouched = 0;
         this.locAdded = 0;
         this.locDeleted = 0;
         this.maxLocAdded = 0;
@@ -119,8 +121,11 @@ public class Record {
         return locTouched;
     }
 
+    public int getTotalLocTouched() {return totalLocTouched; }
+
     public void setLocTouched(int locTouched) {
         this.locTouched = locTouched;
+        totalLocTouched += locTouched;
     }
 
     /*

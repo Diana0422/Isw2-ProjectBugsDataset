@@ -269,6 +269,7 @@ public class Project {
     public void replicateRelease(int releaseIdx, JFile prevInstance) {
         Release versionByIndex = Release.findVersionByIndex(versions, releaseIdx);
         prevInstance.addRelease(versionByIndex);
+        prevInstance.getReleases().sort(Comparator.comparingInt(Release::getIndex));
     }
 
     public void replicateContent(int releaseIdx, JFile file) {

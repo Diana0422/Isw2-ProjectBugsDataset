@@ -125,16 +125,24 @@ public class FeatureCalculator {
         rec.setMaxChgSetSize(chgSetSize);
     }
 
-    /***
+    /**
      * update the value of the age of a class
+     * (cross-release)
+     * @param age
+     * @param rec
      */
     public static void calculateAge(int age, Record rec) {
         rec.setAge(age);
     }
 
+    /**
+     * Calculate the age of a file weighted on the total locTouched over releases
+     * (cross-release)
+     * @param rec
+     */
     public static void calculateWeightedAge(Record rec) {
         int age = rec.getAge();
-        int locTouched = rec.getLocTouched();
+        int locTouched = rec.getTotalLocTouched();
         if (locTouched == 0) {
             rec.setWeightedAge(0);
         } else {

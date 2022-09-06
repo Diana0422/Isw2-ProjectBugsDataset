@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class ProjectInspector {
 
@@ -184,7 +183,7 @@ public class ProjectInspector {
         /* if the file was renamed in a previous release, then do not include in the dataset */
         if (file.checkRenamed()) {
             int renameIdx = file.getRenamedRelease().getIndex();
-            if (releaseIdx >= renameIdx) return; // fixme metti l'uguale anche nella condizione
+            if (releaseIdx >= renameIdx) return;
         }
         /* by default the file is not buggy in the releases in which it's present. */
         if (!hashMaps.get(i).containsKey(filepath)) {
@@ -247,15 +246,16 @@ public class ProjectInspector {
             });
         }
 
-        List<Record> instances = recordsLists.stream().distinct().collect(Collectors.toList());
+        List<Record> instances = recordsLists.stream().distinct().toList();
+        /* Remove code smell */
+        List<Record> modifiable = new ArrayList<>(instances);
 
         /* order records by version index */
-        return instances.stream().sorted((o1, o2) -> {
+        return modifiable.stream().sorted((o1, o2) -> {
             int version1 = o1.getVersion();
             int version2 = o2.getVersion();
             return Integer.compare(version1, version2);
         }).toList();
-
     }
 
     /**

@@ -213,12 +213,15 @@ public class JFile {
         for (int i = createdIdx-1; i < deletedIdx; i++) {
             HashMap<String, JFile> fileHashMap = files.get(i);
             if (fileHashMap.containsKey(relpath)) {
-                prevInstance = fileHashMap.get(relpath); // project.replicateRelease(inserire sopra)
+                String[] text = fileHashMap.get(relpath).getContent().get(i);
+                if (text.length == 0) {
+                    project.replicateContent(i+1, prevInstance);
+                    project.replicateRelease(i+1, prevInstance);
+                }
+                prevInstance = fileHashMap.get(relpath);
                 continue;
             }
             project.replicateMissingFile(i+1, i+2, prevInstance);
-            project.replicateRelease(i+1, prevInstance);
-            project.replicateContent(i+1, prevInstance);
         }
     }
 
