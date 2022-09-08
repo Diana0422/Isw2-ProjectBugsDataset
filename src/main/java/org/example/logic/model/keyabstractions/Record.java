@@ -3,6 +3,9 @@ package org.example.logic.model.keyabstractions;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that represents the final dataset record metadata
+ */
 public class Record {
 
     private int version;
@@ -68,8 +71,8 @@ public class Record {
         this.buggy = buggy;
     }
 
-    /*
-     * LOC : size
+    /**
+     * LOC : size of the file
      */
 
     public int getSize() {
@@ -81,7 +84,7 @@ public class Record {
     }
 
     /**
-     * LOC added
+     * LOC added: lines of code added
      */
 
     public int getLocAdded() {
@@ -114,7 +117,7 @@ public class Record {
     }
 
 
-    /*
+    /**
      * LOC touched : sum of LOC added+deleted over revisions (LOC changed)
      */
     public int getLocTouched() {
@@ -128,7 +131,7 @@ public class Record {
         totalLocTouched += locTouched;
     }
 
-    /*
+    /**
      * NUM revision : number of revisions
      */
 
@@ -177,7 +180,7 @@ public class Record {
     }
 
     /**
-     * num authors
+     * NAuth: number of authors
      */
 
     public List<String> getAuthors() {
@@ -189,7 +192,7 @@ public class Record {
     }
 
     /**
-     * LOC deleted
+     * LOC deleted: lines deleted
      */
 
     public int getLocDeleted() {
@@ -201,7 +204,7 @@ public class Record {
     }
 
     /**
-     * Churn
+     * Churn: sum of added-deleted LOC in class
      */
     public int getChurn() {
         return churn;
@@ -232,6 +235,9 @@ public class Record {
     }
 
 
+    /**
+     * Age: age of the class in weeks
+     */
     public int getAge() {
         return age;
     }
@@ -248,6 +254,9 @@ public class Record {
         this.weightedAge = weightedAge;
     }
 
+    /**
+     * NFix: number of commits fix
+     */
     public int getNFix() {
         return numFix;
     }

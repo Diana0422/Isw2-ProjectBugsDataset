@@ -24,6 +24,12 @@ public class CSVWriter {
         return instance;
     }
 
+    /**
+     * Writes tickets infos into a CSV format file
+     * @param issues list of tickets to write
+     * @param filename name of the output file
+     * @param projName name of the project
+     */
     public void writeTicketsInfo(List<Issue> issues, String filename, String projName) {
         // iterate on array of tickets and writes them as csv entries on file
 
@@ -47,6 +53,12 @@ public class CSVWriter {
         }
     }
 
+    /**
+     * Writes releases infos into a CSV format file
+     * @param releases list of releases to write
+     * @param filename name of the output file
+     * @param projName name of the project
+     */
     public void writeReleaseInfo(List<Release> releases, String filename, String projName) {
         // iterate on array of releases and writes as csv entries on file
 
@@ -76,6 +88,12 @@ public class CSVWriter {
         }
     }
 
+    /**
+     * Writes referencing-issue commits infos into a CSV format file
+     * @param refCommits list of commits to write
+     * @param filename name of the output file
+     * @param projName name of the project
+     */
     public void writeCommitsInfo(List<Commit> refCommits, String filename, String projName) {
         // iterate on array of commits and write as entries on file csv
 
@@ -107,6 +125,12 @@ public class CSVWriter {
         }
     }
 
+
+    /**
+     * Writes dataset
+     * @param obs list of records
+     * @param projName project name
+     */
     public void writeDataset(List<Record> obs, String projName) {
 
         String outname = projName+"dataset.csv";

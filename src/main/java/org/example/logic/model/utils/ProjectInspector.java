@@ -27,8 +27,9 @@ public class ProjectInspector {
         this.datasetRecords = new ArrayList<>();
     }
 
-    /***
-     * retrieve all the commits of the project selected in the config file
+    /**
+     * Retrieve all the commits of the project selected in the config file
+     * @return list of project commits
      */
     public List<Commit> inspectProjectCommits() {
         List<Commit> commits = git.lookupForCommits();
@@ -45,7 +46,8 @@ public class ProjectInspector {
         return commits;
     }
 
-    /***
+
+    /**
      * Retrieves all the files of the project selected in the config file
      */
     public void inspectProjectFiles() {
@@ -54,6 +56,9 @@ public class ProjectInspector {
         commitList.forEach(git::lookupForFiles);
     }
 
+    /**
+     * Fixes gaps of release in files' releases
+     */
     public void fixReleaseGaps() {
         /* fix release gaps */
         int numReleases = project.getVersions().size();
@@ -64,8 +69,9 @@ public class ProjectInspector {
         }
     }
 
-    /***
+    /**
      * Retrieve project issues (bug type) from Jira
+     * @return issues list of the project
      */
     public List<Issue> inspectProjectIssues() {
         List<Issue> bugs = null;
@@ -77,7 +83,8 @@ public class ProjectInspector {
                 if (!project.isExternal()) i.setFixedCommits(findLinkedToIssueCommits(project, i.getKey()));
             }
 
-            /* Order defects by their fix date */
+            /* Order defects by their fix date - this prevents that future issues are used to calculate
+            * each bug's P */
             List<Issue> sortedBugs = bugs
                     .stream()
                     .sorted((o1, o2) -> {
@@ -107,10 +114,11 @@ public class ProjectInspector {
         return bugs;
     }
 
-    /***
-     * filter the commits of the project to those which have the issue key referenced in the commit message
-     * param project: the project to inspect
-     * param issueKey: the key of the issue to filter the commits
+    /**
+     * Filter the commits of the project to those which have the issue key referenced in the commit message
+     * @param project the project to inspect
+     * @param issueKey the key of the issue to filter the commits
+     * @return list of the bug-fixing commits
      */
     private List<Commit> findLinkedToIssueCommits(Project project, String issueKey) {
         List<Commit> fixedCommits = new ArrayList<>();
@@ -122,8 +130,9 @@ public class ProjectInspector {
         return fixedCommits;
     }
 
-    /***
-     * updates the bugginess of the files in the afflicted version of the issues fixed by commits.
+    /**
+     * Updates the bugginess of the files in the afflicted version of the issues fixed by commits.
+     * @param issues list of project tickets to use
      */
     public void updateBugginess(List<Issue> issues) {
         List<JFile> touchedFiles;
@@ -148,8 +157,8 @@ public class ProjectInspector {
         }
     }
 
-    /***
-     * produce dataset using project information about issues and commits that fix the issues.
+    /**
+     * Produce dataset using project information about issues and commits that fix the issues.
      * The sample unit in the data is of type Record.
      */
     public void produceRecords() {
@@ -177,6 +186,12 @@ public class ProjectInspector {
         FeatureCalculator.setHashMaps(hashMaps);
     }
 
+    /**
+     * Add missing record if the corresponding file should be present in a certain release
+     * @param releaseIdx release index considered
+     * @param file file considered
+     * @param hashMaps list of hashmaps to store records by release
+     */
     private void addMissingRecord(int releaseIdx, JFile file, List<HashMap<String, Record>> hashMaps) {
         String filepath = file.getRelPath(); //complete file name
         int i = releaseIdx - 1;
@@ -195,10 +210,10 @@ public class ProjectInspector {
         }
     }
 
-    /***
+    /**
      * Sets the bugginess of the entries in the dataset
-     * @param file :
-     * @param hashMaps :
+     * @param file file considered
+     * @param hashMaps list of hashmaps to store records by release
      */
     private void setRecordsBugginess(JFile file, List<HashMap<String, Record>> hashMaps) {
         List<Release> av; //affected versions
@@ -219,8 +234,9 @@ public class ProjectInspector {
 
     }
 
-    /***
+    /**
      * Calculate the features of the dataset using the FeatureCalculator class
+     * @return list of records of the dataset
      */
     public List<Record> calculateFeatures() {
         List<Commit> commits = project.getCommits();
@@ -260,9 +276,9 @@ public class ProjectInspector {
 
     /**
      * Non commit-based update record to update features
-     * @param releaseIdx
-     * @param file
-     * @return
+     * @param releaseIdx release index
+     * @param file file considered
+     * @return an updated record
      */
     private Record updateRecord(int releaseIdx, JFile file) {
         HashMap<String, Record> releaseRecords = FeatureCalculator.getHashMaps()
@@ -297,6 +313,12 @@ public class ProjectInspector {
         return null;
     }
 
+    /**
+     * Commit-based update record to update features
+     * @param commit commit to consider to calculate features
+     * @param file file considered
+     * @return an updated record
+     */
     private Record updateRecord(JFile file, Commit commit) {
         Release commitRelease = commit.getVersion();
         int releaseIdx = commitRelease.getIndex();
@@ -320,9 +342,10 @@ public class ProjectInspector {
         return null;
     }
 
-    /***
+    /**
      * Select first percentage of records as specified by percentage size
-     * @return listo of records selected
+     * @param records list of total records
+     * @return list of records selected
      */
     public List<Record> selectRecords(List<Record> records) {
         /* select record if belongs to selected releases (e.g first 50%) */

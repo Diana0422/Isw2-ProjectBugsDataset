@@ -14,6 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Class that represent a Project to analyse
+ */
 public class Project {
 
     private final String projName;
@@ -29,8 +32,14 @@ public class Project {
     private List<HashMap<String, JFile>> files;
     private HashMap<String, List<Integer>> filesReleases;
 
+    /**
+     * Main project analysed
+     * @param name project name
+     * @param percent the percent of the dataset to consider at the end
+     * @param projpath the path to the local project repository
+     * @param prop properties
+     */
     public Project(String name, int percent, String projpath, Properties prop) {
-        /* main project */
         this.projName = name;
         this.versions = new ArrayList<>();
         this.viewedVersions = new ArrayList<>();
@@ -54,8 +63,12 @@ public class Project {
         this.filesReleases = new HashMap<>();
     }
 
+    /**
+     * External project
+     * @param name project name
+     * @param prop properties
+     */
     public Project(String name, Properties prop) {
-        /* external project */
         this.projName = name;
         this.bugIssues = new ArrayList<>();
         this.versions = new ArrayList<>();
@@ -66,6 +79,10 @@ public class Project {
         setViewedVersions();
     }
 
+    /**
+     * Sets project releases retrieved from Jira
+     * @param prop properties
+     */
     private void setVersions(Properties prop) {
         //Fills the arraylist with releases dates and orders them
         //Ignores releases with missing dates
@@ -118,6 +135,9 @@ public class Project {
         }
     }
 
+    /**
+     * Sets versions to consider (these can be used only at the end for verification)
+     */
     private void setViewedVersions() {
         int total = this.versions.size();
         int partial = (int) ((this.getViewedPercentage()/100.0)*total);
@@ -134,6 +154,12 @@ public class Project {
         }
     }
 
+    /**
+     * Add a release to the list of project releases
+     * @param strDate date string
+     * @param name release name
+     * @param id the release id
+     */
     private void addRelease(String strDate, String name, String id) {
         LocalDate date = LocalDate.parse(strDate);
         LocalDateTime dateTime = date.atStartOfDay();
@@ -143,6 +169,161 @@ public class Project {
         this.versions.add(release);
     }
 
+    /**
+     * Check if a file is present in a certain release
+     * @param releaseIdx the release index
+     * @param filepath the complete filepath in the project
+     * @return boolean
+     */
+    public boolean checkFile(Integer releaseIdx, String filepath) {
+        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
+        return relFiles.containsKey(filepath);
+    }
+
+    /**
+     * Adds file to a certain release
+     * @param releaseIdx the release index
+     * @param file the file to add
+     */
+    public void addFile(Integer releaseIdx, JFile file) {
+        /* Add the file to the release specified - current */
+        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
+        if (relFiles.containsKey(file.getRelPath())) return;
+        relFiles.put(file.getRelPath(), file);
+
+        /* Add release to list of release indexes of file */
+        addFileRelease(file, releaseIdx);
+    }
+
+    /**
+     * Removes a file from a certain release
+     * @param releaseIdx the release index
+     * @param file the file to remove
+     */
+    public void removeFile(Integer releaseIdx, JFile file) {
+        /* Remove the file from the release specified - current */
+        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
+        relFiles.remove(file.getRelPath());
+        /* remove releases from release */
+        file.getReleases().remove(Release.findVersionByIndex(versions,releaseIdx));
+    }
+
+    /**
+     * Take a file from a certain release. If the file is not present in the current release, check if the file was
+     * created in a previous release, otherwise creates a new file instance.
+     * @param commit the commit (belongs to a release)
+     * @param filename the name of the file
+     * @param filepath the complete filepath
+     * @return a file instance
+     */
+    public JFile getFile(Commit commit, String filename, String filepath) {
+        int releaseIdx = commit.getVersion().getIndex();
+        Release creation = commit.getVersion();
+
+        if (checkFile(releaseIdx, filepath)) {
+            /* the file is already created in the current release - take the existing instance */
+            HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
+            return relFiles.get(filepath);
+        }
+
+        for (int index = releaseIdx-1; index >= 1; index--) {
+            if (checkFile(index, filepath)) {
+                /* the file was already created in a previous release - take the existing instance */
+                HashMap<String, JFile> relFiles = files.get(index-1);
+                JFile prevInstance = relFiles.get(filepath);
+                JFile file = new JFile(index + 1, prevInstance);
+                addFile(releaseIdx, file);
+
+                /* replicate file in intermediate releases */
+                replicateMissingFile(index, releaseIdx, prevInstance);
+                return file;
+            }
+        }
+
+        /* the file is new - create a new instance */
+        JFile file = new JFile(this, filename, filepath, creation);
+        addFile(releaseIdx, file);
+        return file;
+    }
+
+    /**
+     * Replicates a previous file instance if not present in the releases interval selected
+     * @param startingIndex the index of the start release
+     * @param currentReleaseIdx the index of the current release
+     * @param prevInstance the file instance to replicate
+     */
+    public void replicateMissingFile(int startingIndex, int currentReleaseIdx, JFile prevInstance) {
+        String filepath = prevInstance.getRelPath();
+        /* replicate file in intermediate releases */
+        for (int i = startingIndex; i < currentReleaseIdx; i++) {
+            if (!checkFile(i, filepath)) {
+                JFile file = new JFile(i, prevInstance);
+                addFile(i, file);
+            }
+        }
+    }
+
+    /**
+     * Replicate release if not present in the list of releases of a file instance
+     * @param releaseIdx the release index
+     * @param prevInstance the file instance
+     */
+    public void replicateRelease(int releaseIdx, JFile prevInstance) {
+        Release versionByIndex = Release.findVersionByIndex(versions, releaseIdx);
+        prevInstance.addRelease(versionByIndex);
+        prevInstance.getReleases().sort(Comparator.comparingInt(Release::getIndex));
+    }
+
+    /**
+     * Replicate file content from a previous release if the file was not present in the current release
+     * @param releaseIdx the release index
+     * @param file the file to modify
+     */
+    public void replicateContent(int releaseIdx, JFile file) {
+        int created = file.getCreated().getIndex();
+        for (int i = created-1; i < releaseIdx; i++) {
+            if (created == 1) continue;
+            String[] currentContent = file.getContent().get(i);
+            String[] prevContent = file.getContent().get(i - 1);
+            if (currentContent.length == 0) {
+                file.getContent().put(i, prevContent);
+            }
+        }
+
+    }
+
+    /**
+     * Adds a file in a release and replicate the file for all the missing releases if it should be present instead.
+     * @param file the file considered
+     * @param releaseIdx the release index
+     */
+    private void addFileRelease(JFile file, int releaseIdx) {
+        String filepath = file.getRelPath();
+        if (filesReleases.containsKey(filepath)) {
+            List<Integer> fileRels = filesReleases.get(filepath);
+            fileRels.add(releaseIdx);
+            filesReleases.put(filepath, fileRels);
+            if (fileRels.size() > 1) {
+                int currRel = fileRels.get(fileRels.size()-1);
+                int prevRel = fileRels.get(fileRels.size()-2);
+
+                /* Replicate last file for all the previous missing releases */
+                if (checkGap(currRel, prevRel)) replicatePrevFile(currRel, prevRel, filepath);
+            }
+        } else {
+            filesReleases.put(filepath, new ArrayList<>());
+        }
+    }
+
+    private void replicatePrevFile(int currRel, int prevRel, String filepath) {
+        HashMap<String, JFile> fileList = files.get(prevRel - 1);
+        JFile file = fileList.get(filepath);
+        for (int i = prevRel+1; i < currRel-1; i++) {
+            addFile(i, file);
+        }
+    }
+
+    /* GETTERS AND SETTERS */
     public void setBugIssues(List<Issue> issues) {
         this.bugIssues = issues;
     }
@@ -187,136 +368,12 @@ public class Project {
         this.refCommits = refCommits;
     }
 
-    public boolean checkFile(Integer releaseIdx, String filepath) {
-        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
-        return relFiles.containsKey(filepath);
-    }
-
-    public void addFile(Integer releaseIdx, JFile file) {
-        /* Add the file to the release specified - current */
-        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
-        if (relFiles.containsKey(file.getRelPath())) return;
-        relFiles.put(file.getRelPath(), file);
-
-        /* Add release to list of release indexes of file */
-        addFileRelease(file, releaseIdx);
-    }
-
-    public void removeFile(Integer releaseIdx, JFile file) {
-        /* Remove the file from the release specified - current */
-        HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
-        relFiles.remove(file.getRelPath());
-        /* remove releases from release */
-        file.getReleases().remove(Release.findVersionByIndex(versions,releaseIdx));
-    }
-
-    /**
-     * @param commit
-     * @param filename
-     * @param filepath
-     * @return
-     */
-    public JFile getFile(Commit commit, String filename, String filepath) {
-        int releaseIdx = commit.getVersion().getIndex();
-        Release creation = commit.getVersion();
-
-        if (checkFile(releaseIdx, filepath)) {
-            /* the file is already created in the current release - take the existing instance */
-            HashMap<String, JFile> relFiles = files.get(releaseIdx - 1);
-            return relFiles.get(filepath);
-        }
-
-        for (int index = releaseIdx-1; index >= 1; index--) {
-            if (checkFile(index, filepath)) {
-                /* the file was already created in a previous release - take the existing instance */
-                HashMap<String, JFile> relFiles = files.get(index-1);
-                JFile prevInstance = relFiles.get(filepath);
-                JFile file = new JFile(index + 1, prevInstance);
-                addFile(releaseIdx, file);
-
-                /* replicate file in intermediate releases */
-                replicateMissingFile(index, releaseIdx, prevInstance);
-                return file;
-            }
-        }
-
-        /* the file is new - create a new instance */
-        JFile file = new JFile(this, filename, filepath, creation);
-        addFile(releaseIdx, file);
-        return file;
-    }
-
-    /**
-     * @param startingIndex
-     * @param currentReleaseIdx
-     * @param prevInstance
-     */
-    public void replicateMissingFile(int startingIndex, int currentReleaseIdx, JFile prevInstance) {
-        String filepath = prevInstance.getRelPath();
-        /* replicate file in intermediate releases */
-        for (int i = startingIndex; i < currentReleaseIdx; i++) {
-            if (!checkFile(i, filepath)) {
-                JFile file = new JFile(i, prevInstance);
-                addFile(i, file);
-            }
-        }
-    }
-
-    /**
-     * @param releaseIdx
-     * @param prevInstance
-     */
-    public void replicateRelease(int releaseIdx, JFile prevInstance) {
-        Release versionByIndex = Release.findVersionByIndex(versions, releaseIdx);
-        prevInstance.addRelease(versionByIndex);
-        prevInstance.getReleases().sort(Comparator.comparingInt(Release::getIndex));
-    }
-
-    public void replicateContent(int releaseIdx, JFile file) {
-        int created = file.getCreated().getIndex();
-        for (int i = created-1; i < releaseIdx; i++) {
-            if (created == 1) continue;
-            String[] currentContent = file.getContent().get(i);
-            String[] prevContent = file.getContent().get(i - 1);
-            if (currentContent.length == 0) {
-                file.getContent().put(i, prevContent);
-            }
-        }
-
-    }
-
-    private void addFileRelease(JFile file, int releaseIdx) {
-        String filepath = file.getRelPath();
-        if (filesReleases.containsKey(filepath)) {
-            List<Integer> fileRels = filesReleases.get(filepath);
-            fileRels.add(releaseIdx);
-            filesReleases.put(filepath, fileRels);
-            if (fileRels.size() > 1) {
-                int currRel = fileRels.get(fileRels.size()-1);
-                int prevRel = fileRels.get(fileRels.size()-2);
-
-                /* Replicate last file for all the previous missing releases */
-                if (checkGap(currRel, prevRel)) replicatePrevFile(currRel, prevRel, filepath);
-            }
-        } else {
-            filesReleases.put(filepath, new ArrayList<>());
-        }
-    }
-
     public List<HashMap<String, JFile>> getFiles() {
         return files;
     }
 
     private boolean checkGap(int currRel, int prevRel) {
         return currRel-prevRel == 1;
-    }
-
-    private void replicatePrevFile(int currRel, int prevRel, String filepath) {
-        HashMap<String, JFile> fileList = files.get(prevRel - 1);
-        JFile file = fileList.get(filepath);
-        for (int i = prevRel+1; i < currRel-1; i++) {
-            addFile(i, file);
-        }
     }
 
     public boolean isExternal() {

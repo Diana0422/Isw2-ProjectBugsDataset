@@ -23,6 +23,10 @@ public class ARFFWriter {
         return instance;
     }
 
+    /**
+     * Converts the dataset from csv to arff format
+     * @param filename name of the file
+     */
     public void convertCvsToArff(String filename) {
         int nameLen = filename.length();
         String name = filename.substring(0, nameLen-3);
@@ -103,11 +107,14 @@ public class ARFFWriter {
     }
 
 
-
-    /*
-     * Writes dataset attributes on the arff file
+    /**
+     * Writes dataset records into Arff format file
+     * @param attributes file attributes
+     * @param writer file writer
+     * @param filenames project filenames
+     * @param versions project release indexes
+     * @throws IOException error writing attributes
      */
-
     private void writeAttributes(String attributes, FileWriter writer, String filenames, String versions) throws IOException {
         StringTokenizer tokenizer = new StringTokenizer(attributes.replace(";", ","), ",");
         String start = "@attribute ";

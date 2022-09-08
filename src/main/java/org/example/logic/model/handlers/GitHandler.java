@@ -17,14 +17,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-
+/**
+ * Class that interacts with Git
+ */
 public class GitHandler {
+
     private final Project project;
 
     public GitHandler(Project project) {
         this.project = project;
     }
 
+    /**
+     * Runs a git command
+     * @param cmdArgs command arguments array
+     * @param workDir git working directory
+     * @return a Process instance
+     * @throws IOException
+     */
     public Process runGitCommand(String [] cmdArgs, File workDir) throws IOException {
         ProcessBuilder build = new ProcessBuilder(cmdArgs);
         String command = Parser.getInstance().listToString(build.command());
@@ -36,6 +46,12 @@ public class GitHandler {
         }
     }
 
+    /**
+     * Gets the output of a Git command
+     * @param args the command args
+     * @return a BufferedReader to the output
+     * @throws CommandException error during Git command
+     */
     public BufferedReader getCommandOutput(String[] args) throws CommandException {
         BufferedReader input;
         try {
@@ -200,6 +216,12 @@ public class GitHandler {
         return files;
     }
 
+    /**
+     * Checks if a file is really deleated with a certain commit
+     * @param shaId the commit id
+     * @param filepath the complete filepath
+     * @return a boolean
+     */
     private boolean checkGitIfDeleted(String shaId, String filepath) {
         String [] args = {"git", "show", "--name-status", "--diff-filter=D", shaId};
         try {
@@ -212,6 +234,13 @@ public class GitHandler {
         return false;
     }
 
+    /**
+     * Updates the features collected for a certain commit
+     * @param file the file to modify
+     * @param commit the commit that updated the file
+     * @param addition number of LOC added with commit
+     * @param deletion number of LOC deleted with commit
+     */
     private void updateFileFeatures(JFile file, Commit commit, int addition, int deletion) {
         int version = commit.getVersion().getIndex();
         int changes = addition + deletion;

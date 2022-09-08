@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Class that represents a release
+ */
 public class Release {
 
     private int index;
@@ -22,6 +25,10 @@ public class Release {
         this.tag = "";
     }
 
+    /**
+     * Sets index numbers to releases
+     * @param versions the releases list
+     */
     public static void setIndexNumbers(List<Release> versions) {
         /* set index numbers to the releases */
         for (int i = 0; i< versions.size(); i++) {
@@ -33,6 +40,47 @@ public class Release {
             }
         }
     }
+
+    /**
+     * Given a date, returns the corresponding project release
+     * @param versions the list of project releases
+     * @param created date of the commit
+     * @return the release to be assigned to the commit
+     */
+    public static Release findVersionByDate(List<Release> versions, LocalDateTime created) {
+        Release version = null;
+
+        for (Release release : versions) {
+            version = release;
+            if (version.getDate().compareTo(created) >= 0) {
+                return version;
+            }
+        }
+
+        return version;
+    }
+
+    /**
+     * Finds a release by its release index
+     * @param versions releases list
+     * @param idx release index
+     * @return an instance release
+     */
+    public static Release findVersionByIndex(List<Release> versions, int idx) {
+        Release version = null;
+
+        for (Release release : versions) {
+            version = release;
+
+            if (version.getIndex() == idx) {
+                return version;
+            }
+        }
+
+        return version;
+    }
+
+    /* GETTERS AND SETTERS */
 
     public String getId() {
         return id;
@@ -72,39 +120,6 @@ public class Release {
 
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    /**
-     * Given a date, returns the corresponding project release
-     * @param versions the list of project releases
-     * @param created date of the commit
-     * @return the release to be assigned to the commit
-     */
-    public static Release findVersionByDate(List<Release> versions, LocalDateTime created) {
-        Release version = null;
-
-        for (Release release : versions) {
-            version = release;
-            if (version.getDate().compareTo(created) >= 0) {
-                return version;
-            }
-        }
-
-        return version;
-    }
-
-    public static Release findVersionByIndex(List<Release> versions, int idx) {
-        Release version = null;
-
-        for (Release release : versions) {
-            version = release;
-
-            if (version.getIndex() == idx) {
-                return version;
-            }
-        }
-
-        return version;
     }
 
 }

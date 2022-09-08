@@ -31,6 +31,11 @@ public class Commit {
         this.ticketTag = getTicketReference(message);
     }
 
+    /**
+     * Lookup for a ticket reference in the commit message
+     * @param message commit message
+     * @return ticket tag extracted
+     */
     private String getTicketReference(String message) {
         String proj = project.getProjName();
         String m = message.substring(4);

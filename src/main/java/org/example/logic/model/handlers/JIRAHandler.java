@@ -19,6 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Class that interacts with Jira API
+ */
 public class JIRAHandler {
 
     private final Project project;
@@ -27,9 +30,12 @@ public class JIRAHandler {
         this.project = project;
     }
 
-    /***
+
+    /**
      * retrieves project issue selecting a type
-     * param type: the issue type selected
+     * @param type the issue type
+     * @return the issues list
+     * @throws IOException error retrieving issues
      */
     public List<Issue> retrieveProjectIssues(String type) throws IOException {
         int i = 0;
@@ -77,10 +83,11 @@ public class JIRAHandler {
         return tickets;
     }
 
-    /***
+    /**
      * find different types of versions of an issue from Jira
-     * param fields: JSON Object field of the issue
-     * param fieldType: type of the field to retrieve from Jira
+     * @param fields JSON Object field of the issue
+     * @param fieldType type of the field to retrieve from Jira
+     * @return the releases list
      */
     private List<Release> findVersions(JSONObject fields, String fieldType) {
         String date;

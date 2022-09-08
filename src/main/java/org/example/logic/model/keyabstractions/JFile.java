@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
+/**
+ * Saves file metadata
+ */
 public class JFile {
 
     private final Project project;
@@ -25,8 +28,8 @@ public class JFile {
 
     /**
      * Constructor used for file replication (doesn't inherit previous stats)
-     * @param releaseIndex
-     * @param prevInstance
+     * @param releaseIndex the current release
+     * @param prevInstance the instance of the same file in a previous release
      */
     public JFile(int releaseIndex, JFile prevInstance) {
         /* Inherit prev instance file stats */
@@ -77,6 +80,7 @@ public class JFile {
         project.removeFile(created.getIndex(), oldFile);
     }
 
+    /* When the file is created for the first time */
     public JFile(Project project, String name, String relpath, Release created) {
         this.name = name;
         this.project = project;

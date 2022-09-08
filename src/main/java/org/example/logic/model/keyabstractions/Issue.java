@@ -8,11 +8,12 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/***
+ * class that represents a Jira Issue
+ */
 public class Issue {
-    /***
-     * class that represents a Jira Issue
-     */
-    protected static final String[] names =
+
+    protected static final String[] names = // names of the other apache projects
             {"AVRO", "BOOKKEEPER",
             "CHUKWA", "CONNECTORS",
             "CRUNCH", "FALCON",
@@ -48,6 +49,10 @@ public class Issue {
         this.p = 0;
     }
 
+    /**
+     * Adds a release to the affected versions (AV).
+     * @param release the release to add
+     */
     public void addAffected(Release release) {
         List<Release> affected = this.affectedVersions;
 
@@ -113,7 +118,8 @@ public class Issue {
     }
 
     /***
-     * Apply Proportion method to find the Injected Version of an Issue whose Affected Version on JIRA are not consistent or unreliable
+     * Apply Proportion method to find the Injected Version of an Issue whose Affected Version
+     * on JIRA are not consistent or unreliable.
      * @param issue: the issue on which is to be applied Proportion method.
      */
     private static void applyProportion(Issue issue) {
@@ -160,8 +166,9 @@ public class Issue {
     }
 
     /***
-     * calculates the proportion factor using the issue opening version and fixed version, considering that IV / FV = IV / FV = P
-     * The method used to calculate P is Proportion with Moving Window approach.
+     * calculates the proportion factor using the issue opening version and fixed version,
+     * considering that IV / FV = IV / FV = P
+     * The method used to calculate P is Proportion with Moving Window approach, using the last 1% of bug issues.
      * @param issue: the issue to consider.
      * @param openV: the index of the opening version
      * @param fixedV: the index of the fixed version

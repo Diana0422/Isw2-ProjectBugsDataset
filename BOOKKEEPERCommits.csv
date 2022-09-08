@@ -1,0 +1,794 @@
+Commit Sha;Date;Author;Referenced Ticket;Version;Committed Files
+8ee32a8ab;2011-05-20;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-19: BookKeeper doesn't support more than 2Gig of memory (ivan via fpj);1;1
+9ea30d361;2011-05-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-1: Static variable makes tests fail (fpj via ivank);1;0
+266b1c274;2011-05-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-1: Static variable makes tests fail (fpj via ivank) [CHANGES.txt];1;0
+267ed95a2;2011-06-06;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-22: Exception in LedgerCache causes addEntry request to fail (fpj via fpj);1;4
+00f25f562;2011-07-07;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-5: Issue with Netty in BookKeeper (fpj and ivank via fpj);1;3
+45aeb0473;2011-07-12;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-30: Test are too noisy (ivank via fpj);1;9
+74397e3e2;2011-07-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-11: Read from open ledger (fpj via ivank);1;7
+3e9d59648;2011-07-30;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-27: mvn site failed with unresolved dependencies (ivank via fpj);1;0
+de1c3b26a;2011-08-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-29: BookieRecoveryTest fails intermittently (fpj via ivank);1;1
+0910d6cd7;2011-08-11;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-33: Add length and offset parameter to addEntry (ivank via fpj);1;5
+40b13a6b7;2011-08-11;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-29: BookieRecoveryTest fails intermittently (ivank, fpj via fpj);1;7
+a772663c8;2011-08-23;AUTHOR=Benjamin Reed;MES=BOOKKEEPER-43: NullPointException when releasing topic;1;1
+a01067bb2;2011-08-23;AUTHOR=Benjamin Reed;MES=BOOKKEEPER-38: Bookie Server doesn't exit when its zookeeper session is expired. So the process is hang there.;1;2
+5095045d9;2011-08-23;AUTHOR=Benjamin Reed;MES=BOOKKEEPER-44: Reuse publish channel to default server to avoid too many connect requests to default server when lots of producers came in same time;1;1
+c30c309bf;2011-08-23;AUTHOR=Benjamin Reed;MES=forgot to add test from BOOKKEEPER-38;1;1
+ad96c00dc;2011-08-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-58: Changes introduced in BK-38 cause BookieClientTest to hang indefinitely. (ivank);1;1
+da1df6bcf;2011-08-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-18: maven build is unstable (morel, ivank via ivank);1;1
+afdd3dd1e;2011-08-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-28: Create useful startup scripts for bookkeeper and hedwig (ivank);1;0
+675efc92f;2011-08-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-51: NullPointException at FIFODeliveryManager#deliveryPtrs (xulei via ivank);1;1
+360174f12;2011-08-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-52: Message sequence confuse due to the subscribeMsgQueue@SubscribeResponseHandler (xulei via ivank);1;1
+283778032;2011-08-31;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-57: NullPointException at bookie.zk@EntryLogger (xulei via ivank);1;1
+79ea05a3c;2011-09-05;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-63: Hedwig PubSubServer must wait for its Zookeeper client to be connected upon startup (morel via ivank);1;2
+ba9ebc213;2011-09-05;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-26: Indentation is all messed up in the BookKeeper code (ivank via fpj);1;171
+6823a35ce;2011-09-16;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-59: Race condition in netty code allocates and orphans resources (BK-5 revisited) (ivank via fpj);1;2
+06eea6791;2011-10-06;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-41: Generation of packages for distribution (ivank via fpj);1;0
+9639b64a1;2011-10-07;AUTHOR=Benjamin Reed;MES=  BOOKKEEPER-61: BufferedChannel read endless when the remaining bytes of file is less than the capacity of read buffer;1;3
+c980c700d;2011-10-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-65: fix dependencies on incompatible versions of netty (mmorel via ivank);1;0
+2f2f6c66d;2011-10-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-68: Conditional setData (fpj via ivank);1;8
+2c91d144a;2011-10-18;AUTHOR=Benjamin Reed;MES=BOOKKEEPER-86: bookkeeper-benchmark fails to compile after BOOKKEEPER-68;1;1
+d05e52ce5;2011-10-19;AUTHOR=Benjamin Reed;MES=missing CHANGE.txt entry for BOOKKEEPER-61 (commit 1180266);1;0
+477eb1053;2011-10-23;AUTHOR=Benjamin Reed;MES=BOOKKEEPER-84: Add versioning for ZK metadata;1;1
+4f09c6b4a;2011-10-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-88: derby doesn't like - in the topic names (breed via ivank);1;1
+45f2edbb1;2011-10-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-92: using wrong context object in readLastConfirmedComplete callback (Sijie Guo via ivank);1;1
+d6465cad8;2011-10-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-94: Double callbacks in readLastConfirmedOp which fails readLastConfirmed operation even received enough valid responses. (Sijie Guo via ivank);1;1
+c898d53ab;2011-10-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-83: Added versioning and flags to the bookie protocol (ivank);1;7
+68bdab655;2011-10-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-89: Bookkeeper API changes for initial Bookkeeper release (ivank);1;17
+d1823db05;2011-10-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-93: bookkeeper doesn't work correctly on OpenLedgerNoRecovery (Sijie Guo via ivank);1;4
+ea616470c;2011-10-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-100: Some hedwig tests have build errors (dferro via ivank);1;2
+dc5f5d223;2011-10-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-71: hedwig c++ client does not build . (ivank);1;2
+978c0e13d;2011-11-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-103: ledgerId and entryId is parsed wrong when addEntry (Sijie Guo via ivank);1;2
+e7184063b;2011-11-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-102: Make bookkeeper use ZK from temporary repo (ivank);1;0
+c17dfb9aa;2011-11-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-50: NullPointException at LedgerDescriptor#cmpMasterKey (Sijie Guo via ivank);1;3
+2ea2fd09f;2011-11-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-107: memory leak in HostAddress of hedwig c++ client (Sijie Guo via ivank);1;0
+6e3b195d1;2011-11-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-80: subscription msg queue race condition in hedwig c++ client (Sijie Guo via ivank);1;0
+cc467bd58;2011-11-11;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-82: support journal rolling (Sijie Guo via fpj);1;3
+75dbf699b;2011-11-15;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-106: recoveryBookieData can select a recovery bookie which is already in the ledgers ensemble;1;4
+64411b9af;2011-11-15;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-106:	recoveryBookieData can select a recovery bookie which is already in the ledgers ensemble (forgot to edit CHANGES.txt);1;0
+4d9f0c0eb;2011-11-16;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-101 : Add Fencing to Bookkeeper (ivank);1;27
+4be547c86;2011-11-16;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-104: Add versioning between bookie and its filesystem layout (ivank);1;2
+b83d00086;2011-11-17;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-109: Add documentation to describe how bookies flushes data (Sijie Guo via fpj);1;1
+304bf8fe6;2011-11-17;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-81: disk space of garbage collected entry logger files isn't reclaimed util process quit (Sijie Guo via fpj);1;2
+3969ff71a;2011-11-17;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-91: Bookkeeper and hedwig clients should not use log4j directly (ivank via fpj);1;93
+03e03c2b4;2011-11-17;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-87: TestHedwigHub exhausts direct buffer memory with netty 3.2.4.Final (ivank via fpj);1;0
+e14618559;2011-11-17;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-90: Hedwig API changes for initial Bookkeeper release (ivank via fpj);1;28
+4049d4c2b;2011-11-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-108: add configuration support for BK (Sijie via ivank);1;39
+4afc000c1;2011-11-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-69: ServerRedirectLoopException when a machine (hosts bookie server & hub server) reboot, which is caused by race condition of topic manager (Sijie, ivank via ivank);1;3
+d33f843a6;2011-11-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-115: LocalBookKeeper fails after BOOKKEEPER-108 (ivank);1;2
+aed845b57;2011-11-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-114: add a shutdown hook to shut down bookie server safely. (Sijie via ivank);1;1
+1bcbc47bc;2011-11-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-79: randomly startDelivery/stopDelivery will core dump in c++ hedwig client (Sijie Guo via ivank);1;0
+e11006747;2011-11-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-118: Hedwig client doesn't kill and remove old subscription channel after redirection. (Sijie Guo via ivank);1;0
+9daeb60bc;2011-11-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-117: Support multi threads in hedwig cpp client to leverage multi-core hardware (Sijie Guo via ivank);1;0
+d5d73a859;2011-11-28;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-119: Keys in configuration have inconsistent style (ivank via fpj);1;2
+3af9f38fc;2011-11-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-39: Bookie server failed to restart because of too many ledgers (more than ~50,000 ledgers) (Sijie via ivank);1;33
+924fb834d;2011-11-28;AUTHOR=Benjamin Reed;MES=BOOKKEEPER-53: race condition of outstandingMsgSet@SubscribeResponseHandler;1;1
+c323c0036;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-124: build has RAT failures (ivank);1;0
+504867718;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-125: log4j still used in some places (ivank);1;4
+da088187d;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-62: Bookie can not start when encountering corrupted records (breed via ivank);1;2
+8b6f36788;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-121: Review Hedwig client documentation (breed via ivank);1;0
+aa1d82966;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-127: Make poms use official zookeeper 3.4.0 (ivank);1;0
+e3b52e82c;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-120: Review BookKeeper client documentation (ivank);1;0
+544f4b5c0;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-122: Review BookKeeper server documentation (fpj & ivank);1;5
+86040b518;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-122: Review BookKeeper server documentation (fpj & ivank) [Forgot to add 2 files];1;0
+49aa4df14;2011-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-111: Document bookie recovery feature (ivank);1;0
+fa78ba95d;2011-11-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-128: pom and script modifications required for generating release packages (ivank);1;0
+92e69b331;2011-11-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-129: ZK_TIMEOUT typo in client/server configuration (Sijie via ivank);1;2
+12840c3e9;2011-11-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-130: Add developer KEYS file to svn (ivank);1;0
+3bc2bdb0d;2011-11-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-66: use IPv4 for builds (mmorel via ivank);1;0
+63b032331;2011-11-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-132: Sign artifacts before deploying to maven (ivank);1;0
+86844d730;2011-12-01;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-131: Fix zookeeper test dependency (ivank);1;0
+dcfe4bcc5;2011-12-01;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-134: Delete superfluous lib directories (ivank);1;0
+213db5d6a;2011-12-02;AUTHOR=Ivan Brendan Kelly;MES=Reverting BOOKKEEPER-130: Add developer KEYS file to svn (ivank);1;0
+d006007cc;2011-12-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-138: NOTICE.txt is invalid (ivank);1;0
+1c90beb59;2011-12-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-139: Binary packages do not carry NOTICE.txt (ivank);1;0
+9eb549d4c;2011-12-16;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-142: Parsing last log id is wrong, which may make entry log files overwritten (Sijie Gou via ivank);2;1
+015097021;2011-12-16;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-141: Run extracting ledger id from entry log files in GC thread to speed up bookie restart (Sijie Gou via ivank);2;2
+8f755ed13;2011-12-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-140: Hub server doesn't subscribe remote region correctly when a region is down. (Sijie Gou via ivank);2;5
+0975f069d;2011-12-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-133: Hub server should update subscription state to zookeeper when losing topic or shutting down (Sijie Gou via ivank);2;12
+e32715ad9;2012-01-11;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-148: Jenkins build is failing (ivank via fpj);2;1
+0d43f404e;2012-01-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-40: BookieClientTest fails intermittantly (fpj via ivank);2;1
+c7c8af741;2012-01-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-150: Entry is lost when recovering a ledger with not enough bookies. (Sijie Guo via ivank);2;5
+cdcfbb52c;2012-01-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-95: extends zookeeper JMX to monitor and manage bookie server (Sijie Guo via ivank);2;2
+f56e596d7;2012-01-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-153: Ledger can't be opened or closed due to zero-length metadata (Sijie Guo via ivank);2;5
+7e12629ed;2012-02-01;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-23: Timeout requests (ivank);2;6
+5a7f49916;2012-02-01;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-98: collect add/read statistics on bookie server (Sijie Guo via ivank);2;13
+835d963cb;2012-02-01;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-157. For small packets, increasing number of bookies actually degrades performance. (ivank via fpj);2;3
+cfe3e650b;2012-02-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-161: PerChannelBookieClient tries to reuse HashedWheelTimer, throws Exception (ivank);2;1
+327220444;2012-02-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-167: PerChannelBookieClient doesn't use ClientConfiguration (Sijie Guo via ivank);2;1
+bd2efa12f;2012-02-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-156: BookieJournalRollingTest failing (Sijie Guo via ivank);2;1
+a3c9c953d;2012-02-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-77: Add a console client for hedwig (Sijie Guo via ivank);2;5
+beca5951f;2012-02-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-165: Add versioning support for journal files (ivank);2;5
+c65d6ada3;2012-02-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-137: Do not create Ledger index files until absolutely necessary. (ivank);2;11
+29a472598;2012-02-13;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-162: LedgerHandle.readLastConfirmed does not work (fpj);2;6
+5a3b29d05;2012-02-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-152: Can't recover a ledger whose current ensemble contain failed bookie. (ivank);2;11
+3defe9e51;2012-02-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-171: ServerConfiguration can't use more than one directory for ledgers;2;1
+633a23b3a;2012-02-15;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-170: Bookie constructor starts a number of threads. (ivank via fpj);2;7
+bad375aa3;2012-02-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-169: bookie hangs on reading header when encountering partial header index file (sijie via ivank);2;2
+014bcd501;2012-02-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-174: Bookie can't start when replaying entries whose ledger were deleted and garbage collected. (sijie via ivank);2;2
+110d36673;2012-02-24;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-172: Upgrade framework for filesystem layouts (ivank via fpj);2;2
+952319345;2012-02-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-177: Index file is lost or some index pages aren't flushed. (sijie via ivank);2;5
+2ec70d4db;2012-02-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-178: Delay ledger directory creation until the ledger index file was created (sijie via ivank);2;2
+9366322bf;2012-02-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-113: NPE In BookKeeper test (fpj via ivank);2;1
+76818a6aa;2012-03-01;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-74: Bookkeeper Persistence Manager should give up topic on error (sijie via ivank);2;3
+431554da9;2012-03-01;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-176: HierarchicalBookieFailureTest Hung (ivank via fpj);2;3
+e91155929;2012-03-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-160: bookie server needs to do compaction over entry log files to reclaim disk space (sijie via ivank);2;6
+cb8296636;2012-03-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-180: bookie server doesn't quit when running out of disk space (sijie via ivank);2;6
+028a6d536;2012-03-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-158: Move latest benchmarking code into trunk (ivank via fpj);2;4
+8207445ea;2012-03-09;AUTHOR=Ivan Brendan Kelly;MES=Set benchmark script to executable (BOOKKEEPER-158);2;0
+c6cc7cca3;2012-03-13;AUTHOR=Sijie Guo;MES=BOOKKEEPER-163: Prevent incorrect NoSuchLedgerException for readLastConfirmed. (ivank via sijie);2;18
+fd5bb2bce;2012-03-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-168: Message bounding on subscriptions (ivank);2;13
+e8a1dec3f;2012-03-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-185: Remove bookkeeper-server dependency on hadoop-common (ivank);2;2
+a4bded985;2012-03-15;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-184: CompactionTest failing on Jenkins (sijie via ivank);2;11
+33bef6356;2012-03-16;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-182: Entry log file is overwritten when fail to read lastLogId. (sijie via ivank);2;2
+066302978;2012-03-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-96: extends zookeeper JMX to monitor and manage hedwig server (sijie via ivank);2;4
+3abac4eb8;2012-03-19;AUTHOR=Sijie Guo;MES=BOOKKEEPER-186: Bookkeeper throttling - permits is not released when read has failed from all replicas (Rakesh R via sijie);2;2
+841e7dc18;2012-03-20;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-187: Create well defined interface for LedgerCache (ivank);2;8
+7199719be;2012-03-20;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-175: Bookie code is very coupled (ivank);2;6
+f3a404e4e;2012-03-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-188: Garbage collection code is in the wrong place (ivank via sijie);2;3
+3d32544c0;2012-03-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-189: AbstractZkLedgerManager doesn't disregard cookies (ivank via sijie);2;2
+6d56d6083;2012-03-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-195: HierarchicalLedgerManager doesn't consider idgen as a "specialNode" (ivank);2;1
+c80543025;2012-03-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-97: collect pub/sub/consume statistics on hub server (sijie via ivank);2;16
+48304c7c0;2012-03-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-190: Add entries would fail when number of open ledgers reaches more than openFileLimit. (sijie via ivank);2;8
+83e8672a1;2012-03-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-194: Get correct latency for addEntry operations for JMX. (sijie via ivank);2;1
+4b32e049d;2012-03-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-166: Bookie will not recover its journal if the length prefix of an entry is truncated (ivank);2;1
+30c68b0be;2012-03-31;AUTHOR=Sijie Guo;MES=BOOKKEEPER-193: Ledger is garbage collected by mistake. (sijie, ivank via sijie);2;6
+235bc1fec;2012-03-31;AUTHOR=Sijie Guo;MES=BOOKKEEPER-198: replaying entries of deleted ledgers would exhaust ledger cache. (sijie);2;2
+682a23fb2;2012-03-31;AUTHOR=Sijie Guo;MES=BOOKKEEPER-112: Bookie Recovery on an open ledger will cause LedgerHandle#close on that ledger to fail (sijie);2;9
+47244dd77;2012-04-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-135: Fencing does not check the ledger masterPasswd (ivank);2;14
+f694716e2;2012-04-03;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-207: BenchBookie doesn't run correctly (ivank via fpj);2;2
+8f02fb64e;2012-04-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-212: Bookie stops responding when creating and deleting many ledgers (sijie via fpj);2;2
+df5789843;2012-04-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-211: Bookie fails to to start (sijie);2;2
+22bb0534c;2012-04-10;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-200: Fix format and comments (fpj);2;2
+8a1ad4c32;2012-04-16;AUTHOR=Sijie Guo;MES=BOOKKEEPER-197: HedwigConsole uses the same file to load bookkeeper client config and hub server config (sijie);2;1
+3d834bd37;2012-04-16;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-216: Bookie doesn't exit with right exit code (sijie via ivank);2;1
+4a94ce1d8;2012-04-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-196: Define interface between bookie and ledger storage (ivank);2;9
+cf846eb5f;2012-04-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-218: Provide journal manager to manage journal related operations (sijie);2;6
+b5c0791d3;2012-04-19;AUTHOR=Sijie Guo;MES=BOOKKEEPER-213: PerChannelBookieClient calls the wrong errorOut function when encountering an exception (Aniruddha via sijie);2;1
+57a62a1c3;2012-04-20;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-168: Message bounding on subscriptions (ivank) [missing test];2;0
+2f25ef611;2012-04-20;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-173: Uncontrolled number of threads in bookkeeper (sijie via fpj);2;2
+4e9ee8d75;2012-04-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-56: Race condition of message handler in connection recovery in Hedwig client (sijie & Gavin Li via ivank);2;9
+7f9005baa;2012-04-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-217: NPE in hedwig client when enable DEBUG (sijie via ivank);2;1
+f7c1ad57e;2012-04-28;AUTHOR=Sijie Guo;MES=BOOKKEEPER-56: Race condition of message handler in connection recovery in Hedwig client (added AlreadyStartDeliveryException file missed in r1329883) (sijie & Gavin Li via ivank);2;1
+6d50e7273;2012-04-28;AUTHOR=Sijie Guo;MES=BOOKKEEPER-231: ZKUtil.killServer not closing the FileTxnSnapLog from ZK. (Uma Maheswara Rao G via sijie);2;1
+268bdb8c6;2012-05-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-228: Fix the bugs in BK benchmark (umamaheswararao via ivank);2;2
+6fc326ebd;2012-05-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-232: AsyncBK tests failing (umamaheswararao via ivank);2;7
+a7d658179;2012-05-08;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-229: Deleted entry log files would be garbage collected again and again. (sijie via fpj);2;2
+36a4a4190;2012-05-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-241: Add documentation for bookie entry log compaction (sijie via fpj);2;0
+3e224c4b6;2012-05-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-215: Deadlock occurs under high load (sijie via ivank);2;7
+9efe73998;2012-05-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-242: Bookkeeper not able to connect other zookeeper when shutdown the zookeeper server where the BK has connected. (sijie & rakeshr via ivank);2;3
+47ee081e6;2012-05-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-234: EntryLogger will throw NPE, if any dir does not exist or IO Errors. (umamaheswararao via ivank);2;2
+d368d86e2;2012-05-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-235: Bad syncing in entrylogger degrades performance for many concurrent ledgers (ivank via fpj);2;1
+5f25edeba;2012-05-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-236: Benchmarking improvements from latest round of benchmarking (ivank via fpj);2;6
+c32edf860;2012-05-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-245: Intermittent failures in PersistanceManager tests (ivank);2;1
+3a2fdc683;2012-05-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-224: Fix findbugs in bookkeeper-server component (ivank);2;25
+eaf6cf985;2012-05-15;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-145: Put notice and license file for distributed binaries in SVN (ivank);2;0
+ba0ab0421;2012-05-15;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-209: Typo in ServerConfiguration for READAHEAD_ENABLED (ivank);2;1
+132849503;2012-05-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-224: Fix findbugs in bookkeeper-server component [missing changes] (ivank);2;2
+f05021f1e;2012-05-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-254: Bump zookeeper version in poms (ivank);2;0
+73dc34818;2012-05-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-72: Fix warnings issued by FindBugs (ivank);2;34
+1c2141183;2012-05-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-238: Add log4j.properties in conf/ for bin packages (ivank);2;0
+24e7fb03f;2012-05-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-251: Noise error message printed when scanning entry log files those have been garbage collected. (sijie via ivank);2;2
+67cbcdd7a;2012-05-24;AUTHOR=Sijie Guo;MES=BOOKKEEPER-263: ZK ledgers root path is hard coded (Aniruddha via sijie);2;7
+c59b7b8a2;2012-05-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-146: TestConcurrentTopicAcquisition sometimes hangs (ivank);2;5
+7ed489997;2012-05-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-266: Review versioning documentation (ivank);2;0
+cc2854152;2012-05-25;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-265: Review JMX documentation (sijie via fpj);2;0
+a1eac1879;2012-05-25;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-260: Define constant for -1 (invalid entry id) (ivank via fpj);2;15
+1dde3e519;2012-05-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-258: CompactionTest failed (ivank via sijie);2;4
+bfd09dd0b;2012-05-29;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-269: Review documentation for hedwig console client (sijie via fpj);2;0
+0cb40cf90;2012-05-29;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-270: Review documentation on bookie cookie (ivank via fpj);2;0
+f97ac5b41;2012-05-29;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-270: Review documentation on bookie cookie (ivank via fpj);2;0
+887546e79;2012-05-29;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-271: Review documentation for message bounding (ivank via fpj);2;1
+d68727ddd;2012-05-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-273: LedgerHandle.deleteLedger() should be idempotent (Matteo Merli via ivank);2;1
+10b9c5b40;2012-06-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-281: BKClient is failing when zkclient connection delays (ivank via sijie);2;6
+a788614f5;2012-06-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-279: LocalBookKeeper is failing intermittently due to zkclient connection establishment delay (Rakesh R via sijie);2;1
+27b6dd6a4;2012-06-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-285: TestZkSubscriptionManager quits due to NPE, so other tests are not run in hedwig server. (sijie);2;1
+25552d910;2012-06-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-286: Compilation warning (ivank via sijie);2;0
+d5caab3aa;2012-06-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-287: NoSuchElementException in LedgerCacheImpl (sijie);2;2
+0a3ea6222;2012-06-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-288: NOTICE files don't have the correct year (ivank via sijie);2;0
+863f32a8e;2012-06-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-289: mvn clean doesn't remove test output files (sijie via ivank);2;2
+aa7f37c60;2012-06-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-274: Hedwig cpp client library should not link to cppunit which is just used for test. (sijie via ivank);2;0
+a2cd98994;2012-06-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-183: Provide tools to read/check data files in bookie server (sijie via ivank);2;12
+9472fae87;2012-06-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-298: We run with preferIPv4Stack in the scripts but not in the tests (ivank);3;0
+297eb7454;2012-06-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-203: improve ledger manager interface to remove zookeeper dependency on metadata operations. (sijie via ivank);3;45
+187288778;2012-06-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-292: Test backward compatibility automatically between versions. (ivank);3;1
+d193780cc;2012-06-27;AUTHOR=Sijie Guo;MES=BOOKKEEPER-307: BookieShell introduces 4 findbugs warnings (ivank via sijie);3;2
+744edf073;2012-06-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-303: LedgerMetadata should serialized using protobufs (ivank);3;11
+4d15e5675;2012-06-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-302: No more messages delivered when hub server scans messages over two ledgers. (sijie via ivank);3;2
+441bf6508;2012-06-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-322: New protobufs generates findbugs errors (ivank);3;1
+de432058b;2012-06-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-280: LedgerHandle.addEntry() should return an entryId (mmerli via ivank);3;2
+18f5927a2;2012-07-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-320: Let hedwig cpp client could publish messages using Message object instead of string. (jiannan via ivank);3;0
+763479b6f;2012-07-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-324: Flakeyness in LedgerCreateDeleteTest (ivank);3;2
+6b249579f;2012-07-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-318: Spelling mistake in MultiCallback log message. (surendra via sijie);3;1
+db71147d9;2012-07-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-296: It's better provide stop script for bookie (nijel via sijie);3;0
+09e5d1802;2012-07-05;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-294: Not able to start the bookkeeper before the ZK session timeout. (rakeshr via ivank);3;4
+fbcc0b583;2012-07-09;AUTHOR=Sijie Guo;MES=BOOKKEEPER-328: Bookie DeathWatcher is missing thread name (Rakesh via sijie);3;1
+c2efd0a48;2012-07-11;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-250: Need a ledger manager like interface to manage metadata operations in Hedwig (sijie via ivank);3;25
+0e06ddeb7;2012-07-11;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-329: provide stop scripts for hub server (sijie via ivank);3;0
+51ca99b87;2012-07-16;AUTHOR=Sijie Guo;MES=BOOKKEEPER-310: Changes in hedwig server to support JMS spec (ivank via sijie);3;0
+e60f54293;2012-07-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-306: Change C++ client to use gtest for testing (ivank via sijie) (fix wrong entry in CHANGES.txt);3;0
+f13b9f4e2;2012-07-18;AUTHOR=Sijie Guo;MES=BOOKKEEPER-2: bookkeeper does not put enough meta-data in to do recovery properly (ivank via sijie);3;9
+df619306c;2012-07-23;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-327: System.currentTimeMillis usage in BookKeeper (uma via fpj);3;11
+051320f21;2012-07-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-349: Entry logger should close all the chennels which are there in Map, instead of closing only current channel. (umamaheswararao via sijie);3;1
+6e33b2519;2012-07-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-317: Exceptions for replication (ivank via sijie);3;1
+3de1c6668;2012-07-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-330: System.currentTimeMillis usage in Hedwig (uma via sijie);3;17
+46a2663a8;2012-07-27;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-352: Should not use static ServerStats/BKStats instance in TestServerStats/TestBKStats (sijie via fpj);3;2
+0092518bb;2012-07-30;AUTHOR=Sijie Guo;MES=BOOKKEEPER-331: Let hedwig support returning message seq id for publish requests. (Mridul via sijie);3;28
+4088f7ac7;2012-08-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-343: Failed to register hedwig JMX beans in test cases (sijie via ivank);3;3
+41b399cd2;2012-08-06;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-339: Let hedwig cpp client support returning message seq id for publish requests. (sijie via ivank);3;0
+4d9f3d32a;2012-08-06;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-259: Create a topic manager using versioned write for leader election (sijie via ivank);3;19
+5c59fa532;2012-08-06;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-340: Test backward compatibility for hedwig between different versions. (sijie via ivank);3;1
+ec17d0be6;2012-08-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-191: Hub server should change ledger to write, so consumed messages have chance to be garbage collected. (sijie via ivank);3;3
+391f92468;2012-08-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-326: DeadLock during ledger recovery (rakeshr via ivank);3;2
+74e097e0b;2012-08-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-246: Recording of underreplication of ledger entries (ivank);3;9
+f4daacff8;2012-08-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-338: Create Version.NEW and Version.ANY static instances of Version so that were not passing around nulls (sijie via ivank);3;11
+fbba5c913;2012-08-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-247: Detection of under replication (ivank);3;5
+bb0888aca;2012-08-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-283: Improve Hedwig Console to use Hedwig Metadata Manager. (sijie via ivank);3;7
+14e23b6d9;2012-08-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-332: Add SubscriptionPreferences to record all preferences for a subscription (sijie via ivank);3;15
+45034f5f4;2012-08-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-332: Add SubscriptionPreferences to record all preferences for a subscription (sijie via ivank) [missing files];3;1
+be94b88ea;2012-08-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-372: Check service name in bookie start/stop script. (nijel via ivank);3;0
+89e1c0913;2012-08-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-299: Provide LedgerFragmentReplicator which should replicate the fragments found from LedgerChecker (umamahesh via ivank);3;3
+c0746ba1c;2012-08-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-354: [BOOKKEEPER-296] [Documentation] Modify the bookkeeper start script and document the bookkeeper stop command in bookkeeperConfig.xml (Kiran BC via ivank);3;0
+b3331cbc5;2012-08-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-378: ReplicationWorker may not get ZK watcher notification on UnderReplication ledger lock deletion. (umamaheswararao & ivank via ivank);3;2
+97c76a36d;2012-08-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-248: Rereplicating of under replicated data (umamahesh via ivank);3;5
+621ace8d9;2012-08-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-380: ZkLedgerUnderreplicationManager.markLedgerUnderreplicated() is adding duplicate missingReplicas while multiple bk failed for the same ledger (rakeshr via ivank);3;2
+8e9a19f76;2012-08-27;AUTHOR=Sijie Guo;MES=BOOKKEEPER-381: ReadLastConfirmedOp's Logger class name is wrong (surendra via sijie);3;1
+c59b3d2e4;2012-08-27;AUTHOR=Sijie Guo;MES=BOOKKEEPER-382: space missed at concatenations in GarbageCollectorThread logging (Brahma via sijie);3;1
+d930b579a;2012-08-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-304: Prepare bookie vs ledgers cache and will be used by the Auditor (rakeshr via ivank);3;3
+6b44bc232;2012-08-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-272: Provide automatic mechanism to know bookie failures (rakeshr via ivank);3;4
+6379ae858;2012-08-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-333: server-side message filter (sijie via ivank);3;22
+cb8415d5d;2012-08-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-337: Add entry fails with MetadataVersionException when last ensemble has morethan one bookie failures (rakeshr via ivank);3;2
+06f8f9307;2012-08-28;AUTHOR=Sijie Guo;MES=BOOKKEEPER-376: LedgerManagers should consider 'underreplication' node as a special Znode (Uma via sijie);3;5
+fbfd10fa9;2012-08-28;AUTHOR=Sijie Guo;MES=BOOKKEEPER-371: NPE in hedwig hub client causes hedwig hub to shut down. (Aniruddha via sijie);3;7
+9fcb7c0cd;2012-08-31;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-384: Clean up LedgerManagerFactory and LedgerManager usage in tests (rakeshr via ivank);3;2
+2ffc123e5;2012-09-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-334: client-side message filter for java client. (sijie via ivank);3;17
+d169f8843;2012-09-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-335: client-side message filter for cpp client. (sijie via ivank);3;0
+504369377;2012-09-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-385: replicateLedgerFragment should throw Exceptions in error conditions (umamahesh via ivank);3;3
+800fe7de4;2012-09-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-386: It should not be possible to replicate a ledger fragment which is at the end of an open ledger (ivank & umamahesh via ivank);3;6
+64fa78224;2012-09-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-394: CompositeException message is not useful (Stu Hood via sijie);3;1
+0eee9e5cd;2012-09-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-300: Create Bookie format command (Vinay via sijie);3;18
+3d036b0bf;2012-09-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-395: HDFS dep transitively depends on a busted pom (Stu Hood via sijie);3;0
+06b509694;2012-09-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-387: BookKeeper Upgrade is not working. (surendra via sijie);3;2
+6f364a214;2012-09-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-383: NPE in BookieJournalTest  (sijie via ivank);3;3
+26671da54;2012-09-11;AUTHOR=Sijie Guo;MES=BOOKKEEPER-396: Compilation issue in TestClient.java of BenchMark ( showing this in eclipse) (umamahesh via sijie);3;1
+e353a8f93;2012-09-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-208: Separate write quorum from ack quorum (ivank);3;19
+420a6e5e6;2012-09-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-325: Delay the replication of a ledger if RW found that its last fragment is in underReplication. (umamahesh via ivank);3;5
+6bffc3245;2012-09-13;AUTHOR=Sijie Guo;MES= BOOKKEEPER-392: Racey ConcurrentMap usage in java hedwig-client (Stu Hood via sijie);3;6
+4f2b11213;2012-09-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-403: ReReadMetadataCb is not executed in the thread responsible for that ledger (ivank);3;5
+ec977dbe1;2012-09-14;AUTHOR=Sijie Guo;MES=BOOKKEEPER-32: Clean up LOG.debug statements (Stu Hood via sijie);3;39
+820ce5949;2012-09-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-252: Hedwig: provide a subscription mode to kill other subscription channel when hedwig client is used as a proxy-style server. (sijie via ivank);3;18
+53d3fbf26;2012-09-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-405: Let's add Thread name for ReplicationWorker thread. (umamahesh via ivank);3;1
+00341197b;2012-09-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-388: Document bookie format command (vinayrpet via ivank);3;0
+cf414cc06;2012-09-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-388: Document bookie format command (kiran_bc via ivank) [Corrected CHANGES.txt];3;0
+881cda5c8;2012-09-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-397: Make the hedwig client in RegionManager configurable. (Aniruddha via sijie);3;3
+eba338eb3;2012-09-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-364: re-factor hedwig java client to support both one-subscription-per-channel and multiplex-subscriptions-per-channel. (sijie via ivank);3;31
+853ac6bf0;2012-10-01;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-143: Add SSL support for hedwig cpp client (sijie via ivank);3;0
+24fb0bca0;2012-10-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-278: Ability to disable auto recovery temporarily (rakeshr via ivank);3;7
+f57cbe507;2012-10-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-367: Server-Side Message Delivery Flow Control (sijie via ivank);3;11
+ba01aed27;2012-10-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-319: Manage auditing and replication processes (Vinay via ivank);3;4
+e2487b794;2012-10-05;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-315: Ledger entries should be replicated sequentially instead of parallel. (umamahesh via ivank);3;7
+c4519d96d;2012-10-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-415: Rename DeliveryThrottle to MessageWindowSize (ivank via sijie);3;7
+ce0e7b207;2012-10-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-413: Hedwig C++ client: Rename RUN_AS_SSL_MODE to SSL_ENABLED (ivank via sijie);3;0
+de64ff31f;2012-10-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-418: Store hostname of locker in replication lock (ivank);3;2
+bf3d55f0c;2012-10-16;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-417: Hierarchical zk underreplication manager should clean up its hierarchy when done to allow for fast acquisition of underreplicated entries (ivank);3;3
+2385d7a70;2012-10-16;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-436: Journal#rollLog may leak file handler (umamahesh via ivank);3;1
+cb0595452;2012-10-17;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-422: Simplify AbstractSubscriptionManager (stu via fpj);3;1
+5f9f6ef07;2012-10-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-369: re-factor hedwig cpp client to provide better interface to support both one-subscription-per-channel and multiple-subscriptions-per-channel. (sijie via ivank);3;0
+794d8c6a3;2012-10-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-345: Detect IOExceptions on entrylogger and bookie should consider next ledger dir(if any) (Vinay via ivank);3;14
+81aa20165;2012-10-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-435: Create SubscriptionChannelManager to manage all subscription channel (sijie via ivank);3;7
+d0807e31f;2012-10-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-411: Add CloseSubscription Request for multiplexing support (sijie via ivank);3;14
+db1484669;2012-10-23;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-427: TestConcurrentTopicAcquisition hangs every so often (ivank);3;1
+eb01b7c1a;2012-10-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-424: Bookie start is failing intermittently when zkclient connection delays (rakeshr via ivank);3;9
+2c7236cf3;2012-10-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-424: Bookie start is failing intermittently when zkclient connection delays (rakeshr via ivank) [missing files];3;1
+7dced5724;2012-10-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-416: LedgerChecker returns underreplicated fragments for an closed ledger with no entries (ivank);3;2
+ffd46bcd1;2012-10-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-441: InMemorySubscriptionManager should back up top2sub2seq before change it (Yixue via ivank);3;2
+3a9a88708;2012-10-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-346: Detect IOExceptions in LedgerCache and bookie should look at next ledger dir(if any) (Vinay via ivank);3;4
+223a3fb3f;2012-10-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-439: No more messages delivered after deleted consumed ledgers. (sijie via ivank);3;7
+536d86ec4;2012-10-26;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-425: Cleanup Bookie id generation (ivank via fpj);3;11
+fb28dd140;2012-10-31;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-430: Remove manual bookie registration from overview (fpj via ivank);3;0
+0658723fd;2012-10-31;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-434: [Hedwig CPP Client] Delay resolving default host until necessary. (sijie via ivank);3;0
+f633075dd;2012-11-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-368 Implementing multiplexing java client. (sijie via ivank);3;25
+2dd4ff7d8;2012-11-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-370: implement multiplexing cpp client. (sijie via ivank);3;0
+da1b308ba;2012-11-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-452: Rename ClientConfiguration multiplexing_enabled to subscription_connection_sharing_enabled (sijie via ivank);3;7
+c32437ad4;2012-11-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-444: Refactor pending read op to make speculative reads possible (ivank);3;2
+9b7b78890;2012-11-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-204: Provide a MetaStore interface, and a mock implementation. (Jiannan Wang via ivank);3;16
+0a164a8f7;2012-11-21;echo> from protobuf generation in hedwig (ivank);MES=BOOKKEEPER-468: Remove ;3;0
+10091096e;2012-11-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-466: ZooKeeper test utility sets the port number as the tickTime (ivank);3;1
+afa7a082a;2012-11-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-454: hedwig c++ tester script assumes sh is bash (ivank);3;0
+b3a05cd74;2012-11-23;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-467: Allocate ports for testing dynamically (ivank);3;29
+e789bc0da;2012-11-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-460: LedgerDeleteTest checks wrong place for log file (Fangmin Lv via ivank);3;2
+967149c23;2012-11-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-460: LedgerDeleteTest checks wrong place for log file (Fangmin Lv via ivank) [missing file];3;1
+e2d624f8b;2012-11-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-440: Make Write/Delete SubscriptionData Restricted to Version (Fangmin Lv via ivank);3;8
+8a3b4ac9a;2012-11-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-471: Add scripts for preCommit testing (ivank);3;0
+d3ee64578;2012-11-27;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-479: Fix apache-rat issues in tree (ivank via fpj);3;2
+38336805e;2012-11-27;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-477: In ReadOnlyBookieTest, we should wait for the bookie to die before asserting on it (ivank via fpj);3;1
+9512c57d2;2012-11-27;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-476: Log to file during tests (ivank via fpj);3;1
+0d198abad;2012-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-457: Create a format command for Hedwig to cleanup its metadata. (sijie via ivank);3;8
+ea84d6cc0;2012-11-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-487: Add existed hub server settings to configuration template file (sijie via ivank);3;0
+aa1fecd25;2012-11-30;AUTHOR=Sijie Guo;MES=BOOKKEEPER-481: Fix javadoc warnings (ivank via sijie);3;5
+2522f9863;2012-11-30;AUTHOR=Sijie Guo;MES=BOOKKEEPER-480: Fix javac warnings (ivank via sijie);3;0
+3ce797955;2012-11-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-389: add documentation for message filter. (sijie via ivank);3;0
+e14983cbe;2012-12-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-482: Precommit is reporting findbugs errors in trunk (ivank via sijie);3;1
+100785f6f;2012-12-01;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-485: TestFencing hung (ivank via fpj);3;2
+c958b32da;2012-12-03;AUTHOR=Sijie Guo;MES=BOOKKEEPER-351: asyncAddEntry should not throw an exception (Matteo Merli via sijie);3;2
+f12b7896e;2012-12-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-336 bookie readEntries is taking more time if the ensemble has failed bookie(s) Basic speculative functionality  in place;3;4
+6a6d25e7e;2012-12-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-291: BKMBeanRegistry uses log4j directly (fpj via ivank);3;1
+bdf3bfd63;2012-12-03;AUTHOR=Ivan Brendan Kelly;MES=[REVERT] BOOKKEEPER-336 bookie readEntries is taking more time if the ensemble has failed bookie(s) Basic speculative functionality  in place Accidently committed this change, before approval. Reverting (ivank);3;4
+03bf28db4;2012-12-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-459: Rename metastore mock implementation to InMemory implementation (jiannan via ivank);3;4
+4380e5296;2012-12-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-459: Rename metastore mock implementation to InMemory implementation (jiannan via ivank) [remove directory];3;0
+0ea460606;2012-12-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-442: Failed to deliver messages due to inconsistency between SubscriptionState and LedgerRanges. (jiannan via ivank);3;4
+7f6adbe34;2012-12-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-347: Provide mechanism to detect r-o bookie by the bookie clients (Vinay via ivank);3;6
+c86eb1c48;2012-12-03;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-484: Misc fixes for test scripts (ivank via fpj);3;0
+55f6300ef;2012-12-03;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-399: Let hub server configure write quorum from ack quorum. (sijie via fpj);3;2
+6030beaba;2012-12-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-470: Possible infinite loop in simple.SubscribeReconnectCallback (sijie via ivank);3;2
+7f67e765c;2012-12-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-461: Delivery throughput degrades when there are lots of publishers w/ high traffic. (sijie via ivank);3;4
+366d393f2;2012-12-04;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-475: BookieRecoveryTest#testSyncBookieRecoveryToRandomBookiesCheckForDupes() iterates too much (ivank via fpj);3;1
+baef28384;2012-12-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-453: Extract commonality from MultiplexSubscribeResponseHandler and SimpleSubscribeResponseHandler and put into an abstract class  (sijie via ivank);3;9
+66a0dde14;2012-12-08;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-431: Duplicate definition of COOKIES_NODE (uma via fpj);3;20
+d0217c170;2012-12-08;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-431: Duplicate definition of COOKIES_NODE (uma via fpj). Additional commit to fix the DEFAULT_ZK_LEDGERS_ROOT_PATH constant.;3;4
+40ac04bfe;2012-12-08;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-474:  BookieReadWriteTest#testShutdown doesn't make sense (ivank via fpj);3;2
+a063f9b19;2012-12-10;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-469: Remove System.out.println from TestLedgerManager (ivank via fpj);3;1
+7d3dde696;2012-12-10;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-465: CreateNewLog may overwrite lastLogId with smaller value (yixue, fpj via fpj);3;2
+77efd1c00;2012-12-10;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-498: BookieRecoveryTest.tearDown NPE (fpj);3;1
+be155aa0c;2012-12-11;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-491: Hedwig doc for configuration (fpj, sijie via fpj);3;1
+7467d2697;2012-12-11;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-495: Revise BK config doc (fpj, ivank via fpj);3;1
+7275006bf;2012-12-11;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-495: Revise BK config doc (fpj, ivank via fpj) (a few extra edits to bookieCOnfigParams.textile);3;0
+7fa41ff31;2012-12-12;AUTHOR=Sijie Guo;MES=BOOKKEEPER-497: GcLedgersTest has a potential race (ivank via sijie);3;1
+5414cec92;2012-12-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-205: implement a MetaStore based ledger manager for bookkeeper client. (jiannan via ivank);3;9
+55610c26e;2012-12-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-493: moveLedgerIndexFile might have chance pickup same directory (sijie via ivank);3;3
+1e35d5d5e;2012-12-13;AUTHOR=Sijie Guo;MES=BOOKKEEPER-404: Deprecate non-SubscriptionOptions Subscriber Apis (ivank via sijie);3;1
+b6c1a8bbd;2012-12-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-365: Ledger will never recover if one of the quorum bookie is down forever and others dont have entry (sijie via ivank);3;3
+d58a71dbd;2012-12-13;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-458:  Annoy BKReadException error when changing ledger. (jiannan via fpj);3;2
+496f442a7;2012-12-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-336: bookie readEntries is taking more time if the ensemble has failed bookie(s) (ivank);3;7
+d932c9b21;2012-12-13;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-483: precommit tests only check toplevel rat file, not the one for submodules. (ivank via fpj);3;0
+3a950e6f7;2012-12-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-262: Implement a meta store based hedwig metadata manager. (jiannan via ivank);3;4
+4320f6f8a;2012-12-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-341: add documentation for bookkeeper ledger manager interface. (sijie via ivank);3;0
+e0011de44;2012-12-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-408: BookieReadWriteTest will enter the endless loop and will not leave out (ivank);3;1
+812570006;2012-12-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-426: Make auditor Vote znode store a protobuf containing the host that voted (ivank);3;3
+dffe13f5b;2012-12-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-504: Fix findbugs warning in PendingReadOp (fpj via ivank);3;1
+e4a42af69;2012-12-14;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-428: Expose command options in bookie scripts to disable/enable auto recovery temporarily (ivank via fpj);3;3
+5428454ca;2012-12-14;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-428: Expose command options in bookie scripts to disable/enable auto recovery temporarily (rakesh, ivank via fpj);3;0
+8c1e71f2b;2012-12-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-511: BookieShell is very noisy (ivank via sijie);3;0
+d1a3c6d11;2012-12-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-512: BookieZkExpireTest fails periodically (ivank via sijie);3;1
+a8d61e646;2012-12-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-375: Document about Auto replication service in BK (umamahesh via ivank);3;0
+3ab615ebb;2012-12-18;AUTHOR=Sijie Guo;MES=BOOKKEEPER-490: add documentation for MetaStore interface (sijie, ivank via sijie);3;0
+c784b6023;2012-12-18;AUTHOR=Sijie Guo;MES=BOOKKEEPER-342: add documentation for hedwig metadata manager interface. (sijie, ivank via sijie);3;0
+a4d8a34fb;2012-12-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-509: TestBookKeeperPersistenceManager failed on latest trunk (sijie via ivank);3;3
+e5b0dd0d9;2012-12-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-496: Ensure that the auditor and replication worker will shutdown if they lose their ZK session (ivank);3;10
+d69986c4d;2012-12-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-500: Fencing doesn't work when restarting bookies. (sijie via ivank);3;12
+a3da8c74c;2012-12-20;AUTHOR=Sijie Guo;MES=BOOKKEEPER-520: BookieFailureTest hangs on precommit build (ivank via sijie);3;3
+fa1342697;2012-12-24;AUTHOR=Sijie Guo;MES=BOOKKEEPER-463: Refactor garbage collection code for ease to plugin different GC algorithm. (Fangmin, ivank, fpj via sijie);3;22
+a0ae97c23;2012-12-24;AUTHOR=Sijie Guo;MES=BOOKKEEPER-522: TestHedwigHub is failing silently on Jenkins (ivank via sijie);3;10
+7de3ecbd5;2012-12-24;AUTHOR=Sijie Guo;MES=BOOKKEEPER-447: Bookie can fail to recover if index pages flushed before ledger flush acknowledged (ivank via sijie);3;3
+8a396e1f7;2012-12-27;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-520: BookieFailureTest hangs on precommit build (sijie via fpj, jira reopened);3;3
+ea36e59a1;2012-12-28;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-514: TestDeadLock hanging sometimes (ivank, sijie via fpj);3;8
+7b2b91579;2012-12-29;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-523: Every test should have a timeout (ivank, sijie via fpj);3;78
+a27b64e34;2013-01-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-55: SubscribeReconnectRetryTask might retry subscription endlessly when another subscription is already successfully created previously (sijie via ivank);3;14
+b4e985b32;2013-01-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-409: Integration Test - Perform bookie rereplication cycle by Auditor-RW processes (rakeshr via ivank);3;3
+ee29f75f3;2013-01-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-507: Race condition happens if closeSubscription and subscribe happened at the same time (in multiplexed client). (sijie via ivank);3;5
+005b62cc6;2013-01-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-293: Periodic checking of ledger replication status (ivank);3;12
+f80dcedae;2013-01-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-524: Bookie journal filesystem gets full after SyncThread is terminated with exception (Matteo, fpj via sijie);3;3
+b625fdc27;2013-01-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-355: Ledger recovery will mark ledger as closed with -1, in case of slow bookie is added to ensemble during recovery add (ivank);3;5
+f7ce39d52;2013-01-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-534: Flakeyness in AuditorBookieTest (umamahesh via ivank);3;1
+ed9b6037b;2013-01-07;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-532: AbstractSubscriptionManager#AcquireOp read subscriptions every time even it already owned the topic. (sijie via fpj);3;1
+faf407d5d;2013-01-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-531: Cache thread should wait until old entries are collected (sijie via ivank);3;4
+55a6e1b98;2013-01-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-541: Add guava to notice file (ivank via fpj);3;0
+f0db18abe;2013-01-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-533: TestSubAfterCloseSub fails strangely in tests (ivank via fpj);3;12
+1f5278d06;2013-01-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-529: stopServingSubscriber in delivery manager should remove stub callbacks in ReadAheadCache (sijie via ivank);3;6
+5c19add8b;2013-01-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-542: Remove trailing spaces in IndexCorruptionTest (fpj via ivank);3;1
+a9b851b3a;2013-01-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-543: Read zk host list in a wrong way in hedwig server (Fangmin via sijie);3;1
+40de14017;2013-01-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-540: #stopServingSubscriber when channel is disconnected. (Fangmin via sijie);3;3
+7c1793d29;2013-01-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-530: data might be lost during compaction. (ivank);3;4
+4250c1f93;2013-01-10;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-538: Race condition in BookKeeper#close (ivank via fpj);3;6
+1374b7ad2;2013-01-11;AUTHOR=Sijie Guo;MES=BOOKKEEPER-539: ClientNotSubscribedException & doesn't receive enough messages in TestThrottlingDelivery#testServerSideThrottle (sijie);3;3
+96b5aa8e6;2013-01-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-503: The test case of TestThrottlingDelivery#testServerSideThrottle failed sometimes (jiannan & sijie via ivank);3;3
+7d8079c44;2013-01-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-513: TestMessageFilter fails periodically (ivank);3;6
+087e49027;2013-01-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-472: Provide an option to start Autorecovery along with Bookie Servers (umamahesh via ivank);3;9
+7bed2a74a;2013-01-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-544: Modify hedwig server tests to allow client testcases to start/stop them as part of their tests (mridul via ivank);4;3
+e95b9392d;2013-01-31;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-312: Implementation of JMS provider (mridul via ivank);4;147
+b4bac04a8;2013-02-06;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-526: multiple threads for delivery manager (sijie via ivank);4;2
+f060c0d27;2013-02-08;AUTHOR=Uma Maheswara Rao G;MES=BOOKKEEPER-561 Findbugs report errors with openjdk. Contributed by Ivan Kelly.;4;41
+3902ae5a6;2013-02-09;AUTHOR=Sijie Guo;MES=BOOKKEEPER-556: BookieServerMXBean#getServerState makes no sense (ivank via sijie);4;3
+3bcabc5ad;2013-02-12;AUTHOR=Sijie Guo;MES=BOOKKEEPER-554: fd leaking when move ledger index file (sijie, ivank via sijie);4;3
+26731c770;2013-02-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-555: Make BookieServer use Netty rather than a custom IO server (ivank);4;11
+5b7b6835c;2013-02-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-568: NPE during GC with HierarchicalLedgerManager (Matteo via sijie);4;2
+cda181255;2013-02-16;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-569: Critical performance bug in InterleavedLedgerStorage (ivank via fpj);4;1
+040a442be;2013-02-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-548: Document about periodic ledger checker configuration (ivank);4;1
+f4d189431;2013-02-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-549: Documentation missed for readOnlyMode support (ivank);4;1
+d40d38036;2013-02-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-567: ReadOnlyBookieTest hangs on shutdown (sijie via ivank);4;1
+f31a366fa;2013-02-26;AUTHOR=Uma Maheswara Rao G;MES=BOOKKEEPER-574: Extend the bookkeeper shell to get a list of available bookies. Contributed by Ivan Kelly;4;3
+ea5a13d74;2013-03-05;AUTHOR=Uma Maheswara Rao G;MES=BOOKKEEPER-559: Fix occasional failure in AuditorBookieTest. Contributed by Ivan Kelly.;4;1
+94ea9a862;2013-03-08;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-579: TestSubAfterCloseSub was put in a wrong package (sijie via ivank);4;1
+1b7cb6fa9;2013-03-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-576: Bookie client should use netty Decoder/Encoder (ivank via sijie);4;7
+9f0d2a3e2;2013-03-17;AUTHOR=Sijie Guo;MES= BOOKKEEPER-585: Auditor logs noisily when a ledger has been deleted (ivank via sijie);4;3
+9868081b7;2013-03-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-573: Script to start a bookkeeper cluster (ivank via sijie);4;0
+f2bb5603f;2013-03-25;AUTHOR=Sijie Guo;MES=BOOKKEEPER-557: Compiler error showing up badly with jdk 7 (ivank via sijie);4;39
+d1bb8ec0e;2013-03-25;AUTHOR=Sijie Guo;MES=BOOKKEEPER-583: Read from a ReadOnlyBookie fails if index fileinfo is not in ledger cache (vinay via sijie);4;2
+6268be59c;2013-03-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-586: Remove recursive call in delivery manager (sijie via ivank);4;1
+e14cbe41b;2013-03-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-506: Provide better topic release algorithm (sijie via ivank);4;12
+455aabfd3;2013-03-25;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-581: Ledger recovery doesn't work correctly when recovery adds force changing ensembles. (sijie via ivank);4;4
+feb077afa;2013-04-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-597: Add flag to output test logs to stdout (ivank);5;0
+c8f9135e7;2013-04-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-595: Crash of inprocess autorecovery daemon should not take down the bookie (ivank);5;2
+b11882370;2013-04-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-596: Ledgers are gc'ed by mistake in MSLedgerManagerFactory. (sijie & ivank);5;9
+cdf138e24;2013-04-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-599: NPE in PerChannelBookieClient (jiannan via sijie);5;1
+09ec928ee;2013-04-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-598: Fails to compile - RESUBSCRIBE_EXCEPTION conflict (Matthew Farrellee via sijie);5;0
+685ca0796;2013-04-26;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-584: Data loss when ledger metadata is overwritten (sijie via ivank);5;5
+d175ada58;2013-05-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-564: Better checkpoint mechanism (sijie & ivank);5;13
+3a4f8920b;2013-05-06;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-562: Ability to tell if a ledger is closed or not (fpj);5;3
+c2bb7ffb3;2013-05-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-608: Make SyncThread a reusable component (ivank);5;3
+4c89310f8;2013-05-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-257: Ability to list all ledgers (fpj via ivank);5;2
+ccc9545c4;2013-05-31;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-611: Speed up bookkeeper tests (ivank via fpj);5;7
+cf2a858bb;2013-06-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-603: Support Boost 1.53 for Hedwig Cpp Client (jiannan via ivank);5;0
+faf2ed877;2013-06-05;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-617: BOOKKEEPER-544 breaks hedwig-server/bin/hedwig script (ivank);5;0
+1c04906c0;2013-06-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-592: allow application to recommend ledger data locality (sijie via ivank);5;23
+0a208e101;2013-06-15;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-626: BOOKIE_EXTRA_OPTS are added twice (vinay via fpj);5;0
+5ef7f760d;2013-06-15;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-627: LedgerDirsMonitor is missing thread name (rakesh via fpj);5;1
+fce6d4592;2013-06-15;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-618: Better resolution of bookie address (ivank via fpj);5;15
+a3de791cb;2013-06-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-619: Bookie should not create local cookie files if zookeeper is uninitialized (ivank);5;3
+01cccee02;2013-06-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-313: Bookkeeper shutdown call from Bookie thread is not shutting down server (vinay via ivank);5;2
+119e20343;2013-06-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-623: LedgerChecker should avoid segments of closed ledger with higher start entryId than closed entry. (vinay via sijie);5;2
+0cd4be8fd;2013-06-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-633: ConcurrentModificationException in RackawareEnsemblePlacementPolicy when a bookie is removed from available list (vinay via sijie);5;2
+bf3224adf;2013-06-28;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-620: PerChannelBookieClient race during channel disconnect (ivank);5;2
+ad11d4144;2013-07-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-637: NoSuchEntry exception when reading an entry from a bookie should not print ERROR level message (mmerli via ivank);5;1
+0d9708c65;2013-07-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-641: DeathWatcher thread is unnecessarily running even after bookie shutdown (rakeshr via ivank);5;1
+ed3bb58f5;2013-07-04;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-636: Latest txn logs might be deleted in a race condition which is not recoverable if BK goes down before next txn log created. (vinay via ivank);5;3
+0ce12e55e;2013-07-13;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-601: readahead cache size isn't updated correctly (sijie via fpj);5;1
+53c208b09;2013-07-14;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-600: shouldClaim flag isn't cleared for hedwig multiplex java client (sijie via fpj);5;1
+4d66c36cf;2013-07-20;AUTHOR=Sijie Guo;MES=BOOKKEEPER-563: Avoid Journal polluting page cache (Robin Dhamankar via sijie);5;5
+f3731732c;2013-07-20;AUTHOR=Sijie Guo;MES=BOOKKEEPER-610: Make SyncThread use an executor (ivank via sijie);5;2
+d9682edfc;2013-07-20;AUTHOR=Sijie Guo;MES=BOOKKEEPER-635: jenkins build should highlight which lines of the patch cause raw analysis errors (ivank via sijie);5;0
+4a2c74012;2013-07-20;AUTHOR=Sijie Guo;MES=BOOKKEEPER-646: BookieShell readjournal command is throwing BufferUnderflowException (Rakesh via sijie);5;1
+61e619c2b;2013-07-20;AUTHOR=Sijie Guo;MES=BOOKKEEPER-652: Logger class name is wrong in LedgerCacheImpl.java (Rakesh via sijie);5;1
+a889f63d1;2013-07-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-607: Filtered Messages Require ACK from Client Causes User Being Throttled Incorrectly Forever (sijie via ivank);5;2
+67ffec189;2013-07-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-653: Timeout option is missing in few testcases (Rakesh via ivank);5;6
+d3328c5a7;2013-07-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-642: Bookie returns incorrect exitcode, ExitCode.ZK_REG_FAIL is getting overridden (Rakesh via ivank);5;3
+22509a7a2;2013-07-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-663: HierarchicalLedgerManager iterator is missing some ranges and the last ledger in the range (mmerli via ivank);5;3
+d1ad860f8;2013-08-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-604: Ledger storage can log an exception if GC happens concurrently. (sijie & ivank via ivank);5;2
+94d65d8d2;2013-08-13;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-667: Client write will fail with BadMetadataVersion in case of multiple Bookie failures with AutoRecovery enabled (sijie via ivank);5;3
+2179f1bf6;2013-08-20;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-668: Race between PerChannelBookieClient#channelDisconnected() and disconnect() calls can make clients hang while add/reading entries in case of multiple bookie failures (sijie & ivank via ivank);5;2
+f41bb6f8b;2013-08-20;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-624: Reduce logs generated by ReplicationWorker (vinay via ivank);5;1
+c4fd34f0f;2013-08-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-632: AutoRecovery should consider read only bookies (vinay via ivank);5;12
+d8e697238;2013-08-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-649: Race condition in sync ZKUtils.createFullPathOptimistic() (ivank);5;5
+98d6dcec7;2013-08-23;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-580: improve close logic (sijie & ivank via ivank);5;2
+aadaae443;2013-09-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-446: BookKeeper.createLedger(..) should not mask the error with ZKException (sijie via ivank);5;7
+bc0eb8b14;2013-09-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-675: Log noise fixup before cutting 4.2.2 (ivank);5;11
+441891b2d;2013-09-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-683: TestSubAfterCloseSub fails on 4.2 (jiannan via ivank);5;1
+dea488afb;2013-10-02;AUTHOR=Sijie Guo;MES=BOOKKEEPER-640: Log improvement - add shutdown/exit log message for the bookie services (rakesh via sijie);5;10
+e2013e3f2;2013-10-02;AUTHOR=Sijie Guo;MES=BOOKKEEPER-666: Naming threads of ExecutorService (rakesh via sijie);5;15
+3d9bb20a7;2013-10-02;AUTHOR=Sijie Guo;MES=BOOKKEEPER-645: Bookkeeper shell command to get a list of readonly bookies (rakesh via sijie);5;1
+8dafa943a;2013-10-02;AUTHOR=Sijie Guo;MES=BOOKKEEPER-686: Bookie startup will fail if one of the configured ledgerDir is full and the same is used for replaying the journal (Rakesh via sijie);5;3
+0f853a49d;2013-10-11;AUTHOR=Sijie Guo;MES=BOOKKEEPER-658: ledger cache refactor (Robin Dhamankar via sijie);6;9
+d9f4e60c8;2013-10-11;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-638: Two bookies could start at the same time to access bookie data. (sijie via ivank);6;1
+bedfebf93;2013-10-12;AUTHOR=Sijie Guo;MES=BOOKKEEPER-657: Journal Improvement (Robin Dhamankar via sijie);6;24
+dc1f36e98;2013-10-12;AUTHOR=Sijie Guo;MES=BOOKKEEPER-657: Journal Improvement (Robin Dhamankar via sijie) (add missing file);6;1
+16978d671;2013-10-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-605: Use static Logger objects everywhere for bookkeeper (sijie via ivank);6;72
+a3575c3eb;2013-10-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-676: Make add asynchrounous in ledger recovery (aniruddha via ivank);6;1
+33ea58027;2013-10-14;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-673: Ledger length can be inaccurate in failure case (sijie via ivank);6;3
+24dc8ac30;2013-10-22;AUTHOR=Sijie Guo;MES=BOOKKEEPER-688: NPE exception in PerChannelBookieClient (ivank via sijie);6;1
+9602c32f1;2013-10-22;AUTHOR=Sijie Guo;MES=BOOKKEEPER-664: Compaction increases latency on journal writes (ivank via sijie);6;6
+bf5c1838b;2013-10-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-659: LRU page management in ledger cache. (Aniruddha, Robin Dhamankar & sijie via ivank);6;13
+2d0cd0d1b;2013-10-29;AUTHOR=Sijie Guo;MES=BOOKKEEPER-602: we should have request timeouts rather than channel timeout in PerChannelBookieClient (Aniruddha, ivank via sijie);6;11
+cd05194d8;2013-10-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-614: Generic stats interface, which multiple providers can be plugged into (sijie & ivank via ivank);6;9
+6c6ec2b2f;2013-10-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-615: Twitter stats implementation of stats interface (sijie via ivank);6;9
+f345cb947;2013-10-30;AUTHOR=Sijie Guo;MES=BOOKKEEPER-698: Bookie client closure is not considering timeoutExecutor (rakesh via sijie);6;1
+ea4a13a45;2013-10-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-700: GarbageCollectorThread exsiting with ArrayIndexOutOfBoundsException (rakeshr via ivank);6;2
+eb7066a02;2013-11-09;AUTHOR=Sijie Guo;MES=BOOKKEEPER-699: Codahale metrics implementation of stats API (ivank via sijie);6;3
+67dccebdb;2013-11-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-678: BookieServer shutdown hangs indefinitely at NioServerSocketChannelFactory.releaseExternalResources (rakeshr via ivank);6;1
+7c7e00969;2013-12-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-565: Make an option to separate storing entry log files from index files. (sijie via ivank);6;12
+810f10e9c;2013-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-711: bookkeeper-daemon.sh will not remove the pid file one successful stop (vinay via sijie);6;0
+42185c2e3;2013-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-712: bookkeeper script should use java from JAVA_HOME (vinay via sijie);6;0
+34c260bfc;2013-12-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-701: Improve exception handling of Bookkeeper threads (rakesh via sijie);6;10
+5c3a30f8e;2014-01-03;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-709: SlowBookieTest#testSlowBookie fails intermittently (Rakesh R via fpj);6;3
+79a73f0f7;2014-01-09;AUTHOR=Sijie Guo;MES=BOOKKEEPER-714: Logging channel exceptions in PerChannelBookieClient (sijie);6;1
+da8864ad7;2014-01-15;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-662: Major GC should kick in immediately if remaining space reaches a warning threshold (sijie via ivank);6;12
+78c0d2515;2014-01-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-710: OpenLedgerNoRecovery should watch ensemble change. (sijie via ivank);6;11
+96cc0e11c;2014-01-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-429: Provide separate read and write threads in the bookkeeper server (Aniruddha via sijie);6;10
+75f103d9d;2014-01-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-696: stats collection on bookkeeper client (Aniruddha, ivank via sijie);6;10
+23f3760dd;2014-01-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-719: Inconsistent synchronization of org.apache.bookkeeper.stats.CodahaleMetricsProvider.metrics (sijie via ivank);6;1
+9b1e561cb;2014-01-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-661: Turn readonly back to writable if spaces are reclaimed. (sijie via ivank);6;10
+7b44d9552;2014-01-22;AUTHOR=Sijie Guo;MES=BOOKKEEPER-720: CheckpointSource.MIN#compareTo does exactly the opposite of what it should (ivank via sijie);6;1
+694568b0f;2014-01-22;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-643: Improve concurrency of entry logger (sijie & Aniruddha via ivank);6;8
+8bb0cde55;2014-01-24;AUTHOR=Sijie Guo;MES=BOOKKEEPER-703: Document all the settings added in BOOKKEEPER-656 (sijie);6;0
+0345c8095;2014-02-02;AUTHOR=Sijie Guo;MES=BOOKKEEPER-708: Shade protobuf library to avoid incompatible versions (rakesh, ivank via sijie);6;0
+92a627816;2014-02-05;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-644: Provide a bookie address wrapper (sijie via fpj);7;60
+94ebe62b8;2014-02-05;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-727: Names of bookie write/read threads are backwards (ivank via fpj);7;1
+63232dec0;2014-02-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-728: Bookkeeper#Builder is not public, so can't be used outside of client package (ivank via fpj);7;1
+b62a67b1b;2014-02-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-729: Bookie shouldn't exit with 0, if exiting from deathwatcher and thread death was caused by OOM (ivank via fpj);7;1
+3870ff300;2014-02-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-725: AutoRecoveryMain should exit with error code if deathwatcher finds dead thread (ivank via sijie);7;1
+7e0b69cac;2014-02-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-726: PerChannelBookieClient should print address that it failed to connect to when it fails to correct (ivank via sijie);7;1
+8aafd10f6;2014-02-06;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-724: Shade introduces RAT error (sijie via fpj);7;0
+68ffb83d6;2014-02-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-732: Add env variable ENTRY_FORMATTER_CLASS to the bkenv.sh (rakesh via sijie);7;0
+f19744d30;2014-02-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-731: Missing BOOKIE_PID_DIR and BOOKIE_STOP_TIMEOUT in env variables list (rakesh via sijie);7;0
+653dd6d73;2014-02-21;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-654: Bookkeeper client operations are allowed even after its closure, bk#close() (sijie via ivank);7;16
+261bb8f67;2014-03-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-717: journal should look forward to group time-out entries (sijie via ivank);7;3
+12daded8c;2014-03-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-715: bookie: delay dropping journal cached pages (sijie via ivank);7;2
+9d4ce1671;2014-03-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-730: Shade pom file missing apache license header (ivank);7;0
+2d427e8d4;2014-03-07;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-363: Re-distributing topics among newly added hubs. (aniruddha via ivank);7;10
+1ac25ebe9;2014-03-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-740: AutoRecoveryMainTest#testAutoRecoverySessionLoss is failing (Rakesh via sijie);7;1
+885331639;2014-03-12;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-432: Improve performance of entry log range read per ledger entries (yixue, sijie via ivank);7;15
+e1838f478;2014-04-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-742: Fix for empty ledgers losing quorum. (ivank);7;8
+54c54f71a;2014-04-24;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-743: Periodic ledger check running too often as doc doesn't match implementation. (ivank);7;2
+5c1888665;2014-04-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-716: padding writes for bookie journal (sijie via ivank);7;8
+4c2750683;2014-05-06;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-744: Run the auditor bookie check periodically (ivank);7;2
+e824ac269;2014-05-06;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-744: Run the auditor bookie check periodically (ivank) [missing files];7;2
+19b821c63;2014-05-09;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-629: Support hostname based ledger metadata to help users to change IP with existing installation (rakeshr via ivank);7;7
+3ed06c0e9;2014-05-12;AUTHOR=Sijie Guo;MES=BOOKKEEPER-747: Implement register/unregister LedgerMetadataListener in MSLedgerManagerFactory (fpj via sijie);7;9
+e3594b50f;2014-05-14;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-755: Incorrect number of seconds specified in a day (Joseph Redfern via fpj);7;1
+151c50dbe;2014-05-23;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-750. Flake in BookieAutoRecoveryTest#testEmptyLedgerLosesQuorumEventually (ivank via fpj);7;3
+d67f3a752;2014-05-23;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-750. Flake in BookieAutoRecoveryTest#testEmptyLedgerLosesQuorumEventually (ivank via fpj);7;1
+ce3abc6e0;2014-05-27;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-756: Use HashedwheelTimer for request timeouts for PCBC (sijie via ivank);7;8
+209dbf498;2014-05-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-763: findbugs fails to run on jenkins (ivank);7;0
+64d017051;2014-05-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-758: Add TryReadLastAddConfirmed API (sijie via ivank);7;4
+d11665de3;2014-05-30;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-751: Ensure all the bookkeeper callbacks not run under ledger handle lock (sijie via ivank);7;1
+d86917af9;2014-06-02;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-745: Fix for false reports of ledger unreplication during rolling restarts. (ivank);7;7
+404b83aba;2014-06-03;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-746: 5 new shell commands. List ledgers, list metadata, list underreplicated, show auditor and simpletest (ivank);7;3
+68deb96d2;2014-06-05;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-766: Update notice.txt files to include 2014 (ivank via fpj);7;0
+80c6e5526;2014-06-06;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-767: Allow loopback in tests (ivank via fpj);7;8
+c9db76270;2014-06-10;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-765 bookkeeper script should fall back to java in path if JAVA_HOME is not set (ivank);7;0
+37fda574a;2014-07-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-768: fix typo seconds to milliseconds in benchmark output (jialin via sijie);8;1
+8f09334e2;2014-07-23;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-739: Test timeouts mostly ignored (sijie via fpj);8;76
+c81076e4d;2014-07-24;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-582: Make bookie and client use protobuf for requests (non-wire part) (sijie via fpj);8;22
+4ec0bf11c;2014-07-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-582: Make bookie and client use protobuf for requests (non-wire part) (missing files) (sijie);8;0
+e30e116fc;2014-08-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-697: stats collection on bookkeeper server (sijie via fpj) (missing file);8;1
+b6f33e49d;2014-08-14;AUTHOR=Sijie Guo;MES=BOOKKEEPER-774: Flaky test org.apache.bookkeeper.test.ReadOnlyBookieTest.testBookieShouldTurnWritableFromReadOnly (sijie);8;1
+38a6fd300;2014-08-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-704: reconnectable zookeeper client wrapper (sijie via ivank);8;7
+c0cef66c6;2014-08-18;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-630: Add tag to o.a.b.net.* to indict which release of hadoop they came from, move DNS to o.a.b.net.* and indent (sijie via ivank);8;12
+e61a1968c;2014-08-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-704: reconnectable zookeeper client wrapper (sijie via ivank) [missing file];8;1
+0c96765df;2014-09-04;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-780: Findbug issue in trunk (ivank via fpj);8;1
+8f81eba34;2014-09-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-777: Flake in LedgerCloseTest (ivank via fpj);8;1
+fd6835e4f;2014-09-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-779: jmx reporter for codahale metrics provider (ivank via sijie);8;1
+8abec018f;2014-09-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-718: AuditorLedgerCheckerTest is flakey (ivank via sijie);8;1
+6fe9f6349;2014-09-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-736: Stats for AutoRecovery (sijie);8;5
+caf9ef945;2014-09-09;AUTHOR=Sijie Guo;MES=BOOKKEEPER-778: Flake in TestTryReadLastConfirmed (ivank via sijie);8;1
+2e1346c5f;2014-09-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-781: Fix OOM on Hedwig Tests (sijie via fpj);8;0
+fb6324b06;2014-09-09;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-776: Flaky test BookieRecoveryTest (ivank via fpj);8;1
+77e68b5b0;2014-09-10;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-775: Improve MultipleThreadReadTest to reduce flakiness (sijie via fpj);8;1
+c91805165;2014-09-17;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-783: Avoid running out of fds in MutlipleThreadReadTest (sijie via ivank);8;1
+4f0e52d02;2014-09-18;AUTHOR=Sijie Guo;MES=BOOKKEEPER-785: Fix javadoc warnings in trunk (ivank via sijie);8;4
+4a2174a91;2014-09-18;AUTHOR=Sijie Guo;MES=BOOKKEEPER-784: BookKeeperCloseTest#testLedgerCheck is failing intermittently (ivank via sijie);8;1
+86480a21d;2014-09-18;AUTHOR=Sijie Guo;MES=BOOKKEEPER-782: Use builder pattern for Cookie (rakeshr via sijie);8;4
+36478d1e6;2014-09-22;AUTHOR=Flavio Paiva Junqueira;MES=BOOKKEEPER-786: Fix Findbugs Error In Codahale Stats Provider (sijie via fpj);8;1
+479cb452d;2014-09-23;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-787: Modify Cookie by removing 'znodeVersion' state/field (rakeshr via ivank);8;4
+2d630bbd5;2014-09-29;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-773: Provide admin tool to rename bookie identifier in Cookies (rakeshr via ivank);8;3
+3020fcb55;2014-10-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-793: Move to java 7;8;1
+b17a30a46;2014-11-19;AUTHOR=Ivan Brendan Kelly;MES=BOOKKEEPER-797: IllegalArgumentException when calling CodahaleOpStatsLogger#toOpStatsData();8;2
+6a94e45c6;2014-12-04;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-815: Ledger fence state is lost when the ledger file is evicted (Charles Xie via ivank);8;2
+78d6e49d4;2014-12-05;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-800: Expose whether a ledger is closed or not (ivank);8;1
+5de01f700;2014-12-05;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-799: Distribution schedule coverage sets don't take gaps in response lists into account when writequorum > ackquorum (ivank);8;2
+130ebfa8f;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-805: NullPointException in bookie server when using twitter-ostrich-provider (Youngjoon Kim via sijie);8;1
+0dfb4fb94;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-809: Wrong metric on LedgerDeleteOp and LedgerOpenOp (Charles Xie via sijie);8;2
+8a5ac7276;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-805: NullPointException in bookie server when using twitter-ostrich-provider (Youngjoon Kim via sijie) (missing CHANGES.txt);8;0
+ff5d2c512;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-809: Wrong metric on LedgerDeleteOp and LedgerOpenOp (Charles Xie via sijie) (missing CHANGES.txt);8;0
+492997b1e;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-820: print out fi.isFenced() in BookieShell (zhaijia via sijie);8;1
+2b88b11fa;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-804: Client program is not terminated when using openLedgerNoRecovery (ivank via sijie);8;3
+e790cab6d;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-813: BookieShell doesn't find index directory (Charles Xie via sijie);8;1
+92e502233;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-810: Allow to configure TCP connect timeout (Charles Xie via sijie);8;2
+24591f151;2014-12-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-811: Recovery tool doesn't remove cookie after recovering one bookie (Charles Xie via sijie);8;3
+e79f8736a;2014-12-09;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-795: Race condition causes writes to hang if ledger is fenced (sijie via ivank);8;4
+0e3d95c94;2014-12-10;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-814: clean up temp files that generated by test cases. (zhaijia via ivank);8;19
+91b80f6c8;2014-12-12;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-801: Bookkeeper client tutorial (ivank);8;0
+264995cf2;2014-12-12;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-803: Guide for making a replicated log out of ledgers (ivank);8;0
+4050e7965;2015-01-12;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-832: Allow starting bookie in ReadOnly mode (zhaijia via ivank);8;6
+99b40326f;2015-01-13;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-634: Provide admin tool to rename bookie identifier in ledger metadata (rakeshr via ivank);8;5
+0d6a65d3b;2015-01-16;AUTHOR=fpj;MES=BOOKKEEPER-827 change throttle in GarbageCollector to use either "by entry" or "by byte" (Jia Zhai via fpj);8;3
+afbab15ad;2015-01-19;AUTHOR=fpj;MES=BOOKKEEPER-830: Documentation has no structure (ivank via fpj);8;0
+8b23bd30c;2015-02-22;AUTHOR=Sijie Guo;MES=BOOKKEEPER-838: ForceWriteThread::run() leaks “logFile.close()” when interrupt comes (zhaijia via sijie);8;1
+e89ee080f;2015-03-12;AUTHOR=Sijie Guo;MES=BOOKKEEPER-839: AuditorPeriodicCheckTest timeout (rakeshr via sijie);8;1
+0c7dfc077;2015-03-12;AUTHOR=Sijie Guo;MES=BOOKKEEPER-837: UpdateLedgerOp - Replace AbstractFuture with SettableFuture (rakeshr via sijie);8;1
+f2928dca4;2015-03-12;AUTHOR=Sijie Guo;MES=BOOKKEEPER-831: Outdated links in tutorial (ivank via sijie);8;0
+68c5b5a40;2015-03-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-840: Deadlock on flushLock on compaction (sijie);8;1
+4a4802ab5;2015-03-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-828: Script for updating docs on website from master branch (ivank via sijie);8;0
+7177f2a03;2015-03-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-834: test case error in test class TestDiskChecker (zhaijia via sijie);8;1
+c181ea8aa;2015-03-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-844: Add more metrics about latency and bytes characteristics on bookie operations (Tong Yu via sijie);8;2
+638b33256;2015-03-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-844: Add more metrics about latency and bytes characteristics on bookie operations (Tong Yu via sijie) (missing file);8;0
+6622b46d4;2015-04-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-849: Collect stats with sub-milliseconds precision (Matteo Merli via sijie);8;25
+fe6259c7e;2015-04-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-850: Use nanoseconds to calculate poll timeout when doing group commit (Matteo Merli via sijie);8;1
+b24cd7fd8;2015-04-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-847: ArrayIndexOutOfBoundsException in LedgerFragmentReplicator::updateEnsembleInfo (zhaijia via sijie);8;1
+70da24d50;2015-04-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-848: Use volatile for lastAddConfirmed (Matteo Merli via sijie);8;1
+b6dd50534;2015-04-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-695: Some entry logs are not removed from the bookie storage (Matteo Merli via sijie);8;2
+e0d331781;2015-04-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-836: disable compaction when disk becomes full, otherwise compaction will fill up disk quickly (zhaijia via sijie);8;4
+da1a2fa6b;2015-04-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-833: EntryLogId and EntryLogLimit should not be larger than Integer.MAX_VALUE (sijie);8;4
+26b17cba5;2015-04-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-846: TestLedgerChecker times out (rakeshr via sijie);8;1
+6688d96b5;2015-05-19;AUTHOR=Sijie Guo;MES=BOOKKEEPER-835: Update copyright for 2015 on all active branches;8;0
+5bd2edbf8;2015-05-19;AUTHOR=Sijie Guo;MES=BOOKKEEPER-835: Update copyright for 2015 on all active branches (sijie) (missing CHANGES.txt file);8;0
+1387b2be4;2015-05-19;AUTHOR=Sijie Guo;MES=BOOKKEEPER-854: NPE on InterleavedLedgerStorage.onRotateEntryLog (sijie);8;1
+6286c39ea;2015-05-19;AUTHOR=Sijie Guo;MES=BOOKKEEPER-821: Failing to write lastId to ledger directories should not fail startup of bookies (zhaijia via sijie);8;1
+35fbcc357;2015-06-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-858: Fix broken links and typos in bookkeeper documents (Youngjoon Kim via sijie);9;0
+8df7e0fb1;2015-07-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-823: Clean up temp files created by hedwig tests (Jia Zhai via sijie);9;1
+a80bba272;2015-07-10;AUTHOR=fpj;MES=BOOKKEEPER-796: Make bookkeeper client use reconnectable zookeeper wrapper (sijie via fpj);9;24
+8c1b9ebc2;2015-07-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-687: Use static final Logger for hedwig related modules (Ankur Garg via sijie);9;82
+8bf97fb5b;2015-07-28;AUTHOR=fpj;MES=BOOKKEEPER-760: Don't close PCBC proactively if bookies disappeared from zookeeper znodes (sijie via fpj);9;2
+c29a4f260;2015-08-11;AUTHOR=Sijie Guo;MES=BOOKKEEPER-863: Potential resource leak with unclosed LedgerManager in BookieShell (Ted Yu via sijie);9;1
+a59bd5687;2015-09-07;AUTHOR=Sijie Guo;MES=BOOKKEEPER-802: Bookkeeper protocol documentation (ivank via sijie);9;0
+5662416d8;2015-09-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-438: Move ledger id generation out of LedgerManager (Tong Yu via sijie);9;20
+6cfecea6c;2015-10-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-862: Add tracing and stats to OrderedSafeExecutor for debugging slow tasks (Leigh Stewart via sijie);9;19
+48ab23ef3;2015-10-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-868: Add ADD_ENTRY quorum timeout (Leigh Stewart via sijie);9;6
+885cebf11;2015-10-06;AUTHOR=Sijie Guo;MES=BOOKKEEPER-826: PendingAddOp is ignoring ack response after meet ack quorum constraint (sijie);9;1
+9803ee8e6;2015-10-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-872: Resource leak with unclosed LedgerManager in HierarchicalLedgerManagerFactory#format() (Ted Yu via sijie);9;2
+8a3922e00;2015-10-15;AUTHOR=Sijie Guo;MES=BOOKKEEPER-866: Fix compile issue when Updating junit to latest release version( 4.12) in the test of  Bookkeeper-server. (Jia Zhai via sijie);9;8
+355ddbc7c;2015-10-22;AUTHOR=Sijie Guo;MES=BOOKKEEPER-867: New Client API to allow applications pass-in EntryId. (Venkateswararao Jujjuri via sijie);9;7
+e47fb5703;2015-10-22;AUTHOR=Sijie Guo;MES=BOOKKEEPER-867: New Client API to allow applications pass-in EntryId. (Venkateswararao Jujjuri via sijie) (missing CHANGES.txt);9;0
+e42efa9a8;2016-01-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-877: Script for generating patch for reviews (sijie);10;0
+19160e44d;2016-01-24;AUTHOR=Sijie Guo;MES=BOOKKEEPER-885: Script to merge github pull request (sijie via mmerli);10;0
+92722ee9c;2016-01-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-855: handle session expire event in bookie (sijie);10;10
+8729d12be;2016-02-08;AUTHOR=Sijie Guo;MES=BOOKKEEPER-883: Test timeout in bookkeeper-benchmark;10;4
+626b7e8bb;2016-02-08;AUTHOR=Matteo Merli;MES=BOOKKEEPER-890: Concurrent modification exception when removing listener in…;10;1
+61390322e;2016-02-08;AUTHOR=Siddharth Boobna;MES=BOOKKEEPER-892: Bookie sanity test;10;2
+63a2a91eb;2016-02-08;AUTHOR=Matteo Merli;MES=BOOKKEEPER-888: Dispatch individual callbacks from journal in different threads;10;1
+d96a2db91;2016-02-08;AUTHOR=Matteo Merli;MES=BOOKKEEPER-886: Allow to disable ledgers operation throttling;10;3
+63395a3e3;2016-02-08;AUTHOR=Siddharth Boobna;MES=BOOKKEEPER-893: explicitly call bk shutdown to set the exit code;10;1
+9c937f5d8;2016-02-08;AUTHOR=Matteo Merli;MES=BOOKKEEPER-891: Read entries failure should trigger callback only once;10;2
+bac3ed360;2016-02-23;AUTHOR=eolivelli;MES=BOOKKEEPER-879: Record ledger creation time;10;5
+9bd9e061b;2016-02-23;AUTHOR=Sijie Guo;MES=BOOKKEEPER-897: Fix findbugs warnings and missing apache license header;10;2
+2c567d008;2016-02-23;AUTHOR=Matteo Merli;MES=BOOKKEEPER-841: Bookie should calculate ledgers map writing a new entry log file;10;4
+96adbf1d6;2016-03-07;AUTHOR=Matteo Merli;MES=BOOKKEEPER-851: Configurable LedgerStorage implementation;10;20
+a77042db1;2016-03-07;AUTHOR=Siddharth Boobna;MES=BOOKKEEPER-898: listen to read only bookie changes also in auditor;10;4
+410ff7263;2016-03-13;AUTHOR=Matteo Merli;MES=BOOKKEEPER-902: Test failures in EntryLogTest;10;1
+9a8d62b1d;2016-03-15;AUTHOR=Robin Dhamankar;MES=BOOKKEEPER-769: Remove the Hedwig Code;10;385
+1a98088e3;2016-03-15;AUTHOR=Matteo Merli;MES=BOOKKEEPER-594: AutoRecovery shutting down on SyncDisconnected;10;2
+a13d75d7e;2016-03-15;AUTHOR=Siddharth Boobna;MES=BOOKKEEPER-894: add command to read ledger entries form shell;10;3
+e32c38890;2016-03-31;AUTHOR=Arun M. Krishnakumar;MES=BOOKKEEPER-909: ZooKeeper of LocalBookkeeper should use the correct tickTime;10;1
+b1c12c0f4;2016-04-04;AUTHOR=Ivan Kelly;MES=BOOKKEEPER-901: Authentication framework;10;19
+d607b366b;2016-04-04;AUTHOR=Matteo Merli;MES=BOOKKEEPER-578: LedgerCacheImpl is reserving 1/3 of Heap size but allocates NonHeap memory;10;2
+e5939ed58;2016-04-05;AUTHOR=eolivelli;MES=BOOKKEEPER-896: VM-local transport;10;6
+19a5efe21;2016-04-05;AUTHOR=Arun M. Krishnakumar;MES=BOOKKEEPER-910: In LocalBookkeeper, Zookeeper server and client use different host addresses;10;2
+3fe7e7dad;2016-04-06;AUTHOR=eolivelli;MES=BOOKKEEPER-904: BookieInitializationTest.testDuplicateBookieServerStartup fails on non-english machines;10;1
+3efde26e0;2016-04-07;AUTHOR=Andrey Yegorov;MES=BOOKKEEPER-914: ReadOnlyBookieTest.testBookieShouldTurnWritableFromReadOnly is intermettently failing;10;1
+89b032a1b;2016-04-08;AUTHOR=eolivelli;MES=BOOKKEEPER-880: Make LedgerHandle implement AutoCloseable;10;3
+f2bc62b85;2016-04-09;AUTHOR=Matteo Merli;MES=BOOKKEEPER-913: Fix flakiness in TestBackwardCompat;10;1
+b42d8db2b;2016-04-09;AUTHOR=Matteo Merli;MES=BOOKKEEPER-917: LocalBookKeeperTest seems to be silently failing;10;1
+10cab08d0;2016-04-13;AUTHOR=Sijie Guo;MES=BOOKKEEPER-870: Change the default value for bookie settings.;10;4
+91595fc04;2016-04-27;AUTHOR=Matteo Merli;MES=BOOKKEEPER-911: Fix TestReplicationWorker tests in master;10;2
+d66b9f0b4;2016-04-27;AUTHOR=Matteo Merli;MES=BOOKKEEPER-920: Extend bk-merge-pr.py to add more info to Jira ticket…;10;0
+dd575a16d;2016-04-27;AUTHOR=Siddharth Boobna;MES=BOOKKEEPER-895: GC ledgers that are no longer a part of the ensemble;10;9
+696a1515b;2016-04-27;AUTHOR=Arun M. Krishnakumar;MES=BOOKKEEPER-921: Typo in LocalBookkeeper: Use InetAddress.getHostAddress instead of InetAddress;10;1
+101de10a8;2016-04-27;AUTHOR=Matteo Merli;MES=BOOKKEEPER-925: Fix FindBugs discovered issues in master;10;5
+f8e0331f1;2016-04-28;AUTHOR=Matteo Merli;MES=BOOKKEEPER-925: Fix FindBugs discovered issues in master;10;1
+d32010f5f;2016-05-04;AUTHOR=Matteo Merli;MES=BOOKKEEPER-926: Compacted entries are not properly synced before updating index;10;2
+bd2ebcd75;2016-06-08;AUTHOR=Rithin;MES=BOOKKEEPER-881: Upgrade surefire plugin to 2.19.1;11;0
+e5f3afa5e;2016-07-11;AUTHOR=JV;MES=BOOKKEEPER-908: BKLedgerExistException creation is missing;11;1
+6d71b8292;2016-07-11;AUTHOR=Rithin;MES=BOOKKEEPER-922: CreaterId in ledger metadata;11;6
+d5cea821c;2016-07-11;AUTHOR=Matteo Merli;MES=BOOKKEEPER-932: Move to JDK 8;11;0
+2506c98f8;2016-07-11;AUTHOR=Sijie Guo;MES=BOOKKEEPER-939: Fix typo of bookkeeper merge pr script;11;0
+2f71beb5e;2016-07-14;AUTHOR=eolivelli;MES=BOOKKEEPER-940: Fix findbugs warnings after bumping to java 8;11;17
+1f7e47005;2016-07-25;AUTHOR=JV;MES=BOOKKEEPER-927: LedgerHandleAdv to handle disabled ledgers operation …;11;1
+8324632b2;2016-07-30;AUTHOR=eolivelli;MES=BOOKKEEPER-933: ClientConfiguration always inherits System properties;11;4
+c43858b50;2016-07-30;AUTHOR=Robin Dhamankar;MES=BOOKKEEPER-941: Feature Switches for controling client and server behavior;11;7
+64f596f45;2016-07-31;AUTHOR=Andrey Yegorov;MES=BOOKKEEPER-938 ledger digestType autodetection on open;11;3
+28f23e80b;2016-08-16;AUTHOR=Andrey Yegorov;MES=BOOKKEEPER-937: Upgrade protobuf to 2.6;11;3
+9db51b8d5;2016-09-10;AUTHOR=eolivelli;MES=BOOKKEEPER-930: Option to disable Bookie networking;11;8
+9dc05fc08;2016-09-10;AUTHOR=Rithin;MES=BOOKKEEPER-945: Add counters to track the activity of auditor and repl…;11;9
+bbd1eb8d8;2016-10-12;AUTHOR=Robin Dhamankar;MES=BOOKKEEPER-612: Region aware placement;11;32
+bf4a4d6a0;2016-10-13;AUTHOR=eolivelli;MES=BOOKKEEPER-924: addEntry() is susceptible to spurious wakeups;11;5
+4383b0b17;2016-10-20;AUTHOR=Yiming Zang;MES=BOOKKEEPER-952: Fix RegionAwareEnsemblePlacementPolicy;11;1
+0abf37c64;2016-11-08;AUTHOR=Rithin;MES=BOOKKEEPER-946: Provide an option to delay auto recovery of lost bookies;11;4
+309cbba65;2016-11-08;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-903: metaformat command fix;11;1
+cc3d27016;2016-11-08;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-956: Fix for HierarchicalLedgerRangeIterator;11;1
+8f0bed9f8;2016-11-08;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-957: LedgerHandleAdv fixes;11;1
+026ef10e1;2016-11-08;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-958: Fix for ZeroBuffer Bug;11;1
+7673febb6;2016-11-11;AUTHOR=Matteo Merli;MES=BOOKKEEPER-961: Assign read/write requests for same ledger to a single thread;11;5
+2ba9a2c4f;2016-11-11;AUTHOR=Matteo Merli;MES=BOOKKEEPER-962: Add more journal timing stats;11;2
+9359d682a;2016-11-17;AUTHOR=Robin Dhamankar;MES=BOOKKEEPER-965: Long Polling Part I: Changes in the write path;11;12
+95ea4815b;2016-11-17;AUTHOR=eolivelli;MES=BOOKKEEPER-912: Allow EnsemblePlacementPolicy to choose bookies using ledger custom data (multitenancy support);11;12
+66515e74d;2016-11-29;AUTHOR=Rithin;MES=BOOKKEEPER-948: Provide an option to add more ledger/index directorie…;11;5
+4cf097871;2016-11-29;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-955: in listLedgers method currentRange variable has to be…;11;1
+ecbb053e6;2016-11-29;AUTHOR=Matteo Merli;MES=BOOKKEEPER-964: Add concurrent maps and sets for primitive types;11;12
+f710e5a44;2016-11-29;AUTHOR=eolivelli;MES=BOOKKEEPER-976 Fix license headers;11;6
+6d2737ca2;2016-12-16;AUTHOR=Sijie Guo;MES=BOOKKEEPER-984: Fix BookieClientTest.testWriteGaps;11;1
+d2e82d494;2016-12-16;AUTHOR=eolivelli;MES=BOOKKEEPER-987: BookKeeper build is broken due to the shade plugin;11;0
+4bb57ef0b;2016-12-16;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-967: New testsuite for RackPlacement;11;1
+be99f024d;2016-12-16;AUTHOR=jiazhai;MES=BOOKKEEPER-971: update bk codahale stats provider version;11;1
+669ab4ac3;2016-12-16;AUTHOR=Rithin;MES=BOOKKEEPER-946: Provide an option to delay auto recovery of lost bookies;11;1
+73edd4a99;2016-12-16;AUTHOR=jiazhai;MES=BOOKKEEPER-966: change bookieServer cmdline to make conf-file and option co-exist;11;1
+548634733;2016-12-20;AUTHOR=Sijie Guo;MES=BOOKKEEPER-988: Add missing license header;11;1
+9a506c261;2016-12-20;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-983: BookieShell LedgerDelete Command;11;1
+6e738d0c0;2016-12-20;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-986: Handle memtable flush failure;11;3
+f53cbf827;2016-12-21;AUTHOR=eolivelli;MES=BOOKKEEPER-964: Ignore findbugs warnings;11;1
+15d6f600e;2017-01-10;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-992: ReadLog Command Enhancement;11;1
+0fbb98b36;2017-01-10;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-991: Get list of disk files;11;1
+43971c3b9;2017-01-10;AUTHOR=eolivelli;MES=BOOKKEEPER-943: Reduce log level of AbstractZkLedgerManager;11;1
+ca7e5fd80;2017-01-30;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-907: EntryFormatter should be configured;11;2
+ba5dadcb3;2017-01-30;AUTHOR=JV;MES=BOOKKEEPER-949: Allow entryLog creation for compaction;11;6
+26b09abb4;2017-01-30;AUTHOR=Andrey Yegorov;MES=BOOKKEEPER-968: Entry log flushes at configurable chunks;11;2
+13d668f22;2017-01-30;AUTHOR=eolivelli;MES=BOOKKEEPER-959: ClientAuthProvider and BookieAuthProvider Public API used Protobuf Shaded classes;11;23
+42e8f1294;2017-01-30;AUTHOR=Venkateswara;MES= BOOKKEEPER-873 and BOOKKEEPER-553;11;12
+c813b3d32;2017-01-30;AUTHOR=JV;MES=BOOKKEEPER-874: Explict LAC from Writer to Bookies;11;32
+91db1254c;2017-01-31;AUTHOR=Sijie Guo;MES=BOOKKEEPER-996: LongHierarchicalLedgerManagerFactory is missing license header;11;1
+123eccd43;2017-03-22;AUTHOR=Govind Menon;MES=BOOKKEEPER-1009: Use multiple journals in bookie;11;12
+28c264c86;2017-03-22;AUTHOR=Robert (Bobby) Evans;MES=BOOKKEEPER-998: Increased the max entry size to 5MB;11;6
+32ebf0ad6;2017-03-22;AUTHOR=Robert (Bobby) Evans;MES=BOOKKEEPER-999: Stop leaking threads in BookKeeper client;11;1
+f3671fc9f;2017-03-22;AUTHOR=Kishor Patil;MES=BOOKKEEPER-1003: Fix TestDiskChecker so it can be used on /dev/shm;11;1
+f20568eaa;2017-03-22;AUTHOR=eolivelli;MES=BOOKKEEPER-1007: Explicit LAC: make the interval configurable in ms;11;3
+3d3340be7;2017-03-23;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1013: Fix findbugs errors on latest master;11;8
+986110c4d;2017-03-23;AUTHOR=Francesco Caliumi - Diennea;MES=BOOKKEEPER-1001: Make LocalBookiesRegistry.isLocalBookie() public;11;2
+1e4ccaf16;2017-03-23;AUTHOR=Sijie Guo;MES=BOOKKEEPER-970: Bump the zookeeper version to 3.5;11;3
+0583175de;2017-03-28;AUTHOR=Rithin;MES=BOOKKEEPER-950: Ledger placement policy to accomodate different storage capacity of bookies;11;27
+bf8ef14bc;2017-03-28;AUTHOR=Matteo Merli;MES=BOOKKEEPER-852: Release LedgerDescriptor and master-key objects when not used anymore;11;8
+825e0e7b4;2017-03-28;AUTHOR=Govind Menon;MES=BOOKKEEPER-1004: Allow bookie garbage collection to be triggered manu…;11;3
+b30b527ba;2017-03-28;AUTHOR=eolivelli;MES=BOOKKEEPER-390: Provide support for ZooKeeper authentication;11;22
+9836c87dc;2017-04-03;AUTHOR=eolivelli;MES=BOOKKEEPER-1020: Fix Explicit LAC tests on master;11;1
+9001e300c;2017-04-03;AUTHOR=Govind Menon;MES=BOOKKEEPER-1018: Allow client to select older V2 protocol (no protobuf);11;4
+f30f60889;2017-04-03;AUTHOR=Govind Menon;MES=BOOKKEEPER-1018: Revert ": Allow client to select older V2 protocol (no…;11;4
+ab707d2c6;2017-04-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1021: Improve merge script to handle github reviews api;11;0
+48aa69dd0;2017-04-11;AUTHOR=Samuel Just;MES=BOOKKEEPER-1031: close the ledger handle in ReplicationWorker.rereplicate;11;1
+12bb13cdb;2017-04-11;AUTHOR=eolivelli;MES=BOOKKEEPER-1022: Make BookKeeperAdmin implement AutoCloseable;11;2
+24fae0322;2017-04-11;AUTHOR=Sijie Guo;MES=BOOKKEEPER-997: Wire protocol change for supporting long poll;11;1
+f74d07d6b;2017-04-15;AUTHOR=Govind Menon;MES=BOOKKEEPER-1018: Allow client to select older V2 protocol (no protobuf);11;4
+de59bd2ad;2017-04-18;AUTHOR=eolivelli;MES=BOOKKEEPER-1039: bk-merge-pr.py ask to run findbugs and rat before merge;11;0
+83d5d9e2a;2017-04-20;AUTHOR=eolivelli;MES=BOOKKEEPER-1038: Fix findbugs warnings and upgrade to 3.0.4;11;2
+c94bbbacd;2017-04-24;AUTHOR=eolivelli;MES=BOOKKEEPER-1043: Upgrade Apache Parent Pom Reference to latest version;11;0
+c72ff5efb;2017-05-01;AUTHOR=Enrico Olivelli;MES=BOOKKEEPER-1042: Deploy SNAPSHOTS of master to public Apache Repository;11;0
+9c79e078b;2017-05-02;AUTHOR=eolivelli;MES=BOOKKEEPER-1019: Support for reading entries after LAC;11;3
+057af8dbc;2017-05-02;AUTHOR=Kyle Nusbaum;MES=BOOKKEEPER-552: 64 Bits Ledger ID Generation;11;19
+5d282dcea;2017-05-04;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1045: Execute tests in different JVM processes;11;0
+25c113f62;2017-05-04;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1046: Avoid long to Long conversion in OrderedSafeExecutor task submit;11;1
+d5af77c05;2017-05-04;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1047: Add missing error code in ZK setData return path;11;1
+61a5446b8;2017-05-09;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1050: Cache journalFormatVersionToWrite when starting Journal;11;1
+1a2e017b6;2017-05-09;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1051: Fast shutdown for GarbageCollectorThread;11;1
+5531014ab;2017-05-09;AUTHOR=Siddharth Boobna;MES=BOOKKEEPER-1052: Print autorecovery enabled or not in bookie shell;11;1
+d8a7ac310;2017-05-09;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1053: Upgrade RAT maven version to 0.12 and ignore Eclipse project files;11;0
+af397e224;2017-05-10;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1060: Add utility to use SafeRunnable from Java8 Lambda;11;1
+fc4800544;2017-05-10;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1059: Upgrade to SLF4J-1.7.25;11;0
+eeaddeda6;2017-05-10;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1054: Add gitignore file;11;0
+e2894a9e9;2017-05-12;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1066: Introduce GrowableArrayBlockingQueue;11;3
+d7f7b922f;2017-05-12;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1064: ConcurrentModificationException in AuditorLedgerCheckerTest;11;1
+5130d3596;2017-05-12;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1063: Use executor.execute() instead of submit();11;4
+811ece53a;2017-05-15;AUTHOR=rdhabalia;MES=BOOKKEEPER-1058: Ignore already deleted ledger on replication audit;11;1
+74f795136;2017-05-15;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1008: Netty 4.1;11;73
+d86351371;2017-05-15;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1067: Add Prometheus stats provider;11;4
+5d43260e8;2017-05-15;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1061: BookieWatcher should not do ZK blocking operations from ZK async callback thread;11;1
+0f81461d2;2017-05-15;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1048: Use ByteBuf in LedgerStorage interface;11;36
+e44c73883;2017-05-16;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1069: If client uses V2 proto, set the connection to always decode V2 messages;11;1
+0f16da896;2017-05-17;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1055: Optimize handling of masterKey in case it is empty;11;4
+7da9ed293;2017-05-18;AUTHOR=Enrico Olivelli;MES=BOOKKEEPER-1070: bk-merge-pr.py use apache-rat:check goal;11;0
+667390d1a;2017-05-25;AUTHOR=Enrico Olivelli;MES=BOOKKEEPER-391: Support Kerberos authentication of bookkeeper;11;11
+7b1eec470;2017-05-25;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1068: Expose ByteBuf in LedgerEntry to avoid data copy;11;7
+64bedc2f9;2017-05-25;AUTHOR=Alex Yarmula;MES=BOOKKEEPER-1075: BK LedgerMetadata: more memory-efficient parsing of configs;11;1
+6698912e4;2017-05-26;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1077: Allow configuration journal/ledger paths for local bookkeeper.;11;2
+fd3331a27;2017-05-26;AUTHOR=arvindkandhare;MES=BOOKKEEPER-1010: Moving Guava to 20.0;11;5
+9bade929d;2017-05-26;AUTHOR=Enrico Olivelli;MES=BOOKKEEPER-1079: shell lastMark throws NPE;11;1
+fc51f73cb;2017-06-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1073: Several stats provider related changes.;11;15
+da7064871;2017-06-01;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1071: Use per connection instances of request encoder/decoder;11;1
+0eca5ff57;2017-06-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1078: Local BookKeeper enhancements for testability;11;4
+77a01dc7e;2017-06-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1084: Make variables finale if necessary;11;6
+e33ec10aa;2017-06-01;AUTHOR=Robin Dhamankar;MES=BOOKKEEPER-1083: Improvements on OrderedSafeExecutor;11;1
+d1f37dafb;2017-06-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1085: Introduce the AlertStatsLogger;11;1
+dd08ce1a6;2017-06-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1074: Remove JMX Bean;11;17
+a9fe7d94f;2017-06-01;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1056: Removed PacketHeader serialization/deserialization allocation;11;2
+5c81acacc;2017-06-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1086: Ledger Recovery - Refactor PendingReadOp;11;2
+55d1dc45c;2017-06-01;AUTHOR=Sijie Guo;MES=BOOKKEEPER-989: Enable Travis CI for Apache BookKeeper;11;0
+5f945f8a0;2017-06-01;AUTHOR=Matteo Merli;MES=BOOKKEEPER-1090: Use LOG.isDebugEnabled() to avoid unexpected allocations;11;50
+efd8ec269;2017-06-05;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-944: LowWaterMark Storage Threshold;11;8
+b3b958c2b;2017-06-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1087: Ledger Recovery (part 2) - Add a parallel reading request in PendingReadOp;11;5
+5fe86525a;2017-06-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1088: Ledger Recovery (part-3) - Add a ReadEntryListener to callback on individual request;11;4
+58b92de8b;2017-06-05;AUTHOR=Sijie Guo;MES=BOOKKEEPER-748: Move fence requests out of read threads;11;13
+13c5c88f6;2017-06-10;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1088: CompactionTest tests are broken because of;11;1
+07852d358;2017-06-12;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-1096: recursive znode delete;11;5
+90a8f2839;2017-06-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1089: Ledger Recovery (part-4) - allow batch reads in ledger recovery;11;7
+90e4e46bc;2017-06-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1093: Piggyback LAC on ReadResponse;11;6
+256e75873;2017-06-21;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1092: Ledger Recovery (Part 5) - Add Test Case for Parallel Ledger Recovery;11;7
+596966007;2017-06-21;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-1097: GC test when no WritableDirs;11;3
+9ddd9e6f9;2017-06-28;AUTHOR=Charan Reddy Guttapalem;MES=BOOKKEEPER-1034: Bookie start in RO when diskfull;11;6
+32c2859f0;2017-06-28;AUTHOR=Samuel Just;MES=BOOKKEEPER-1086: ZkUnderreplicationManager cache watcher;11;3
+5e399df67;2017-06-29;AUTHOR=Sijie Guo;MES=BOOKKEEPER-759: Delay Ensemble Change & Disable Ensemble Change;11;19
+ee0dddee6;2017-07-04;AUTHOR=Sijie Guo;MES=BOOKKEEPER-772: Reorder Read Sequence;11;30
+29eb420f1;2017-07-06;AUTHOR=cguttapalem;MES=BOOKKEEPER-1028 and BOOKKEEPER-1029;11;11
+9aff6d52e;2017-07-06;AUTHOR=cguttapalem;MES=BOOKKEEPER-1033: Handle DirsPartitionDuplication;11;15
+1b79adaae;2017-07-17;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1095: Long Poll - Server and Client Side Changes;11;2
+f47dd4272;2017-07-18;AUTHOR=Sijie Guo;MES=BOOKKEEPER-980: BookKeeper Tools doesn't process the argument correctly;11;1
+2d992e39d;2017-07-20;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1027: Cleanup README;11;0
+24ac8ead6;2017-07-25;AUTHOR=Sijie Guo;MES=BOOKKEEPER-1044: Entrylogger is not readding rolled logs back to the logChannelsToFlush list when exception happens while trying to flush rolled logs;11;1
+313cfa660;2017-07-26;AUTHOR=Enrico Olivelli;MES=BOOKKEEPER-1017: Create documentation for ZooKeeper ACLs;11;0
+0ccbc0e9c;2017-07-28;AUTHOR=Samuel Just;MES=BOOKKEEPER-1104: Fix testWithDiskFullAndAbilityToCreateNewIndexFile;11;1
+cf2936548;2017-07-28;AUTHOR=Sijie Guo;MES=BOOKKEEPER-935: Javadoc improvements and publish sources and javadocs to Maven Central;11;42
+3908d9ce6;2017-07-28;AUTHOR=Samuel Just;MES=BOOKKEEPER-1103: Fix LedgerMetadataCreateTest random id loop;11;1
+a5f8580f5;2017-07-31;AUTHOR=Samuel Just;MES=BOOKKEEPER-1102: Clarify BookieInfoReader and fix associated test flappers;11;5
+8e0bd2c3d;2017-08-01;AUTHOR=kishorekasi;MES=BOOKKEEPER-588: SSL Support for Bookkeeper;11;31
+de9eecc18;2017-08-15;AUTHOR=Yiming Zang;MES=BOOKKEEPER-1100: Add module for Bookkeeper Http Endpoint;11;32
+f5d2ba66d;2017-08-15;AUTHOR=Andrey Yegorov;MES=BOOKKEEPER-1105: RackAwarePolicy: Failure to map node into rack may result in failure to add other nodes.;11;14
+aa03c5231;2017-09-16;AUTHOR=Sijie Guo;MES=BOOKKEEPER-31: Project Logo;11;0
+2bbecd7da;2017-10-03;AUTHOR=Yiming Zang;MES=BOOKKEEPER-1106: Introduce write FileInfo cache and read FileInfo cache;11;5
+40a7f1de4;2017-10-17;AUTHOR=Robert Evans;MES=BOOKKEEPER-1062: Fixed the race in AuditorLedgerCheckerTest;11;10
+3392beee5;2017-11-08;AUTHOR=Yiming Zang;MES=BOOKKEEPER-1040: Use separate log for compaction and add transaction support;11;10
+10272ead9;2019-02-20;AUTHOR=Samuel Just;MES=BOOKKEEPER-1919: putEntryOffset translate FileInfoDeletedException;11;2
+e9021a607;2020-05-18;AUTHOR=Rajan Dhabalia;MES=[BOOKKEEPER-TOOL] Fix update rate-limiting for update-ledger command;11;6
